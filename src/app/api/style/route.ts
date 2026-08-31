@@ -186,7 +186,7 @@ Provide a complete, structured analysis matching this EXACT JSON structure:
     "compatibilityScore": 9.4,
     "verdict": "Short punchy 2-4 word verdict (e.g. Excellent Match, Radiant Ensemble, Effortless Elegance)",
     "eventCompatibility": "1-2 sentences explaining why this outfit works perfectly for a ${formality} ${setting} event during ${weather} weather.",
-    "stylistNotes": "Comprehensive 2-3 sentence expert styling advise detailing color coordination and accessory harmony."
+    "stylistNotes": "Comprehensive 2-3 sentence expert styling advice detailing color coordination and accessory harmony."
   },
   "colorPalette": {
     "primary": "#HEXCODE of garment primary tone",
@@ -267,10 +267,12 @@ CRITICAL RULES:
     userParts.push({ text: promptText });
 
     const modelsToTry = [
-      'gemini-3.6-flash',
+      'gemini-2.0-flash',
+      'gemini-1.5-flash',
+      'gemini-1.5-pro',
       'gemini-2.5-flash',
+      'gemini-3.6-flash',
       'gemini-flash-latest',
-      'gemini-2.5-pro',
     ];
 
     let geminiResponse: Response | null = null;

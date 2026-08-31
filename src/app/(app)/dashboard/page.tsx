@@ -92,7 +92,6 @@ export default function DashboardPage() {
                 key={tab.id}
                 onClick={() => {
                   setActiveTab(tab.id);
-                  if (tab.id === 'analyzer') setResults(null);
                 }}
                 className={`relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                   activeTab === tab.id

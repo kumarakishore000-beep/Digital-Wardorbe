@@ -258,7 +258,7 @@ export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPi
           bottomType: 'skirt',
           bottomColor: baseColor,
           accentColor: accent2 || '#E36339',
-          description: `Billowing ${accent1} crepe de chine blouse tucked into high-waist ${baseColor} accordian pleats.`,
+          description: `Billowing ${accent1} crepe de chine blouse tucked into high-waist ${baseColor} accordion pleats.`,
         },
         {
           title: 'Draped Atelier Shrug & Raw Denim',
@@ -369,23 +369,23 @@ export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPi
             </div>
             <div>
               <span className="font-mono text-[11px] font-bold tracking-[0.25em] uppercase text-[#E36339]">
-                LO-FLO RECORDS
+                AURA ATELIER CHROMATIQUE
               </span>
               <p className="font-serif italic text-xs text-[#7A756D]">
-                Jane McNealy Studio Archives &bull; Paris — Los Angeles
+                Haute Couture &amp; Dressing Palette Lab &bull; Paris &mdash; Milan &mdash; New York
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#7A756D]">
             <span className="px-2.5 py-1 rounded-full bg-[#EFE8DE] border border-[#E5D8CA]">
-              33⅓ RPM STEREO
+              COUTURE PALETTE VOL. 02
             </span>
             <span className="px-2.5 py-1 rounded-full bg-[#3EA094]/10 text-[#2E7D73] border border-[#3EA094]/30 font-bold">
-              CHROMATIC LAB VOL. 02
+              GARMENT DRAPE LAB
             </span>
             <span className="hidden sm:inline-block px-2.5 py-1 rounded-full bg-[#E36339]/10 text-[#E36339] border border-[#E36339]/30">
-              REF #JF-1974
+              REF #AT-1974
             </span>
           </div>
         </div>
@@ -395,14 +395,13 @@ export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPi
           <div className="lg:col-span-8 space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#E5D8CA]/60 text-[#232220] text-xs font-mono tracking-widest uppercase">
               <Compass className="w-3.5 h-3.5 text-[#3EA094]" />
-              <span>Harmonic Frequency Selector</span>
+              <span>Dressing Chroma &amp; Silhouette Harmony Selector</span>
             </div>
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl tracking-tight text-[#232220] leading-[1.08]">
-              Harmonies <span className="italic font-normal text-[#3EA094]">&amp;</span> Grooves
+              Color Harmonies <span className="italic font-normal text-[#3EA094]">&amp;</span> Couture Drapes
             </h1>
             <p className="text-[#5C564E] text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
-              Explore musicological color theory inspired by the Lo-Flo vinyl archive. Compose 
-              chromatic palettes and wear live harmonic garment cuts on the studio mannequin.
+              Explore precision couture color theory, tonal garment layering, and luxury fabric harmonies. Compose seasonal fashion palettes and drape live tailored cuts directly onto the interactive studio mannequin.
             </p>
           </div>
 
@@ -963,7 +962,7 @@ export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPi
       {/* ========================================================= */}
       <div className="text-center py-6 border-t border-[#E5D8CA] text-xs font-mono text-[#7A756D] space-y-1">
         <p className="uppercase tracking-widest">
-          Lo-Flo Records Chromatic Edition &bull; Design by Julie Flogeac &bull; Paris Archives
+          Aura Atelier Chromatique &bull; Haute Couture Dressing &amp; Color Harmony Laboratory
         </p>
         <p className="italic font-serif text-[11px] text-[#A8A196]">
           Archived &amp; preserved for StyleMatch AI Digital Wardrobe
