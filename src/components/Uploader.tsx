@@ -14,6 +14,29 @@ const WEATHER_OPTIONS = [
   { value: 'Rainy', icon: CloudRain, label: 'Rainy', color: 'text-slate-400' },
 ];
 
+const LOOKBOOK_PRESETS = [
+  {
+    name: 'Festive Indo-Western',
+    src: '/images/branding/womens-ethnic-fusion.jpg',
+    tag: 'Women Fusion',
+  },
+  {
+    name: "Men's Smart Ethnic",
+    src: '/images/branding/mens-smart-casual.jpg',
+    tag: 'Men Festive',
+  },
+  {
+    name: 'Pastel Streetwear',
+    src: '/images/branding/urban-western-casual.jpg',
+    tag: 'Western Chic',
+  },
+  {
+    name: 'Campaign Group',
+    src: '/images/branding/hero-banner.jpg',
+    tag: 'Lookbook',
+  },
+];
+
 export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -58,6 +81,20 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
     setPreview(objectUrl);
   };
 
+  const selectLookbookPreset = async (src: string, name: string) => {
+    setPreview(src);
+    try {
+      const response = await fetch(src);
+      const blob = await response.blob();
+      const presetFile = new File([blob], `${name.toLowerCase().replace(/\s+/g, '-')}.jpg`, {
+        type: 'image/jpeg',
+      });
+      setFile(presetFile);
+    } catch {
+      // Fallback
+    }
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -65,6 +102,49 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
       transition={{ duration: 0.6 }}
       className="w-full max-w-3xl mx-auto space-y-8"
     >
+      {/* Quick Lookbook Presets */}
+      <div className="space-y-3 bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-300">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Try Curated Pantaloons Lookbook Outfits</span>
+          </div>
+          <span className="text-[11px] text-white/50">One-click AI Styling</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {LOOKBOOK_PRESETS.map((preset) => {
+            const isSelected = preview === preset.src;
+            return (
+              <button
+                key={preset.src}
+                type="button"
+                onClick={() => selectLookbookPreset(preset.src, preset.name)}
+                className={`flex items-center gap-2.5 p-2 rounded-xl border text-left transition-all group ${
+                  isSelected
+                    ? 'bg-indigo-600/30 border-indigo-400 ring-1 ring-indigo-400/50 shadow-md'
+                    : 'bg-black/30 border-white/10 hover:bg-white/10 hover:border-white/20'
+                }`}
+              >
+                <img
+                  src={preset.src}
+                  alt={preset.name}
+                  className="w-10 h-10 rounded-lg object-cover object-top border border-white/20 shrink-0 group-hover:scale-105 transition-transform"
+                />
+                <div className="overflow-hidden">
+                  <p className="text-xs font-bold text-white truncate group-hover:text-indigo-200">
+                    {preset.name}
+                  </p>
+                  <span className="text-[10px] text-indigo-300 font-mono block">
+                    {preset.tag}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Upload Zone */}
         <div 
