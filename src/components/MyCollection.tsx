@@ -4,6 +4,8 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Heart, Trash2, Search, Package, Star } from 'lucide-react';
 import { useCollection, CollectionItem } from '@/hooks/useCollection';
+import { useAuth } from '@/hooks/useAuth';
+import LoginModal from '@/components/LoginModal';
 
 const CATEGORIES: CollectionItem['category'][] = [
   'Jewelry', 'Shoes', 'Watch', 'Chain', 'Bracelet', 'Bag', 'Hat', 'Sunglasses', 'Other',
@@ -27,10 +29,11 @@ interface MyCollectionProps {
 }
 
 export default function MyCollection({ collection, onAddItem }: MyCollectionProps) {
+  const { isAuthenticated } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [filter, setFilter] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Add form state
   const [newName, setNewName] = useState('');
@@ -50,6 +53,15 @@ export default function MyCollection({ collection, onAddItem }: MyCollectionProp
   });
 
   const handleAddItem = () => {
+    if (!newName.trim()) return;
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+    executeAddItem();
+  };
+
+  const executeAddItem = () => {
     if (!newName.trim()) return;
     addItem({
       name: newName.trim(),
@@ -77,12 +89,22 @@ export default function MyCollection({ collection, onAddItem }: MyCollectionProp
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-5xl mx-auto space-y-8"
-    >
+    <>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onSuccess={() => {
+          executeAddItem();
+        }}
+        title="Sign In to Add to Collection"
+        message="Sign in or create an account to save custom wardrobe items to your collection."
+      />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-5xl mx-auto space-y-8"
+      >
       {/* Header */}
       <div className="text-center space-y-2">
         <h2 className="text-3xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-emerald-100 to-emerald-400">
@@ -326,5 +348,6 @@ export default function MyCollection({ collection, onAddItem }: MyCollectionProp
         </div>
       )}
     </motion.div>
+    </>
   );
 }

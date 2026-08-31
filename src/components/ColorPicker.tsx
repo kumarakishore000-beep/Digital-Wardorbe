@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, Palette } from 'lucide-react';
+import { Check, Palette, Sparkles, Shirt, Eye } from 'lucide-react';
+import MannequinVisualizer, { OutfitConfig } from '@/components/MannequinVisualizer';
+import { useAuth, Gender } from '@/hooks/useAuth';
 
 interface ColorHarmony {
   name: string;
@@ -33,9 +35,9 @@ function hslToHex(h: number, s: number, l: number): string {
 function hexToHsl(hex: string): [number, number, number] {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return [0, 70, 50];
-  let r = parseInt(result[1], 16) / 255;
-  let g = parseInt(result[2], 16) / 255;
-  let b = parseInt(result[3], 16) / 255;
+  const r = parseInt(result[1], 16) / 255;
+  const g = parseInt(result[2], 16) / 255;
+  const b = parseInt(result[3], 16) / 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b);
   let h = 0, s = 0;
   const l = (max + min) / 2;
@@ -51,7 +53,7 @@ function hexToHsl(hex: string): [number, number, number] {
   return [Math.round(h), Math.round(s * 100), Math.round(l * 100)];
 }
 
-function getContrastColor(hex: string): string {
+export function getContrastColor(hex: string): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return '#FFFFFF';
   const r = parseInt(result[1], 16);
@@ -67,27 +69,27 @@ function getHarmonies(hex: string): ColorHarmony[] {
     {
       name: 'Complementary',
       colors: [hex, hslToHex(h + 180, s, l)],
-      description: 'Opposite on the color wheel — high contrast, bold impact',
+      description: 'High contrast contrast — bold executive impact',
     },
     {
       name: 'Split Complementary',
       colors: [hex, hslToHex(h + 150, s, l), hslToHex(h + 210, s, l)],
-      description: 'Two colors adjacent to the complement — vibrant yet balanced',
+      description: 'Two adjacent complement colors — vibrant yet balanced',
     },
     {
       name: 'Triadic',
       colors: [hex, hslToHex(h + 120, s, l), hslToHex(h + 240, s, l)],
-      description: 'Three evenly spaced colors — rich and dynamic',
+      description: 'Three evenly spaced colors — rich and dynamic tone',
     },
     {
       name: 'Analogous',
       colors: [hslToHex(h - 30, s, l), hex, hslToHex(h + 30, s, l)],
-      description: 'Adjacent colors — harmonious and serene',
+      description: 'Adjacent color family — harmonious and serene aesthetic',
     },
     {
       name: 'Tetradic',
       colors: [hex, hslToHex(h + 90, s, l), hslToHex(h + 180, s, l), hslToHex(h + 270, s, l)],
-      description: 'Four colors in two complementary pairs — bold and complex',
+      description: 'Four paired colors — multi-layered outfit styling',
     },
   ];
 }
@@ -107,12 +109,143 @@ interface ColorPickerProps {
 }
 
 export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPickerProps) {
-  const [selectedColor, setSelectedColor] = useState('#1E3A8A');
-  const [copiedColor, setCopiedColor] = useState<string | null>(null);
+  const { user, updateGender } = useAuth();
+  const gender: Gender = user?.gender || 'female';
+
+  const [selectedColor, setSelectedColor] = useState('#2E7D32'); // Default Crisp Green
   const [activeHarmony, setActiveHarmony] = useState(0);
 
   const harmonies = getHarmonies(selectedColor);
   const [h, s, l] = hexToHsl(selectedColor);
+
+  // Generate real clothing outfit combinations mapped to the current color and gender
+  const outfitCombinations: OutfitConfig[] = useMemo(() => {
+    const baseColor = selectedColor;
+    const accent1 = harmonies[activeHarmony].colors[1] || hslToHex(h + 180, s, l);
+    const accent2 = harmonies[activeHarmony].colors[2] || hslToHex(h + 120, s, l);
+
+    if (gender === 'male') {
+      return [
+        {
+          title: 'Green Pant with Crisp White Shirt',
+          topType: 'shirt',
+          topColor: accent1 || '#FFFFFF',
+          bottomType: 'chinos',
+          bottomColor: baseColor,
+          outerwearColor: '#1E293B',
+          accentColor: '#475569',
+          description: `Base ${baseColor} pant paired with ${accent1} button shirt and dark jacket.`,
+        },
+        {
+          title: 'Ethnic Kurta with Silk Trousers',
+          topType: 'kurta',
+          topColor: baseColor,
+          bottomType: 'trousers',
+          bottomColor: accent1 || '#F8FAFC',
+          accentColor: '#F59E0B',
+          description: `Royal ${baseColor} ethnic kurta paired with ${accent1} silk trousers and gold accents.`,
+        },
+        {
+          title: 'T-Shirt & Athletic Trackpants',
+          topType: 'tshirt',
+          topColor: accent1 || '#FFFFFF',
+          bottomType: 'tracks',
+          bottomColor: baseColor,
+          accentColor: '#0F172A',
+          description: `Sporty ${baseColor} trackpants with white racing side-stripes and ${accent1} performance tee.`,
+        },
+        {
+          title: 'Open Shrug / Cardigan Layered Look',
+          topType: 'shrug',
+          topColor: baseColor,
+          bottomType: 'chinos',
+          bottomColor: '#1E293B',
+          accentColor: accent1 || '#FFFFFF',
+          description: `Stylish open-front ${baseColor} shrug cardigan draped over neutral tee and chinos.`,
+        },
+        {
+          title: 'Denim Jacket & Casual T-Shirt',
+          topType: 'tshirt',
+          topColor: baseColor,
+          bottomType: 'jeans',
+          bottomColor: '#1E3A8A',
+          outerwearColor: accent1,
+          accentColor: '#0F172A',
+          description: `Comfortable ${baseColor} casual tee layered under ${accent1} denim jacket.`,
+        },
+        {
+          title: 'Formal Suit Blazer & Tailored Trousers',
+          topType: 'blazer',
+          topColor: accent1,
+          bottomType: 'trousers',
+          bottomColor: baseColor,
+          outerwearColor: baseColor,
+          accentColor: accent2,
+          description: `Tailored ${baseColor} trousers matched with crisp ${accent1} shirt and suit blazer.`,
+        },
+      ];
+    } else {
+      return [
+        {
+          title: 'Luxury Silk Evening Gown',
+          topType: 'gown',
+          topColor: baseColor,
+          bottomType: 'gown_skirt',
+          bottomColor: baseColor,
+          accentColor: '#F59E0B',
+          description: `Elegant floor-length ${baseColor} evening gown dress with gold waist accent & sweetheart neckline.`,
+        },
+        {
+          title: 'Pleated Midi Skirt & Blouse',
+          topType: 'skirt',
+          topColor: accent1 || '#FFFFFF',
+          bottomType: 'skirt',
+          bottomColor: baseColor,
+          accentColor: accent2,
+          description: `Chic ${accent1} blouse tucked into a high-waist pleated ${baseColor} midi skirt.`,
+        },
+        {
+          title: 'Draped Shrug over Crop Top & Jeans',
+          topType: 'shrug',
+          topColor: baseColor,
+          bottomType: 'jeans',
+          bottomColor: '#1E3A8A',
+          accentColor: accent1 || '#FFFFFF',
+          description: `Trendy ${baseColor} lightweight shrug cardigan draped over white crop top and denim jeans.`,
+        },
+        {
+          title: 'Emerald Kurti with Salwar Bottom',
+          topType: 'kurti',
+          topColor: baseColor,
+          bottomType: 'salwar_bottom',
+          bottomColor: accent1 || '#F8FAFC',
+          accentColor: accent2 || '#F59E0B',
+          description: `Vibrant ${baseColor} ethnic kurti with ${accent1} flared salwar and gold accents.`,
+        },
+        {
+          title: 'Royal Draped Saree with Gold Border',
+          topType: 'saree',
+          topColor: baseColor,
+          bottomType: 'skirt',
+          bottomColor: baseColor,
+          outerwearColor: accent1,
+          accentColor: '#F59E0B',
+          description: `Draped ${baseColor} traditional saree with contrasting ${accent1} blouse and gold zari border.`,
+        },
+        {
+          title: 'White Crop Top & High-Waist Trousers',
+          topType: 'croptop',
+          topColor: accent1 || '#FFFFFF',
+          bottomType: 'jeans',
+          bottomColor: baseColor,
+          accentColor: accent2,
+          description: `Stylish ${accent1} crop top paired with high-waist ${baseColor} trousers.`,
+        },
+      ];
+    }
+  }, [gender, selectedColor, activeHarmony, harmonies, h, s, l]);
+
+  const [activeOutfitIndex, setActiveOutfitIndex] = useState(0);
 
   const handleColorInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -152,152 +285,165 @@ export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPi
     onColorSelect?.(newColor);
   }, [h, s, onColorSelect]);
 
-  const copyToClipboard = useCallback((color: string) => {
-    navigator.clipboard.writeText(color).then(() => {
-      setCopiedColor(color);
-      setTimeout(() => setCopiedColor(null), 1500);
-    });
-  }, []);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-5xl mx-auto space-y-8"
+      className="w-full max-w-6xl mx-auto space-y-8"
     >
-      {/* Header */}
       <div className="text-center space-y-2">
-        <h2 className="text-3xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-pink-100 to-purple-400">
-          Color Harmony Lab
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-300 text-sm font-medium">
+          <Sparkles className="w-4 h-4 text-pink-400" />
+          <span>AI Analyst Color Match & Mannequin Studio</span>
+        </div>
+        <h2 className="text-3xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-pink-100 to-purple-400">
+          Color Theory & Mannequin Stylist
         </h2>
-        <p className="text-indigo-200/70 text-lg">
-          Pick a color and explore its perfect harmonies
+        <p className="text-indigo-200/70 text-lg max-w-2xl mx-auto">
+          Explore color theory through <strong>real clothing combinations</strong> worn on interactive mannequins.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Color Picker */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Color Wheel Preview */}
-          <div className="bg-black/30 p-6 rounded-3xl border border-white/10 backdrop-blur-md space-y-5">
-            <div className="flex items-center gap-3 mb-2">
-              <Palette className="w-5 h-5 text-purple-400" />
-              <h3 className="text-lg font-semibold text-white">Pick Your Color</h3>
+      {/* Main Grid: Mannequin Visualizer + Color Theory Studio */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Left Column: Mannequin Visualizer (5 Cols) */}
+        <div className="lg:col-span-5 space-y-4 sticky top-24">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Shirt className="w-5 h-5 text-purple-400" />
+              <span>Real Mannequin Draped Outfit</span>
+            </h3>
+          </div>
+
+          <MannequinVisualizer
+            gender={gender}
+            onGenderChange={(newGender) => updateGender(newGender)}
+            outfit={outfitCombinations[activeOutfitIndex]}
+            showControls={true}
+          />
+        </div>
+
+        {/* Right Column: Color Theory Controls (7 Cols) */}
+        <div className="lg:col-span-7 space-y-6">
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-6 backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Palette className="w-5 h-5 text-pink-400" />
+                  Interactive Color Wheel
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Select base color or adjust sliders to see harmonized clothing combos
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full border border-white/30" style={{ backgroundColor: selectedColor }} />
+                <span className="text-sm font-mono font-bold text-white">{selectedColor}</span>
+              </div>
             </div>
 
-            {/* Visual Color Wheel */}
-            <div className="relative w-48 h-48 mx-auto">
-              <div
-                className="w-full h-full rounded-full border-4 border-white/10 shadow-[0_0_30px_rgba(139,92,246,0.2)]"
-                style={{ background: getWheelGradient() }}
-              />
-              <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border-4 border-white/30 shadow-xl transition-colors duration-300"
-                style={{ backgroundColor: selectedColor }}
-              />
-              {/* Harmony dots on wheel */}
-              {harmonies[activeHarmony].colors.map((color, idx) => {
-                if (idx === 0) return null;
-                const harmonyHsl = hexToHsl(color);
-                const angle = (harmonyHsl[0] - 90) * (Math.PI / 180);
-                const radius = 80;
-                const x = Math.cos(angle) * radius;
-                const y = Math.sin(angle) * radius;
-                return (
-                  <div
-                    key={idx}
-                    className="absolute w-5 h-5 rounded-full border-2 border-white shadow-lg transition-all duration-500"
-                    style={{
-                      backgroundColor: color,
-                      top: `calc(50% + ${y}px)`,
-                      left: `calc(50% + ${x}px)`,
-                      transform: 'translate(-50%, -50%)',
-                    }}
+            {/* Wheel Display & Sliders */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <div className="relative w-44 h-44 mx-auto">
+                <div
+                  className="w-full h-full rounded-full border border-white/10 shadow-2xl"
+                  style={{ background: getWheelGradient() }}
+                />
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border-4 border-white/30 shadow-xl transition-colors duration-300"
+                  style={{ backgroundColor: selectedColor }}
+                />
+                {harmonies[activeHarmony].colors.map((color, idx) => {
+                  if (idx === 0) return null;
+                  const harmonyHsl = hexToHsl(color);
+                  const angle = (harmonyHsl[0] - 90) * (Math.PI / 180);
+                  const radius = 65;
+                  const x = Math.cos(angle) * radius;
+                  const y = Math.sin(angle) * radius;
+                  return (
+                    <div
+                      key={idx}
+                      className="absolute w-4 h-4 rounded-full border-2 border-white shadow-lg transition-all duration-500"
+                      style={{
+                        backgroundColor: color,
+                        top: `calc(50% + ${y}px)`,
+                        left: `calc(50% + ${x}px)`,
+                        transform: 'translate(-50%, -50%)',
+                      }}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Sliders */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={selectedColor}
+                    onChange={handleColorInput}
+                    className="w-12 h-12 rounded-xl cursor-pointer border-2 border-white/20 bg-transparent shrink-0"
                   />
-                );
-              })}
-            </div>
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      defaultValue={selectedColor}
+                      key={selectedColor}
+                      onBlur={handleHexInput}
+                      onKeyDown={(e) => e.key === 'Enter' && handleHexInput(e as unknown as React.FocusEvent<HTMLInputElement>)}
+                      placeholder="#2E7D32"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-base focus:outline-none focus:border-purple-500/50"
+                    />
+                  </div>
+                </div>
 
-            {/* Native Color Input */}
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={selectedColor}
-                onChange={handleColorInput}
-                className="w-14 h-14 rounded-xl cursor-pointer border-2 border-white/20 bg-transparent"
-              />
-              <div className="flex-1">
-                <input
-                  type="text"
-                  defaultValue={selectedColor}
-                  key={selectedColor}
-                  onBlur={handleHexInput}
-                  onKeyDown={(e) => e.key === 'Enter' && handleHexInput(e as any)}
-                  placeholder="#1E3A8A"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-lg focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20"
-                />
-              </div>
-            </div>
-
-            {/* HSL Sliders */}
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs text-white/50">
-                  <span>Hue</span><span>{h}°</span>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs text-white/60 font-medium">
+                      <span>Hue Tone</span><span>{h}°</span>
+                    </div>
+                    <input
+                      type="range" min="0" max="360" value={h}
+                      onChange={handleHueChange}
+                      className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs text-white/60 font-medium">
+                      <span>Saturation</span><span>{s}%</span>
+                    </div>
+                    <input
+                      type="range" min="0" max="100" value={s}
+                      onChange={handleSatChange}
+                      className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs text-white/60 font-medium">
+                      <span>Lightness</span><span>{l}%</span>
+                    </div>
+                    <input
+                      type="range" min="10" max="90" value={l}
+                      onChange={handleLightChange}
+                      className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                    />
+                  </div>
                 </div>
-                <input
-                  type="range" min="0" max="360" value={h}
-                  onChange={handleHueChange}
-                  className="w-full h-2 rounded-full appearance-none cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, 
-                      hsl(0,${s}%,${l}%), hsl(60,${s}%,${l}%), hsl(120,${s}%,${l}%), 
-                      hsl(180,${s}%,${l}%), hsl(240,${s}%,${l}%), hsl(300,${s}%,${l}%), hsl(360,${s}%,${l}%))`
-                  }}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs text-white/50">
-                  <span>Saturation</span><span>{s}%</span>
-                </div>
-                <input
-                  type="range" min="0" max="100" value={s}
-                  onChange={handleSatChange}
-                  className="w-full h-2 rounded-full appearance-none cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, hsl(${h},0%,${l}%), hsl(${h},100%,${l}%))`
-                  }}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs text-white/50">
-                  <span>Lightness</span><span>{l}%</span>
-                </div>
-                <input
-                  type="range" min="0" max="100" value={l}
-                  onChange={handleLightChange}
-                  className="w-full h-2 rounded-full appearance-none cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, hsl(${h},${s}%,0%), hsl(${h},${s}%,50%), hsl(${h},${s}%,100%))`
-                  }}
-                />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right: Harmonies */}
-        <div className="lg:col-span-2 space-y-4">
           {/* Harmony Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             {harmonies.map((harmony, idx) => (
               <button
                 key={harmony.name}
                 onClick={() => setActiveHarmony(idx)}
-                className={`whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
                   activeHarmony === idx
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] border border-transparent'
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30'
                     : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
                 }`}
               >
@@ -306,88 +452,104 @@ export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPi
             ))}
           </div>
 
-          {/* Active Harmony Display */}
-          <motion.div
-            key={activeHarmony}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="bg-black/30 p-6 rounded-3xl border border-white/10 backdrop-blur-md"
-          >
-            <div className="mb-4">
-              <h3 className="text-xl font-bold text-white">{harmonies[activeHarmony].name}</h3>
-              <p className="text-sm text-white/50 mt-1">{harmonies[activeHarmony].description}</p>
+          {/* REAL CLOTHES OUTFIT COMBINATIONS (Not Color Code Alone!) */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-pink-400" />
+                  AI Analyst Clothing Recommendations
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Real outfits matched to {harmonies[activeHarmony].name} color rules ({gender === 'female' ? 'Women' : 'Men'} Collection)
+                </p>
+              </div>
             </div>
 
-            {/* Color Swatches */}
-            <div className="flex gap-3 mb-6">
-              {harmonies[activeHarmony].colors.map((color, idx) => (
-                <motion.div
-                  key={`${color}-${idx}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="flex-1 space-y-2"
-                >
-                  <button
-                    onClick={() => copyToClipboard(color)}
-                    className="w-full h-28 rounded-2xl border border-white/10 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl relative group"
-                    style={{ backgroundColor: color }}
+            <div className="grid grid-cols-1 gap-4">
+              {outfitCombinations.map((item, idx) => {
+                const isWearing = activeOutfitIndex === idx;
+                return (
+                  <motion.div
+                    key={(item.title || 'outfit') + idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.08 }}
+                    className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-4 ${
+                      isWearing
+                        ? 'bg-gradient-to-r from-indigo-900/60 to-purple-900/60 border-indigo-400/50 shadow-xl ring-1 ring-indigo-400/30'
+                        : 'bg-black/40 border-white/10 hover:bg-white/5'
+                    }`}
                   >
-                    <div className="absolute inset-0 rounded-2xl bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                      {copiedColor === color ? (
-                        <Check className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: getContrastColor(color) }} />
-                      ) : (
-                        <Copy className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: getContrastColor(color) }} />
-                      )}
+                    <div className="space-y-2 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">{gender === 'female' ? '👗' : '👔'}</span>
+                        <h4 className="text-base font-bold text-white">{item.title}</h4>
+                        {isWearing && (
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
+                            Worn on Mannequin
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-300">{item.description}</p>
+
+                      {/* Clothing Garment Swatches (Cloth Manner) */}
+                      <div className="flex flex-wrap items-center gap-2 pt-1">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] text-white">
+                          <span
+                            className="w-3 h-3 rounded-full border border-white/30"
+                            style={{ backgroundColor: item.topColor }}
+                          />
+                          <strong className="capitalize">{item.topType}:</strong> {item.topColor}
+                        </span>
+
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] text-white">
+                          <span
+                            className="w-3 h-3 rounded-full border border-white/30"
+                            style={{ backgroundColor: item.bottomColor }}
+                          />
+                          <strong className="capitalize">{item.bottomType.replace('_', ' ')}:</strong> {item.bottomColor}
+                        </span>
+
+                        {item.outerwearColor && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] text-white">
+                            <span
+                              className="w-3 h-3 rounded-full border border-white/30"
+                              style={{ backgroundColor: item.outerwearColor }}
+                            />
+                            <strong>Jacket:</strong> {item.outerwearColor}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    {idx === 0 && (
-                      <div className="absolute -top-2 -right-2 bg-purple-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">BASE</div>
-                    )}
-                  </button>
-                  <div className="text-center">
-                    <p className="text-xs font-mono text-white/80">{color}</p>
-                    <p className="text-[10px] text-white/40 uppercase tracking-wider">
-                      {idx === 0 ? 'Base' : `Harmony ${idx}`}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
 
-            {/* Full palette preview bar */}
-            <div className="flex h-12 rounded-2xl overflow-hidden border border-white/10 shadow-inner">
-              {harmonies[activeHarmony].colors.map((color, idx) => (
-                <div
-                  key={idx}
-                  className="flex-1 transition-all duration-500"
-                  style={{ backgroundColor: color }}
-                />
-              ))}
+                    {/* Action Button */}
+                    <button
+                      onClick={() => setActiveOutfitIndex(idx)}
+                      className={`shrink-0 px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                        isWearing
+                          ? 'bg-emerald-500 text-white shadow-md'
+                          : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md'
+                      }`}
+                    >
+                      {isWearing ? (
+                        <>
+                          <Check className="w-4 h-4" />
+                          <span>Currently Wearing</span>
+                        </>
+                      ) : (
+                        <>
+                          <Eye className="w-4 h-4" />
+                          <span>Wear on Mannequin</span>
+                        </>
+                      )}
+                    </button>
+                  </motion.div>
+                );
+              })}
             </div>
-          </motion.div>
-
-          {/* All Harmonies Overview */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {harmonies.filter((_, idx) => idx !== activeHarmony).map((harmony, idx) => (
-              <button
-                key={harmony.name}
-                onClick={() => setActiveHarmony(harmonies.indexOf(harmony))}
-                className="bg-white/5 border border-white/10 p-4 rounded-2xl text-left hover:bg-white/10 transition-all duration-300 group"
-              >
-                <p className="text-sm font-semibold text-white/80 mb-2 group-hover:text-white transition-colors">{harmony.name}</p>
-                <div className="flex gap-2">
-                  {harmony.colors.map((color, cIdx) => (
-                    <div
-                      key={cIdx}
-                      className="w-8 h-8 rounded-lg border border-white/10"
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                </div>
-              </button>
-            ))}
           </div>
+
         </div>
       </div>
     </motion.div>

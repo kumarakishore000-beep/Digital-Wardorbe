@@ -1,9 +1,7 @@
-'use client';
-
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Lightbulb, Plus, Heart, ShoppingBag } from 'lucide-react';
-import { useCollection } from '@/hooks/useCollection';
+import { Lightbulb, Plus, Heart } from 'lucide-react';
+import { useCollection, CollectionItem } from '@/hooks/useCollection';
 
 interface Suggestion {
   name: string;
@@ -54,8 +52,8 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
     s => !ownedNames.has(s.name.toLowerCase())
   ).sort((a, b) => {
     // Prioritize categories the user doesn't have
-    const aHas = ownedCategories.has(a.category as any) ? 1 : 0;
-    const bHas = ownedCategories.has(b.category as any) ? 1 : 0;
+    const aHas = ownedCategories.has(a.category as CollectionItem['category']) ? 1 : 0;
+    const bHas = ownedCategories.has(b.category as CollectionItem['category']) ? 1 : 0;
     if (aHas !== bHas) return aHas - bHas;
     // Then by impact
     const impactOrder = { High: 0, Medium: 1, Low: 2 };
@@ -78,7 +76,7 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
   const handleTrySuggestion = (suggestion: Suggestion) => {
     addItem({
       name: suggestion.name,
-      category: suggestion.category as any,
+      category: suggestion.category as CollectionItem['category'],
       color: suggestion.color,
       tags: ['suggested'],
     });
@@ -89,7 +87,7 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
     return (
       <div className="text-center py-12 space-y-3">
         <div className="text-5xl">🎉</div>
-        <p className="text-xl font-semibold text-white">You've got everything!</p>
+        <p className="text-xl font-semibold text-white">You&apos;ve got everything!</p>
         <p className="text-sm text-white/50">Your collection is comprehensive. Keep exploring new styles!</p>
       </div>
     );

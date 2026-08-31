@@ -249,7 +249,7 @@ CRITICAL RULES:
 - Do NOT wrap JSON in markdown code fences (\`\`\`json).
 - Provide exactly 6 accessory recommendations (one per category: Watch, Chain, Bracelet, Shoes, Jewelry, Bag).`;
 
-    let userParts: any[] = [];
+    const userParts: Array<{ inline_data?: { mime_type: string; data: string }; text?: string }> = [];
 
     if (imageFile && imageFile.size > 0) {
       const buffer = Buffer.from(await imageFile.arrayBuffer());
@@ -267,11 +267,10 @@ CRITICAL RULES:
     userParts.push({ text: promptText });
 
     const modelsToTry = [
+      'gemini-3.6-flash',
       'gemini-2.5-flash',
-      'gemini-1.5-flash',
-      'gemini-2.0-flash',
       'gemini-flash-latest',
-      'gemini-pro',
+      'gemini-2.5-pro',
     ];
 
     let geminiResponse: Response | null = null;
@@ -316,14 +315,18 @@ CRITICAL RULES:
     }
 
     const data = await geminiResponse.json();
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const cleanedText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    const rawText = parts.map((p: { text?: string }) => p.text || '').filter(Boolean).join('\n');
+    
+    // Clean and extract valid JSON object from response
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    const cleanedText = jsonMatch ? jsonMatch[0] : rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
 
     try {
       const parsed = JSON.parse(cleanedText);
       return NextResponse.json(parsed);
     } catch (parseErr) {
-      console.error('Failed to parse Gemini style JSON output:', rawText);
+      console.error('Failed to parse Gemini style JSON output:', parseErr, rawText);
       return NextResponse.json(getFallbackStyleAnalysis(formality, setting, weather));
     }
   } catch (error) {

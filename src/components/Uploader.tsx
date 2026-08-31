@@ -210,23 +210,34 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        onClick={() => onAnalyze(file, formality, setting, weather, useCloset)}
-        disabled={!file || isAnalyzing}
-        className={`w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-500 ${
-          !file 
-            ? 'bg-white/10 text-white/40 cursor-not-allowed border border-white/5' 
-            : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-[0_0_40px_rgba(99,102,241,0.5)] border border-white/20 hover:shadow-[0_0_60px_rgba(99,102,241,0.7)]'
-        }`}
+        onClick={() => {
+          if (file) {
+            onAnalyze(file, formality, setting, weather, useCloset);
+          } else {
+            // Create a sample dummy file from URL for instant demo styling
+            fetch('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop')
+              .then(r => r.blob())
+              .then(blob => {
+                const sampleFile = new File([blob], 'sample-outfit.jpg', { type: 'image/jpeg' });
+                onAnalyze(sampleFile, formality, setting, weather, useCloset);
+              })
+              .catch(() => {
+                onAnalyze(null, formality, setting, weather, useCloset);
+              });
+          }
+        }}
+        disabled={isAnalyzing}
+        className="w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-500 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-[0_0_40px_rgba(99,102,241,0.5)] border border-white/20 hover:shadow-[0_0_60px_rgba(99,102,241,0.7)] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isAnalyzing ? (
           <>
             <Loader2 className="w-6 h-6 animate-spin" />
-            Analyzing Style & Color Theory...
+            Analyzing Style & Color Theory with Gemini...
           </>
         ) : (
           <>
             <Sparkles className="w-6 h-6 text-yellow-300" />
-            Style My Outfit
+            {file ? 'Style My Uploaded Outfit' : 'Style Sample Outfit with Gemini AI'}
           </>
         )}
       </motion.button>

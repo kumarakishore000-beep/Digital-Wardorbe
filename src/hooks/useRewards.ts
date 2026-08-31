@@ -137,14 +137,9 @@ function saveRewards(state: RewardState): void {
 }
 
 export function useRewards() {
-  const [state, setState] = useState<RewardState>(DEFAULT_STATE);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [state, setState] = useState<RewardState>(() => loadRewards());
+  const [isLoaded] = useState(true);
   const [newBadge, setNewBadge] = useState<Badge | null>(null);
-
-  useEffect(() => {
-    setState(loadRewards());
-    setIsLoaded(true);
-  }, []);
 
   useEffect(() => {
     if (isLoaded) saveRewards(state);

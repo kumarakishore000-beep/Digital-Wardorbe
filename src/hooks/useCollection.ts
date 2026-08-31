@@ -48,16 +48,9 @@ function saveToStorage<T>(key: string, value: T): void {
 }
 
 export function useCollection() {
-  const [items, setItems] = useState<CollectionItem[]>([]);
-  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    setItems(loadFromStorage<CollectionItem[]>(COLLECTION_KEY, []));
-    setWishlist(loadFromStorage<WishlistItem[]>(WISHLIST_KEY, []));
-    setIsLoaded(true);
-  }, []);
+  const [items, setItems] = useState<CollectionItem[]>(() => loadFromStorage<CollectionItem[]>(COLLECTION_KEY, []));
+  const [wishlist, setWishlist] = useState<WishlistItem[]>(() => loadFromStorage<WishlistItem[]>(WISHLIST_KEY, []));
+  const [isLoaded] = useState(true);
 
   // Persist on change
   useEffect(() => {

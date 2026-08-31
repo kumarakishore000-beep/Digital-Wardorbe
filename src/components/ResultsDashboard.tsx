@@ -1,12 +1,32 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Check, Info, ShoppingBag, Shirt, Watch, Link2, CircleDot, Footprints, Plus } from 'lucide-react';
 import SuggestionBox from './SuggestionBox';
 import { useCollection } from '@/hooks/useCollection';
+import { useAuth } from '@/hooks/useAuth';
+import LoginModal from '@/components/LoginModal';
+
+export interface AccessoryRecommendationItem {
+  styleName: string;
+  category: string;
+  material: string;
+  color: string;
+  reasoning: string;
+  searchQuery: string;
+  inCloset?: boolean;
+}
+
+export interface OverallAssessment {
+  compatibilityScore?: string | number;
+  verdict?: string;
+  stylistNotes?: string;
+  eventCompatibility?: string;
+}
 
 interface ResultsDashboardProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   collection: ReturnType<typeof useCollection>;
   onAddToCollection?: () => void;
@@ -45,18 +65,31 @@ const CATEGORY_COLORS: Record<string, { bg: string; border: string; text: string
 };
 
 export default function ResultsDashboard({ data, collection, onAddToCollection, onTrySuggestion }: ResultsDashboardProps) {
+  const { isAuthenticated } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [pendingAcc, setPendingAcc] = useState<AccessoryRecommendationItem | null>(null);
+
   if (!data) return null;
 
-  const { overallAssessment, colorPalette, accessoryRecommendations, context } = data;
+  const { overallAssessment, colorPalette, accessoryRecommendations = [], context } = data;
 
   // Group accessories by category
-  const grouped: Record<string, any[]> = {};
+  const grouped: Record<string, AccessoryRecommendationItem[]> = {};
   for (const acc of accessoryRecommendations) {
     if (!grouped[acc.category]) grouped[acc.category] = [];
     grouped[acc.category].push(acc);
   }
 
-  const handleAddToCollection = (acc: any) => {
+  const handleAddToCollection = (acc: AccessoryRecommendationItem) => {
+    if (!isAuthenticated) {
+      setPendingAcc(acc);
+      setIsLoginModalOpen(true);
+      return;
+    }
+    executeCollect(acc);
+  };
+
+  const executeCollect = (acc: AccessoryRecommendationItem) => {
     const categoryMap: Record<string, string> = {
       Watch: 'Watch',
       Chain: 'Chain',
@@ -67,19 +100,29 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
     };
     collection.addItem({
       name: acc.styleName,
-      category: (categoryMap[acc.category] || 'Other') as any,
+      category: (categoryMap[acc.category] || 'Other') as unknown as 'Watch' | 'Chain' | 'Bracelet' | 'Shoes' | 'Jewelry' | 'Bag' | 'Other',
       color: colorPalette?.accent || '#8B5CF6',
     });
     onAddToCollection?.();
   };
 
   return (
-    <motion.div 
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-      className="w-full max-w-5xl mx-auto space-y-8 pb-20"
-    >
+    <>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onSuccess={() => {
+          if (pendingAcc) executeCollect(pendingAcc);
+        }}
+        title="Sign In to Collect Items"
+        message="Sign in or create an account to save accessory recommendations directly to your wardrobe collection."
+      />
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="w-full max-w-5xl mx-auto space-y-8 pb-20"
+      >
       {/* Top Banner: Score & Assessment */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="col-span-1 bg-gradient-to-br from-indigo-900/80 to-purple-900/80 p-8 rounded-3xl border border-white/20 backdrop-blur-md flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden">
@@ -158,7 +201,7 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
                 <h4 className={`text-sm font-bold uppercase tracking-widest ${colors.text}`}>{category}</h4>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {items.map((acc: any, idx: number) => (
+                {items.map((acc: AccessoryRecommendationItem, idx: number) => (
                   <motion.div 
                     key={idx}
                     whileHover={{ y: -5 }}
@@ -210,5 +253,6 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
         />
       </motion.div>
     </motion.div>
+    </>
   );
 }

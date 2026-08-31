@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Star, Zap, Award, TrendingUp, X } from 'lucide-react';
-import { useRewards, BADGES, Badge } from '@/hooks/useRewards';
+import { useRewards, BADGES } from '@/hooks/useRewards';
 
 interface RewardsPanelProps {
   rewards: ReturnType<typeof useRewards>;

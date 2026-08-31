@@ -28,7 +28,7 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode; gradient: string }[
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>('analyzer');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<Record<string, unknown> | null>(null);
 
   const collection = useCollection();
   const rewards = useRewards();
@@ -181,6 +181,22 @@ export default function DashboardPage() {
                   />
                 </div>
               )}
+            </motion.div>
+          )}
+
+          {/* ===== AI OUTFIT ASSISTANT TAB ===== */}
+          {activeTab === 'assistant' && (
+            <motion.div
+              key="assistant"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="w-full"
+            >
+              <OutfitAssistant
+                onSaveToCollection={() => rewards.earnPoints('add_to_collection')}
+              />
             </motion.div>
           )}
 

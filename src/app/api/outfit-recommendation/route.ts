@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server';
 
+export interface WalkInAdvice {
+  entranceVibe: string;
+  postureAndGait: string;
+  holdingStyle: string;
+  lightingPresence: string;
+}
+
 export interface OutfitRecommendationResponse {
   title: string;
   overview: string;
   mood: string;
+  gender?: string;
   items: {
     upperBody: string;
     lowerBody: string;
@@ -21,67 +29,119 @@ export interface OutfitRecommendationResponse {
   }>;
   stylingTips: string[];
   weatherSuitability: string;
+  walkInAdvice: WalkInAdvice;
+  source?: string;
+  modelUsed?: string;
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { occasion = 'Casual Outing', colorPreference = 'Neutral & Earthy', weather = 'Mild 20°C' } = body;
+    const { 
+      occasion = 'Casual Outing', 
+      colorPreference = 'Neutral & Earthy', 
+      weather = 'Mild 20°C',
+      gender = 'female'
+    } = body;
 
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return NextResponse.json(
-        { error: 'GEMINI_API_KEY is not configured in environment variables' },
-        { status: 500 }
-      );
+      return NextResponse.json({
+        ...getFallbackOutfit(occasion, colorPreference, weather, gender),
+        source: 'fallback',
+        modelUsed: 'Fallback Engine (Missing API Key)'
+      });
     }
 
-    const systemPrompt = `You are a world-class high-fashion AI personal stylist.
-A user needs an outfit recommendation based on the following inputs:
+    const systemPrompt = `You are an elite AI Fashion Designer, Personal Stylist, and E-commerce Advisor specializing in both Men's and Women's fashion intelligence.
+Your styling methodology is rooted in:
+1. Holistic Analysis (occasion, body proportions, skin tone compatibility, weather).
+2. Base, Layer, Accent methodology for complete head-to-toe ensemble construction.
+3. Accessory Mastery (coordinating watches, chains, bags, eyewear, jewelry/belts with matching hardware finishes).
+4. Precise Fabric & Fit specifications (specify exact texture, drape, weave, and fit like 'structured wool blend', 'flowy mulberry silk', 'tailored tapered fit').
+5. Color Science (cohesive 3-tone color harmony with web-safe HEX codes).
+
+Target Parameters:
+- Target Gender: ${gender}
 - Occasion: ${occasion}
 - Color Preference: ${colorPreference}
 - Weather Condition: ${weather}
 
-Provide a complete, cohesive, highly stylish outfit recommendation in JSON format matching this EXACT structure:
+Provide a complete, cohesive, head-to-toe ensemble in JSON format matching this EXACT structure:
 {
-  "title": "A catchy, stylish outfit name",
-  "overview": "A brief 2-3 sentence overview explaining why this outfit is ideal for the occasion and weather",
-  "mood": "A 2-3 word aesthetic summary (e.g., Chic & Effortless, Smart Casual Monochrome)",
+  "title": "A catchy, stylish outfit name tailored for ${gender}",
+  "overview": "A 2-3 sentence overview explaining why this outfit is ideal for a ${gender} for this occasion and weather",
+  "mood": "A 2-3 word aesthetic summary (e.g. Midnight City Minimalist, Royal Emerald Elegance)",
+  "gender": "${gender}",
   "items": {
-    "upperBody": "Detailed description of top/shirt/blouse/sweater",
-    "lowerBody": "Detailed description of pants/trousers/skirt/shorts",
-    "footwear": "Detailed description of shoes/sneakers/boots/heels",
-    "outerwear": "Optional coat/jacket/cardigan if suitable for weather, else empty string or null"
+    "upperBody": "Specific description of top including exact fabric texture, drape, and fit (e.g. Hand-embroidered silk tunic in tailored slim fit)",
+    "lowerBody": "Specific description of bottom including fabric and fit (e.g. Draped silk palazzo trousers in high-waisted fluid fit)",
+    "footwear": "Specific description of footwear including heel/sole material and finish",
+    "outerwear": "Specific jacket, coat, or cardigan with fabric and structured fit details"
   },
   "accessories": [
     {
-      "category": "Watch | Chain | Bag | Eyewear | Jewelry | Hat",
-      "name": "Accessory name",
-      "description": "Why it compliments the look"
+      "category": "Watch",
+      "name": "Specific watch style name and metal finish",
+      "description": "Why it elevates this look"
+    },
+    {
+      "category": "Chain | Necklace",
+      "name": "Specific chain, pendant, or choker style and length",
+      "description": "How it accents the neckline and chest"
+    },
+    {
+      "category": "Bag | Clutch",
+      "name": "Specific bag style, material, and hardware finish",
+      "description": "Why it balances the silhouette"
+    },
+    {
+      "category": "Eyewear",
+      "name": "Specific sunglasses or optical frames",
+      "description": "Facial framing and lens finish notes"
+    },
+    {
+      "category": "Jewelry | Cufflinks | Belt",
+      "name": "Specific earrings, ring, cufflinks, or leather belt",
+      "description": "Finishing touch detail"
     }
   ],
   "colorPalette": [
     {
-      "name": "Color Name",
+      "name": "Primary Color",
+      "hex": "#HEXCODE"
+    },
+    {
+      "name": "Secondary Color",
+      "hex": "#HEXCODE"
+    },
+    {
+      "name": "Accent Tone",
       "hex": "#HEXCODE"
     }
   ],
   "stylingTips": [
-    "Tip 1 regarding fit, tucking, rolling sleeves, or layering",
-    "Tip 2 regarding color balance or grooming/scent",
-    "Tip 3 regarding versatility"
+    "Tip 1 regarding fit, tucking, rolling sleeves, or drape",
+    "Tip 2 regarding color balance or metal hardware finish unity",
+    "Tip 3 regarding versatility and walk-in entrance confidence"
   ],
-  "weatherSuitability": "Specific note on how this outfit stays comfortable in the given weather"
+  "weatherSuitability": "Specific note on how this outfit keeps you comfortable in ${weather}",
+  "walkInAdvice": {
+    "entranceVibe": "Catchy walk-in vibe title (e.g. Red-Carpet Grand Entrance, Executive Walk-In Presence)",
+    "postureAndGait": "Actionable gait, stride length, and posture instructions during entry walk-in",
+    "holdingStyle": "How to hold the bag, jacket, or accessories while walking into the venue",
+    "lightingPresence": "How the fabric textures and accessories catch venue spotlights and ambient light"
+  }
 }
 
-IMPORTANT: Respond ONLY with valid JSON. Do not include markdown codeblock wrappers like \`\`\`json or extra explanatory text outside the JSON object.`;
+IMPORTANT: Respond ONLY with valid raw JSON. Do not include markdown codeblock wrappers (\`\`\`json).`;
 
     const modelsToTry = [
+      'gemini-3.6-flash',
       'gemini-2.5-flash',
-      'gemini-1.5-flash',
-      'gemini-2.0-flash',
-      'gemini-pro'
+      'gemini-flash-latest',
+      'gemini-2.5-pro'
     ];
 
     let geminiResponse: Response | null = null;
@@ -109,7 +169,7 @@ IMPORTANT: Respond ONLY with valid JSON. Do not include markdown codeblock wrapp
               temperature: 0.7,
               topK: 40,
               topP: 0.95,
-              maxOutputTokens: 1024,
+              maxOutputTokens: 1536,
             },
           }),
         });
@@ -127,25 +187,38 @@ IMPORTANT: Respond ONLY with valid JSON. Do not include markdown codeblock wrapp
     }
 
     if (!geminiResponse || !geminiResponse.ok) {
-      // Fallback response if Gemini API key fails or network issue occurs
       console.error('All Gemini API models failed or API key was invalid. Returning fallback recommendation.');
-      return NextResponse.json(getFallbackOutfit(occasion, colorPreference, weather));
+      return NextResponse.json({
+        ...getFallbackOutfit(occasion, colorPreference, weather, gender),
+        source: 'fallback',
+        modelUsed: 'Fallback Engine'
+      });
     }
 
     const data = await geminiResponse.json();
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    const rawText = parts.map((p: { text?: string }) => p.text || '').filter(Boolean).join('\n');
     
-    // Clean JSON response (strip markdown fences if present)
-    const cleanedText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+    // Clean and extract valid JSON object from response
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    const cleanedText = jsonMatch ? jsonMatch[0] : rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
 
     try {
       const parsedRecommendation: OutfitRecommendationResponse = JSON.parse(cleanedText);
-      return NextResponse.json(parsedRecommendation);
+      return NextResponse.json({
+        ...parsedRecommendation,
+        source: 'gemini-api',
+        modelUsed: selectedModel
+      });
     } catch (parseError) {
-      console.error('Failed to parse Gemini JSON output:', rawText);
-      return NextResponse.json(getFallbackOutfit(occasion, colorPreference, weather));
+      console.error('Failed to parse Gemini JSON output:', parseError, rawText);
+      return NextResponse.json({
+        ...getFallbackOutfit(occasion, colorPreference, weather, gender),
+        source: 'fallback',
+        modelUsed: 'Fallback Engine'
+      });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in outfit-recommendation route:', error);
     return NextResponse.json(
       { error: 'Internal Server Error processing outfit recommendation' },
@@ -154,46 +227,74 @@ IMPORTANT: Respond ONLY with valid JSON. Do not include markdown codeblock wrapp
   }
 }
 
-function getFallbackOutfit(occasion: string, colorPreference: string, weather: string): OutfitRecommendationResponse {
+function getFallbackOutfit(occasion: string, colorPreference: string, weather: string, gender: string = 'female'): OutfitRecommendationResponse {
+  const isMale = gender === 'male';
+
   return {
-    title: `The Essential ${occasion} Ensemble`,
-    overview: `A refined outfit tailored for a ${occasion} in ${weather} weather, featuring a harmonious ${colorPreference} palette.`,
-    mood: `${occasion} Chic`,
+    title: isMale ? `The Gentleman's ${occasion} Ensemble` : `The Chic ${occasion} Statement`,
+    overview: `A refined ${gender} ensemble curated for a ${occasion} in ${weather} weather, crafted around a harmonious ${colorPreference} palette.`,
+    mood: `${occasion} ${isMale ? 'Distinguished' : 'Elegance'}`,
+    gender,
     items: {
-      upperBody: `Tailored Oxford shirt or elevated fine-knit top in ${colorPreference.includes('Black') ? 'Charcoal' : 'Off-White'}`,
-      lowerBody: 'Slim-tapered tailored trousers or dark selvedge denim',
-      footwear: 'Minimalist leather sneakers or classic loafers',
+      upperBody: isMale 
+        ? `Structured Oxford shirt or fine linen blazer in ${colorPreference.includes('Black') ? 'Charcoal' : 'Crisp White'}`
+        : `Silk button blouse or hand-embroidered emerald kurti in ${colorPreference.includes('Black') ? 'Midnight Black' : 'Emerald Green'}`,
+      lowerBody: isMale
+        ? 'Slim-tapered tailored chinos or dark selvedge denim'
+        : 'Tailored high-waist trousers or silk salwar bottom',
+      footwear: isMale
+        ? 'Burnished leather Oxford shoes or clean minimalist sneakers'
+        : 'Pointed-toe stiletto pumps or embellised mojris',
       outerwear: weather.toLowerCase().includes('cold') || weather.toLowerCase().includes('rain') 
-        ? 'Structured trench coat or wool-blend overcoat' 
-        : 'Lightweight linen blazer',
+        ? 'Tailored double-breasted trench coat' 
+        : isMale ? 'Unstructured cotton cardigan' : 'Flowing sheer silk shrug',
     },
     accessories: [
       {
         category: 'Watch',
-        name: 'Stainless Steel Dress Watch',
-        description: 'Adds timeless sophistication and ties the look together.'
+        name: isMale ? 'Chronograph Leather Strap Watch' : 'Rose Gold Slim Mesh Watch',
+        description: 'Adds quiet luxury and architectural precision to the wrist.'
+      },
+      {
+        category: 'Chain / Necklace',
+        name: isMale ? 'Minimalist Silver Box Chain' : 'Layered Gold Pendant Necklace',
+        description: 'Framing the collarbone area with polished brilliance.'
       },
       {
         category: 'Bag',
-        name: 'Leather Crossbody Sling',
-        description: 'Sleek utility for holding essentials effortless.'
+        name: isMale ? 'Full-Grain Leather Sling Briefcase' : 'Structured Envelope Leather Clutch',
+        description: 'Streamlined functionality for carrying daily essentials in style.'
       },
       {
         category: 'Eyewear',
-        name: 'Classic Acetate Frames',
-        description: 'Framing your face with polished elegance.'
+        name: 'Square Acetate Polarized Frames',
+        description: 'Frames your features with modern elegance.'
+      },
+      {
+        category: 'Jewelry / Accent',
+        name: isMale ? 'Brushed Stainless Steel Cufflinks' : 'Emerald Drop Halo Earrings',
+        description: 'Elevates visual interest with curated sparkle.'
       }
     ],
     colorPalette: [
-      { name: 'Primary Accent', hex: '#1E293B' },
+      { name: 'Primary Accent', hex: isMale ? '#1E293B' : '#059669' },
       { name: 'Secondary Tone', hex: '#64748B' },
       { name: 'Base Neutral', hex: '#F8FAFC' }
     ],
     stylingTips: [
-      'Ensure proper fit at the shoulders and ankle cuff for a custom look.',
-      'Cuff sleeve cuffs once for a relaxed, confident flair.',
-      'Keep accessories in matching metallic hardware finishes.'
+      'Ensure precise shoulder seam alignment and tailored trouser break at the shoe top.',
+      'Maintain hardware finish unity: sync watch casing, chain metal, and belt buckle.',
+      'Walk with upright shoulders to let outerwear drape naturally during your walk-in.'
     ],
-    weatherSuitability: `Layered strategically to adapt smoothly to ${weather} conditions throughout the day.`
+    weatherSuitability: `Layered strategically to maintain breathable comfort during ${weather} conditions.`,
+    walkInAdvice: {
+      entranceVibe: isMale ? 'Commanding Executive Entry' : 'Red-Carpet Grand Entrance',
+      postureAndGait: 'Walk with an unhurried, measured stride, relaxed arms, and head held high to project effortless confidence.',
+      holdingStyle: isMale 
+        ? 'Carry the sling bag naturally at your side; keep one hand casually near your jacket lapel.'
+        : 'Hold the clutch securely at mid-torso with fingertips for a graceful silhouette.',
+      lightingPresence: 'Under entry spotlights, the metallic accessory accents catch soft reflections against rich fabric tones.'
+    }
   };
 }
+

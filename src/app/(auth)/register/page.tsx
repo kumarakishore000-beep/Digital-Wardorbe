@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, User, UserPlus, Sparkles } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth, Gender } from '@/hooks/useAuth';
 
 function getPasswordStrength(password: string): { score: number; label: string; color: string } {
   let score = 0;
@@ -27,6 +27,7 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [gender, setGender] = useState<Gender>('female');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -46,7 +47,7 @@ export default function RegisterPage() {
     setIsLoading(true);
     await new Promise((r) => setTimeout(r, 600));
 
-    const result = register(email, password, name);
+    const result = register(email, password, name, gender);
     if (result.success) {
       router.push('/dashboard');
     } else {
@@ -76,6 +77,41 @@ export default function RegisterPage() {
         )}
 
         <div className="space-y-4">
+          {/* Category / Gender Selection */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-300 flex items-center gap-2">
+              <User className="w-4 h-4 text-indigo-400" />
+              Select Style Category / Gender
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setGender('female')}
+                className={`py-3 px-4 rounded-xl border text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
+                  gender === 'female'
+                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 border-pink-400 text-white shadow-lg shadow-pink-500/25 ring-2 ring-pink-400/50'
+                    : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
+                }`}
+              >
+                <span className="text-lg">👗</span>
+                <span>Female</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setGender('male')}
+                className={`py-3 px-4 rounded-xl border text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
+                  gender === 'male'
+                    ? 'bg-gradient-to-r from-indigo-500 to-cyan-600 border-indigo-400 text-white shadow-lg shadow-indigo-500/25 ring-2 ring-indigo-400/50'
+                    : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
+                }`}
+              >
+                <span className="text-lg">👔</span>
+                <span>Male</span>
+              </button>
+            </div>
+          </div>
+
           {/* Name */}
           <div className="space-y-2">
             <label htmlFor="register-name" className="text-sm font-medium text-slate-300">

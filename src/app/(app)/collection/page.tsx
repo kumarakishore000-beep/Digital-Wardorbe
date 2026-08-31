@@ -89,9 +89,9 @@ export default function CollectionPage() {
                 if (!acc[item.category]) acc[item.category] = [];
                 acc[item.category].push(item);
                 return acc;
-              }, {} as Record<string, any[]>)
+              }, {} as Record<string, Array<{ name?: string; emoji?: string; category: string }>>)
             ).map(([category, items]) =>
-              items.map((item: any, index: number) => (
+              items.map((item, index: number) => (
                 <div
                   key={`${category}-${index}`}
                   className="group glass-card rounded-xl overflow-hidden hover:border-indigo-500/30 transition-all duration-300"
@@ -100,7 +100,7 @@ export default function CollectionPage() {
                     <div className="text-4xl">{item.emoji || '👕'}</div>
                   </div>
                   <div className="p-3">
-                    <p className="text-sm font-medium text-white truncate">{item.name || item}</p>
+                    <p className="text-sm font-medium text-white truncate">{typeof item === 'string' ? item : item.name || 'Unnamed'}</p>
                     <p className="text-xs text-slate-400 capitalize">{category}</p>
                   </div>
                 </div>
