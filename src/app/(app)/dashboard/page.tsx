@@ -17,12 +17,12 @@ import { useRouter } from 'next/navigation';
 
 type Tab = 'analyzer' | 'assistant' | 'colors' | 'collection' | 'rewards';
 
-const TABS: { id: Tab; label: string; icon: React.ReactNode; gradient: string }[] = [
-  { id: 'analyzer', label: 'Style Analyzer', icon: <Sparkles className="w-4 h-4" />, gradient: 'from-indigo-500 to-purple-600' },
-  { id: 'assistant', label: 'AI Outfit Assistant', icon: <Bot className="w-4 h-4" />, gradient: 'from-purple-500 to-pink-600' },
-  { id: 'colors', label: 'Color Lab', icon: <Palette className="w-4 h-4" />, gradient: 'from-pink-500 to-rose-600' },
-  { id: 'collection', label: 'My Collection', icon: <Package className="w-4 h-4" />, gradient: 'from-emerald-500 to-teal-600' },
-  { id: 'rewards', label: 'Rewards', icon: <Trophy className="w-4 h-4" />, gradient: 'from-amber-500 to-orange-600' },
+const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
+  { id: 'analyzer', label: 'Curated Lookbook & Style AI', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'assistant', label: 'AI Outfit Assistant', icon: <Bot className="w-4 h-4" /> },
+  { id: 'colors', label: 'Harmonic Color Lab', icon: <Palette className="w-4 h-4" /> },
+  { id: 'collection', label: 'My Wardrobe Collection', icon: <Package className="w-4 h-4" /> },
+  { id: 'rewards', label: 'Atelier Rewards', icon: <Trophy className="w-4 h-4" /> },
 ];
 
 export default function DashboardPage() {
@@ -76,57 +76,59 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-slate-900 to-black text-slate-100 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#0a192f] text-[#FAF8F5] font-sans selection:bg-[#1e3a8a] selection:text-[#fffff0]">
       <Header
         collectionCount={collection.totalCount}
         rewardPoints={rewards.points}
         rewardLevel={rewards.level}
       />
       
-      {/* Tab Navigation */}
-      <nav className="sticky top-[88px] z-40 bg-slate-900/80 backdrop-blur-xl border-b border-white/5">
+      {/* Tab Navigation in Royal Blue & Ivory */}
+      <nav className="sticky top-[73px] z-40 bg-[#0a192f]/95 backdrop-blur-xl border-b border-[#FAF8F5]/15">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-1 py-3 overflow-x-auto scrollbar-hide">
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                }}
-                className={`relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
-                  activeTab === tab.id
-                    ? `bg-gradient-to-r ${tab.gradient} text-white shadow-lg`
-                    : 'text-white/50 hover:text-white/80 hover:bg-white/5'
-                }`}
-              >
-                {tab.icon}
-                {tab.label}
-                {/* Notification dots */}
-                {tab.id === 'collection' && collection.totalCount > 0 && activeTab !== 'collection' && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">
-                    {collection.totalCount}
-                  </span>
-                )}
-                {tab.id === 'rewards' && rewards.points > 0 && activeTab !== 'rewards' && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">
-                    {rewards.level}
-                  </span>
-                )}
-              </button>
-            ))}
+          <div className="flex items-center gap-1.5 py-3 overflow-x-auto scrollbar-hide">
+            {TABS.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-300 border ${
+                    isActive
+                      ? 'bg-[#FAF8F5] text-[#0a192f] border-[#FAF8F5] shadow-lg shadow-[#1e3a8a]/30 scale-105'
+                      : 'bg-[#1e3a8a]/30 border-[#FAF8F5]/15 text-[#FAF8F5]/70 hover:bg-[#1e3a8a]/60 hover:text-[#FAF8F5]'
+                  }`}
+                >
+                  {tab.icon}
+                  <span>{tab.label}</span>
+                  {/* Notification dots */}
+                  {tab.id === 'collection' && collection.totalCount > 0 && activeTab !== 'collection' && (
+                    <span className="ml-1 w-4 h-4 bg-[#1e3a8a] text-[9px] font-bold text-white rounded-full flex items-center justify-center border border-white">
+                      {collection.totalCount}
+                    </span>
+                  )}
+                  {tab.id === 'rewards' && rewards.points > 0 && activeTab !== 'rewards' && (
+                    <span className="ml-1 w-4 h-4 bg-[#FAF8F5] text-[9px] font-bold text-[#0a192f] rounded-full flex items-center justify-center">
+                      {rewards.level}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+
             {/* Spacer + Logout */}
-            <div className="ml-auto shrink-0 flex items-center gap-3">
+            <div className="ml-auto shrink-0 flex items-center gap-3 pl-4">
               {user && (
-                <span className="text-xs text-slate-400 hidden md:block">
+                <span className="text-xs text-[#FAF8F5]/70 font-mono hidden md:block">
                   {user.name}
                 </span>
               )}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-[#FAF8F5]/70 hover:text-white hover:bg-[#FAF8F5]/10 transition-all border border-[#FAF8F5]/10"
                 title="Sign out"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Sign out</span>
               </button>
             </div>
@@ -134,9 +136,9 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-12 flex flex-col items-center">
+      <main className="container mx-auto px-4 py-8 flex flex-col items-center max-w-6xl">
         <AnimatePresence mode="wait">
-          {/* ===== STYLE ANALYZER TAB ===== */}
+          {/* ===== STYLE ANALYZER & LOOKBOOK TAB ===== */}
           {activeTab === 'analyzer' && (
             <motion.div
               key="analyzer"
@@ -144,15 +146,18 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="w-full"
+              className="w-full space-y-12"
             >
               {!results && (
-                <div className="text-center max-w-2xl mx-auto mb-12 space-y-4">
-                  <h2 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-indigo-100 to-indigo-400">
-                    Discover Your Perfect Match
+                <div className="text-center max-w-2xl mx-auto space-y-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e3a8a]/30 border border-[#FAF8F5]/20 text-xs text-[#FAF8F5] uppercase tracking-widest font-mono">
+                    ✦ AuraStyle Curated Lookbook & AI ✦
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-serif font-black tracking-tight text-[#FAF8F5]">
+                    Curate Your Aesthetic
                   </h2>
-                  <p className="text-lg text-indigo-200/80">
-                    Upload an item from your wardrobe, and our AI stylist will build the perfect outfit around it — including matching watches, chains, bracelets, and footwear adapted to your weather and setting.
+                  <p className="text-sm md:text-base text-[#FAF8F5]/75">
+                    Explore high-fashion moodboards or upload any item to receive bespoke AI harmonic styling.
                   </p>
                 </div>
               )}
@@ -164,10 +169,12 @@ export default function DashboardPage() {
               {results && (
                 <div className="w-full space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
                   <div className="flex justify-between items-center max-w-5xl mx-auto px-4">
-                    <h2 className="text-3xl font-bold text-white">Your Style Analysis</h2>
+                    <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#FAF8F5]">
+                      Harmonic Style Analysis
+                    </h2>
                     <button 
                       onClick={() => setResults(null)}
-                      className="text-sm font-medium text-indigo-300 hover:text-white transition-colors border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 rounded-lg"
+                      className="text-xs font-semibold text-[#0a192f] bg-[#FAF8F5] hover:bg-white px-4 py-2 rounded-full transition-all shadow-md"
                     >
                       Style Another Item
                     </button>

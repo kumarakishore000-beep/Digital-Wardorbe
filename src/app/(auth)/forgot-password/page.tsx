@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Lock, ArrowLeft, CheckCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import AuraStyleLogo from '@/components/AuraStyleLogo';
 
 export default function ForgotPasswordPage() {
   const { forgotPassword, resetPassword } = useAuth();
@@ -27,7 +28,6 @@ export default function ForgotPasswordPage() {
       setToken(result.token);
       setStep('reset');
     } else if (result.success) {
-      // No account found — still show reset step for security (won't work without valid token)
       setStep('reset');
     }
     setIsLoading(false);
@@ -55,19 +55,19 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Logo */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 shadow-lg shadow-indigo-500/25 mb-2">
-          <Sparkles className="w-7 h-7 text-white" />
+        <div className="inline-flex items-center justify-center mb-1">
+          <AuraStyleLogo variant="mark" size="lg" />
         </div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">
-          {step === 'email' && 'Reset password'}
-          {step === 'reset' && 'Set new password'}
-          {step === 'success' && 'All set!'}
+        <h1 className="text-2xl md:text-3xl font-serif font-bold text-[#FAF8F5] tracking-tight">
+          {step === 'email' && 'Reset Password'}
+          {step === 'reset' && 'Set New Password'}
+          {step === 'success' && 'Password Updated'}
         </h1>
-        <p className="text-slate-400 text-sm">
-          {step === 'email' && 'Enter your email and we\'ll help you reset your password'}
+        <p className="text-[#FAF8F5]/70 text-xs">
+          {step === 'email' && 'Enter your email and we\'ll send you a recovery link'}
           {step === 'reset' && 'Enter your new password below'}
           {step === 'success' && 'Your password has been reset successfully'}
         </p>
@@ -75,21 +75,21 @@ export default function ForgotPasswordPage() {
 
       {/* Step 1: Email */}
       {step === 'email' && (
-        <form onSubmit={handleEmailSubmit} className="glass-card rounded-2xl p-8 space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="forgot-email" className="text-sm font-medium text-slate-300">
+        <form onSubmit={handleEmailSubmit} className="bg-[#0f254e]/60 rounded-3xl p-6 md:p-8 space-y-4 border border-[#FAF8F5]/15 shadow-2xl backdrop-blur-xl text-[#FAF8F5]">
+          <div className="space-y-1">
+            <label htmlFor="forgot-email" className="text-xs font-mono uppercase text-[#FAF8F5]/70">
               Email address
             </label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#FAF8F5]/40" />
               <input
                 id="forgot-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="you@domain.com"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+                className="w-full bg-[#0a192f] border border-[#FAF8F5]/15 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder:text-[#FAF8F5]/30 focus:outline-none focus:border-[#FAF8F5]/40 transition-all"
               />
             </div>
           </div>
@@ -97,12 +97,12 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-xl bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold text-xs shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
           >
             {isLoading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-[#0a192f]/30 border-t-[#0a192f] rounded-full animate-spin" />
             ) : (
-              'Continue'
+              'Send Recovery Link'
             )}
           </button>
         </form>
@@ -110,76 +110,57 @@ export default function ForgotPasswordPage() {
 
       {/* Step 2: New Password */}
       {step === 'reset' && (
-        <form onSubmit={handleResetSubmit} className="glass-card rounded-2xl p-8 space-y-6">
+        <form onSubmit={handleResetSubmit} className="bg-[#0f254e]/60 rounded-3xl p-6 md:p-8 space-y-4 border border-[#FAF8F5]/15 shadow-2xl backdrop-blur-xl text-[#FAF8F5]">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-300 text-sm rounded-xl px-4 py-3 flex items-center gap-2">
+            <div className="bg-red-950/50 border border-red-500/30 text-red-200 text-xs rounded-xl px-4 py-2.5 flex items-center gap-2">
               <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-red-400" />
               {error}
             </div>
           )}
 
-          {!token && (
-            <div className="bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm rounded-xl px-4 py-3">
-              If an account exists for <strong>{email}</strong>, you can set a new password below.
-            </div>
-          )}
-
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="new-password" className="text-sm font-medium text-slate-300">
-                New password
-              </label>
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <label className="text-xs font-mono uppercase text-[#FAF8F5]/70">New password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#FAF8F5]/40" />
                 <input
-                  id="new-password"
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="••••••••"
                   required
                   minLength={6}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+                  className="w-full bg-[#0a192f] border border-[#FAF8F5]/15 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder:text-[#FAF8F5]/30 focus:outline-none focus:border-[#FAF8F5]/40"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="confirm-new-password" className="text-sm font-medium text-slate-300">
-                Confirm new password
-              </label>
+            <div className="space-y-1">
+              <label className="text-xs font-mono uppercase text-[#FAF8F5]/70">Confirm new password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#FAF8F5]/40" />
                 <input
-                  id="confirm-new-password"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
                   required
                   minLength={6}
-                  className={`w-full bg-white/5 border rounded-xl py-3 pl-11 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all ${
-                    confirmPassword && confirmPassword !== newPassword
-                      ? 'border-red-500/50'
-                      : 'border-white/10'
-                  }`}
+                  className="w-full bg-[#0a192f] border border-[#FAF8F5]/15 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder:text-[#FAF8F5]/30 focus:outline-none focus:border-[#FAF8F5]/40"
                 />
               </div>
-              {confirmPassword && confirmPassword !== newPassword && (
-                <p className="text-xs text-red-400">Passwords do not match</p>
-              )}
             </div>
           </div>
 
           <button
             type="submit"
             disabled={isLoading || !token}
-            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-xl bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold text-xs shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
           >
             {isLoading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-[#0a192f]/30 border-t-[#0a192f] rounded-full animate-spin" />
             ) : (
-              'Reset password'
+              'Reset Password'
             )}
           </button>
         </form>
@@ -187,16 +168,16 @@ export default function ForgotPasswordPage() {
 
       {/* Step 3: Success */}
       {step === 'success' && (
-        <div className="glass-card rounded-2xl p-8 space-y-6 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-            <CheckCircle className="w-8 h-8 text-emerald-400" />
+        <div className="bg-[#0f254e]/60 rounded-3xl p-8 space-y-4 text-center border border-[#FAF8F5]/15 shadow-2xl backdrop-blur-xl text-[#FAF8F5]">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#FAF8F5] text-[#0a192f]">
+            <CheckCircle className="w-7 h-7 text-[#1e3a8a]" />
           </div>
-          <p className="text-slate-300">
+          <p className="text-xs text-[#FAF8F5]/80">
             Your password has been updated. You can now sign in with your new password.
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-500/25"
+            className="inline-flex items-center justify-center gap-2 bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold py-2.5 px-6 rounded-xl transition-all text-xs shadow-lg"
           >
             Back to sign in
           </Link>
@@ -208,7 +189,7 @@ export default function ForgotPasswordPage() {
         <p className="text-center">
           <Link
             href="/login"
-            className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-300 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-[#FAF8F5]/70 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to sign in

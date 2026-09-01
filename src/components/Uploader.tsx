@@ -8,32 +8,32 @@ interface UploaderProps {
 }
 
 const WEATHER_OPTIONS = [
-  { value: 'Hot', icon: Sun, label: 'Hot', color: 'text-orange-400' },
-  { value: 'Mild', icon: Cloud, label: 'Mild', color: 'text-blue-300' },
-  { value: 'Cold', icon: Snowflake, label: 'Cold', color: 'text-cyan-300' },
-  { value: 'Rainy', icon: CloudRain, label: 'Rainy', color: 'text-slate-400' },
+  { value: 'Hot', icon: Sun, label: 'Hot' },
+  { value: 'Mild', icon: Cloud, label: 'Mild' },
+  { value: 'Cold', icon: Snowflake, label: 'Cold' },
+  { value: 'Rainy', icon: CloudRain, label: 'Rainy' },
 ];
 
 const LOOKBOOK_PRESETS = [
   {
-    name: 'Festive Indo-Western',
-    src: '/images/branding/womens-ethnic-fusion.jpg',
-    tag: 'Women Fusion',
+    name: 'Casual Workplaces',
+    src: '/images/branding/mens-smart-casual.jpg',
+    tag: 'Look 01',
   },
   {
-    name: "Men's Smart Ethnic",
-    src: '/images/branding/mens-smart-casual.jpg',
-    tag: 'Men Festive',
+    name: 'Regal Celebration',
+    src: '/images/branding/womens-ethnic-fusion.jpg',
+    tag: 'Look 02',
   },
   {
     name: 'Pastel Streetwear',
     src: '/images/branding/urban-western-casual.jpg',
-    tag: 'Western Chic',
+    tag: 'Look 03',
   },
   {
-    name: 'Campaign Group',
+    name: 'Signature Ensemble',
     src: '/images/branding/hero-banner.jpg',
-    tag: 'Lookbook',
+    tag: 'Look 04',
   },
 ];
 
@@ -100,19 +100,19 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full max-w-3xl mx-auto space-y-8"
+      className="w-full max-w-4xl mx-auto space-y-8"
     >
       {/* Quick Lookbook Presets */}
-      <div className="space-y-3 bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+      <div className="space-y-3 bg-[#0f254e]/50 border border-[#FAF8F5]/15 rounded-3xl p-5 backdrop-blur-md shadow-xl">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-300">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Try Curated Pantaloons Lookbook Outfits</span>
+          <div className="flex items-center gap-2 text-xs font-serif font-bold uppercase tracking-wider text-[#FAF8F5]">
+            <Sparkles className="w-3.5 h-3.5 text-[#fffff0]" />
+            <span>Select From Editorial Lookbook Archives</span>
           </div>
-          <span className="text-[11px] text-white/50">One-click AI Styling</span>
+          <span className="text-[11px] text-[#FAF8F5]/60 font-mono">1-Click Harmonic Input</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {LOOKBOOK_PRESETS.map((preset) => {
             const isSelected = preview === preset.src;
             return (
@@ -120,22 +120,22 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
                 key={preset.src}
                 type="button"
                 onClick={() => selectLookbookPreset(preset.src, preset.name)}
-                className={`flex items-center gap-2.5 p-2 rounded-xl border text-left transition-all group ${
+                className={`flex items-center gap-2.5 p-2 rounded-2xl border text-left transition-all group ${
                   isSelected
-                    ? 'bg-indigo-600/30 border-indigo-400 ring-1 ring-indigo-400/50 shadow-md'
-                    : 'bg-black/30 border-white/10 hover:bg-white/10 hover:border-white/20'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] border-[#FAF8F5] shadow-lg shadow-[#1e3a8a]/40 scale-102'
+                    : 'bg-[#0a192f]/60 border-[#FAF8F5]/10 hover:bg-[#16366f]/40 hover:border-[#FAF8F5]/30'
                 }`}
               >
                 <img
                   src={preset.src}
                   alt={preset.name}
-                  className="w-10 h-10 rounded-lg object-cover object-top border border-white/20 shrink-0 group-hover:scale-105 transition-transform"
+                  className="w-11 h-11 rounded-xl object-cover object-top border border-[#FAF8F5]/20 shrink-0 group-hover:scale-105 transition-transform"
                 />
                 <div className="overflow-hidden">
-                  <p className="text-xs font-bold text-white truncate group-hover:text-indigo-200">
+                  <p className={`text-xs font-bold truncate ${isSelected ? 'text-[#0a192f]' : 'text-[#FAF8F5]'}`}>
                     {preset.name}
                   </p>
-                  <span className="text-[10px] text-indigo-300 font-mono block">
+                  <span className={`text-[10px] font-mono block ${isSelected ? 'text-[#1e3a8a]' : 'text-[#93c5fd]'}`}>
                     {preset.tag}
                   </span>
                 </div>
@@ -145,11 +145,11 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
         {/* Upload Zone */}
         <div 
-          className={`relative w-full h-80 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-all duration-300 backdrop-blur-sm ${
-            dragActive ? 'border-indigo-400 bg-indigo-500/10' : 'border-white/20 bg-black/20 hover:border-white/40 hover:bg-black/30'
+          className={`relative w-full min-h-[320px] rounded-3xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-all duration-300 backdrop-blur-sm cursor-pointer ${
+            dragActive ? 'border-[#FAF8F5] bg-[#1e3a8a]/30' : 'border-[#FAF8F5]/20 bg-[#0a192f]/60 hover:border-[#FAF8F5]/50 hover:bg-[#0f254e]/60'
           }`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -173,7 +173,7 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
                 src={preview} 
-                className="absolute inset-0 w-full h-full object-cover z-0 opacity-70"
+                className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
                 alt="Upload preview" 
               />
             ) : (
@@ -182,39 +182,39 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="z-10 flex flex-col items-center gap-4 text-white/70"
+                className="z-10 flex flex-col items-center gap-4 text-[#FAF8F5]/80 p-6 text-center"
               >
-                <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                  <UploadCloud className="w-10 h-10 text-indigo-300" />
+                <div className="w-16 h-16 rounded-full bg-[#1e3a8a]/50 border border-[#FAF8F5]/30 flex items-center justify-center shadow-lg shadow-[#1e3a8a]/40">
+                  <UploadCloud className="w-8 h-8 text-[#FAF8F5]" />
                 </div>
-                <div className="text-center">
-                  <p className="font-semibold text-lg text-white">Drag & drop an outfit photo</p>
-                  <p className="text-sm">or click to browse from device</p>
+                <div>
+                  <p className="font-serif font-bold text-base text-[#FAF8F5]">Drop an Outfit Photo</p>
+                  <p className="text-xs text-[#FAF8F5]/60 mt-1">or click to browse your look</p>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
           {preview && (
-            <div className="absolute top-4 right-4 z-10 bg-green-500/80 backdrop-blur-md text-white p-2 rounded-full shadow-lg">
-              <CheckCircle2 className="w-6 h-6" />
+            <div className="absolute top-4 right-4 z-10 bg-[#FAF8F5] text-[#0a192f] p-2 rounded-full shadow-lg border border-[#0a192f]/20">
+              <CheckCircle2 className="w-5 h-5 text-[#1e3a8a]" />
             </div>
           )}
         </div>
 
         {/* Configuration Panel */}
-        <div className="space-y-5 flex flex-col justify-center">
-          <div className="space-y-3">
-            <label className="text-sm font-medium text-indigo-200">Event Formality</label>
+        <div className="space-y-4 flex flex-col justify-between bg-[#0f254e]/50 border border-[#FAF8F5]/15 rounded-3xl p-6 shadow-xl">
+          <div className="space-y-2">
+            <label className="text-xs font-mono uppercase tracking-wider text-[#FAF8F5]/70 font-semibold">Event Formality</label>
             <div className="flex gap-2">
               {['Casual', 'Cocktail', 'Formal'].map((f) => (
                 <button
                   key={f}
                   onClick={() => setFormality(f)}
-                  className={`flex-1 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all duration-300 border ${
                     formality === f 
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] border border-transparent' 
-                    : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] border-[#FAF8F5] shadow-md' 
+                    : 'bg-[#0a192f]/60 border-[#FAF8F5]/10 text-[#FAF8F5]/70 hover:bg-[#16366f]'
                   }`}
                 >
                   {f}
@@ -223,17 +223,17 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
             </div>
           </div>
 
-          <div className="space-y-3">
-            <label className="text-sm font-medium text-indigo-200">Setting</label>
+          <div className="space-y-2">
+            <label className="text-xs font-mono uppercase tracking-wider text-[#FAF8F5]/70 font-semibold">Setting</label>
             <div className="flex gap-2">
               {['Indoor', 'Outdoor', 'Beach'].map((s) => (
                 <button
                   key={s}
                   onClick={() => setSetting(s)}
-                  className={`flex-1 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all duration-300 border ${
                     setting === s 
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] border border-transparent' 
-                    : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] border-[#FAF8F5] shadow-md' 
+                    : 'bg-[#0a192f]/60 border-[#FAF8F5]/10 text-[#FAF8F5]/70 hover:bg-[#16366f]'
                   }`}
                 >
                   {s}
@@ -242,59 +242,59 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
             </div>
           </div>
 
-          {/* Weather Selector (NEW) */}
-          <div className="space-y-3">
-            <label className="text-sm font-medium text-indigo-200">Weather</label>
+          {/* Weather Selector */}
+          <div className="space-y-2">
+            <label className="text-xs font-mono uppercase tracking-wider text-[#FAF8F5]/70 font-semibold">Weather Adaptation</label>
             <div className="flex gap-2">
               {WEATHER_OPTIONS.map((w) => {
                 const Icon = w.icon;
+                const isSelected = weather === w.value;
                 return (
                   <button
                     key={w.value}
                     onClick={() => setWeather(w.value)}
-                    className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex flex-col items-center gap-1 ${
-                      weather === w.value 
-                      ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] border border-transparent' 
-                      : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
+                    className={`flex-1 py-2 rounded-xl text-xs font-semibold transition-all duration-300 flex flex-col items-center gap-1 border ${
+                      isSelected 
+                      ? 'bg-[#FAF8F5] text-[#0a192f] border-[#FAF8F5] shadow-md' 
+                      : 'bg-[#0a192f]/60 border-[#FAF8F5]/10 text-[#FAF8F5]/70 hover:bg-[#16366f]'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${weather === w.value ? 'text-white' : w.color}`} />
-                    <span className="text-xs">{w.label}</span>
+                    <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#1e3a8a]' : 'text-[#FAF8F5]'}`} />
+                    <span className="text-[11px]">{w.label}</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          <div className="pt-3 flex items-center justify-between border-t border-white/10">
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${useCloset ? 'bg-indigo-500/20 text-indigo-300' : 'bg-white/5 text-white/40'}`}>
-                <Shirt className="w-5 h-5" />
+          <div className="pt-3 flex items-center justify-between border-t border-[#FAF8F5]/10">
+            <div className="flex items-center gap-2.5">
+              <div className={`p-2 rounded-xl border ${useCloset ? 'bg-[#1e3a8a] text-white border-[#FAF8F5]/30' : 'bg-[#0a192f] text-white/40 border-[#FAF8F5]/10'}`}>
+                <Shirt className="w-4 h-4" />
               </div>
               <div className="text-left">
-                <p className="text-sm font-semibold text-white">Digital Closet</p>
-                <p className="text-xs text-white/50">Prioritize items I own</p>
+                <p className="text-xs font-bold text-[#FAF8F5]">Digital Wardrobe Priority</p>
+                <p className="text-[10px] text-[#FAF8F5]/60 font-mono">Mix with my owned items</p>
               </div>
             </div>
             <button 
               onClick={() => setUseCloset(!useCloset)}
-              className={`w-14 h-7 rounded-full p-1 transition-colors duration-300 ease-in-out ${useCloset ? 'bg-indigo-500' : 'bg-white/20'}`}
+              className={`w-12 h-6 rounded-full p-0.5 transition-colors duration-300 ${useCloset ? 'bg-[#FAF8F5]' : 'bg-[#0a192f] border border-[#FAF8F5]/20'}`}
             >
-              <div className={`w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300 ease-in-out ${useCloset ? 'translate-x-7' : 'translate-x-0'}`} />
+              <div className={`w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ${useCloset ? 'translate-x-6 bg-[#0a192f]' : 'translate-x-0 bg-[#FAF8F5]'}`} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* CTA Button */}
+      {/* Big Action CTA in Royal Blue & Ivory */}
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
         onClick={() => {
           if (file) {
             onAnalyze(file, formality, setting, weather, useCloset);
           } else {
-            // Create a sample dummy file from URL for instant demo styling
             fetch('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop')
               .then(r => r.blob())
               .then(blob => {
@@ -307,17 +307,17 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
           }
         }}
         disabled={isAnalyzing}
-        className="w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-500 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-[0_0_40px_rgba(99,102,241,0.5)] border border-white/20 hover:shadow-[0_0_60px_rgba(99,102,241,0.7)] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-4.5 rounded-full font-serif font-bold text-base flex items-center justify-center gap-3 transition-all duration-300 bg-[#FAF8F5] hover:bg-white text-[#0a192f] shadow-2xl shadow-[#1e3a8a]/40 border-2 border-[#FAF8F5] disabled:opacity-50"
       >
         {isAnalyzing ? (
           <>
-            <Loader2 className="w-6 h-6 animate-spin" />
-            Analyzing Style & Color Theory with Gemini...
+            <Loader2 className="w-5 h-5 animate-spin text-[#1e3a8a]" />
+            <span>Harmonizing Color & Aesthetics with Gemini...</span>
           </>
         ) : (
           <>
-            <Sparkles className="w-6 h-6 text-yellow-300" />
-            {file ? 'Style My Uploaded Outfit' : 'Style Sample Outfit with Gemini AI'}
+            <Sparkles className="w-5 h-5 text-[#1e3a8a]" />
+            <span>{file ? 'Harmonize Uploaded Outfit with AuraStyle AI' : 'Harmonize Sample Lookbook Outfit'}</span>
           </>
         )}
       </motion.button>

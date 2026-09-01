@@ -11,194 +11,273 @@ import {
   Shirt,
   Tag,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  Layers,
+  ArrowUpRight,
+  Info,
 } from 'lucide-react';
 import { useCollection, CollectionItem } from '@/hooks/useCollection';
 import { useAuth } from '@/hooks/useAuth';
 import LoginModal from '@/components/LoginModal';
 
 export interface LookStoryItem {
+  id: string;
   name: string;
   category: CollectionItem['category'];
   color: string;
   icon: string;
+  image?: string;
+  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
   reason: string;
+  swatchLabel?: string;
+  price?: string;
 }
 
 export interface CuratedLookStory {
   id: string;
   code: string;
-  title: string;
+  titleSerif: string;
+  titleSans: string;
   category: string;
   tagline: string;
   styleImpact: 'High' | 'Medium' | 'Low';
-  image?: string;
+  modelImage: string;
+  themeColor: string;
+  tintPanel1: string;
+  tintPanel2: string;
   items: LookStoryItem[];
   palette: string[];
 }
 
 export const CURATED_LOOKS_DATA: CuratedLookStory[] = [
   {
-    id: 'hp-stl-6',
-    code: 'HP STL 6',
-    title: 'Signature Brand Campaign Look',
-    category: 'Festive Luxury',
-    tagline: 'Flagship contemporary lehenga skirt & crop jacket ensemble with opulent accents',
+    id: 'look-casual-work',
+    code: 'LOOK 01',
+    titleSerif: 'Casual',
+    titleSans: 'WORKPLACES',
+    category: 'Smart Casual',
+    tagline: 'Modern utility jacket layered over organic white tee with relaxed indigo denim and commuter backpack.',
     styleImpact: 'High',
-    image: '/images/branding/hero-banner.jpg',
-    palette: ['#3EA094', '#E36339', '#D4A343', '#E5D8CA'],
+    modelImage: '/images/branding/mens-smart-casual.jpg',
+    themeColor: '#1e3a8a',
+    tintPanel1: 'bg-[#dbeafe]/70',
+    tintPanel2: 'bg-[#f4efeb]',
+    palette: ['#1e3a8a', '#fffff0', '#4b5563', '#1e293b'],
     items: [
-      { name: 'Royal Sage Embellished Lehenga Skirt', category: 'Jewelry', color: '#3EA094', icon: '👗', reason: 'Flowing silhouette with delicate mirror and zari work.' },
-      { name: 'Embroidered Crop Jacket & Blouse', category: 'Other', color: '#E5D8CA', icon: '🧥', reason: 'Modern structured layering over festive silk.' },
-      { name: 'Polki Statement Choker & Jhumkas', category: 'Jewelry', color: '#D4A343', icon: '💍', reason: 'High-luxury heritage gold jewelry that anchors the look.' },
-      { name: 'Zari Embroidered Box Clutch', category: 'Bag', color: '#E36339', icon: '👜', reason: 'Handcrafted evening clutch with metallic motifs.' },
-      { name: 'Gold Metallic Block Heels', category: 'Shoes', color: '#D4A343', icon: '👠', reason: 'All-day comfort with festive shine.' },
+      {
+        id: 'c-bag',
+        name: 'Technical Commuter Backpack',
+        category: 'Bag',
+        color: '#0f172a',
+        icon: '🎒',
+        position: 'top-left',
+        swatchLabel: 'DETAIL DECODED',
+        reason: 'Water-resistant matte ballistic nylon with padded laptop sleeve.',
+        price: '$89',
+      },
+      {
+        id: 'c-jacket',
+        name: 'Structured Utility Zip Overshirt',
+        category: 'Other',
+        color: '#475569',
+        icon: '🧥',
+        position: 'top-right',
+        reason: 'Tailored collar with dual chest pockets in heavyweight cotton twill.',
+        price: '$119',
+      },
+      {
+        id: 'c-pants',
+        name: 'Deep Indigo Straight-Leg Jeans',
+        category: 'Other',
+        color: '#1e293b',
+        icon: '👖',
+        position: 'bottom-left',
+        reason: 'Clean selvedge rinse without distressing for elevated office polish.',
+        price: '$95',
+      },
+      {
+        id: 'c-shoes',
+        name: 'Low-Top Suede City Sneakers',
+        category: 'Shoes',
+        color: '#334155',
+        icon: '👟',
+        position: 'bottom-right',
+        reason: 'Ergonomic gum sole with hand-stitched leather-lined heel.',
+        price: '$110',
+      },
     ],
   },
   {
-    id: 'hp-stl-7',
-    code: 'HP STL 7',
-    title: 'Retro Denim & Street Casuals',
-    category: 'Casual Street',
-    tagline: 'Vintage washed denim trucker with straight-leg denim & retro sneakers',
+    id: 'look-regal-evening',
+    code: 'LOOK 02',
+    titleSerif: 'Regal',
+    titleSans: 'CELEBRATION',
+    category: 'Indo-Western Fusion',
+    tagline: 'Opulent embroidered cropped bandhgala paired with layered ivory palazzo trousers and handcrafted jewelry.',
+    styleImpact: 'High',
+    modelImage: '/images/branding/womens-ethnic-fusion.jpg',
+    themeColor: '#1e3a8a',
+    tintPanel1: 'bg-[#fdfbf7]',
+    tintPanel2: 'bg-[#1e3a8a]/10',
+    palette: ['#1e3a8a', '#fffff0', '#c2a649', '#0a192f'],
+    items: [
+      {
+        id: 'r-jewelry',
+        name: 'Heritage Royal Blue Choker',
+        category: 'Jewelry',
+        color: '#1e3a8a',
+        icon: '💍',
+        position: 'top-left',
+        swatchLabel: 'FINE ATELIER',
+        reason: 'Polki and sapphire-toned enamel accents framed in 18k gold plating.',
+        price: '$145',
+      },
+      {
+        id: 'r-jacket',
+        name: 'Ivory Zari Embroidered Cape',
+        category: 'Other',
+        color: '#fffff0',
+        icon: '🧥',
+        position: 'top-right',
+        reason: 'Weightless sheer organza with delicate metallic threadwork.',
+        price: '$175',
+      },
+      {
+        id: 'r-pants',
+        name: 'Pleated Silk Crepe Palazzos',
+        category: 'Other',
+        color: '#FAF8F5',
+        icon: '👖',
+        position: 'bottom-left',
+        reason: 'Fluid drape with subtle flare that moves with regal grace.',
+        price: '$120',
+      },
+      {
+        id: 'r-shoes',
+        name: 'Metallic Ankle-Strap Stilettos',
+        category: 'Shoes',
+        color: '#eae3d2',
+        icon: '👡',
+        position: 'bottom-right',
+        reason: 'Mirrored gold finish with cushioned insole for festive soirées.',
+        price: '$135',
+      },
+    ],
+  },
+  {
+    id: 'look-urban-street',
+    code: 'LOOK 03',
+    titleSerif: 'Pastel',
+    titleSans: 'STREETWEAR',
+    category: 'Urban Casual',
+    tagline: 'Cropped vintage trucker jacket with relaxed cargo utility trousers and clean ivory platform sneakers.',
     styleImpact: 'Medium',
-    palette: ['#2A4365', '#E2E8F0', '#94A3B8', '#1E293B'],
+    modelImage: '/images/branding/urban-western-casual.jpg',
+    themeColor: '#1e3a8a',
+    tintPanel1: 'bg-[#faf8f5]',
+    tintPanel2: 'bg-[#93c5fd]/20',
+    palette: ['#1e3a8a', '#fffff0', '#64748b', '#0f2042'],
     items: [
-      { name: 'Vintage Washed Denim Trucker Jacket', category: 'Other', color: '#2A4365', icon: '🧥', reason: 'Timeless oversized layer for casual styling.' },
-      { name: '90s Relaxed High-Rise Straight Jeans', category: 'Other', color: '#334155', icon: '👖', reason: 'Flattering classic cut that pairs with any tee.' },
-      { name: 'Classic Aviator Sunglasses', category: 'Sunglasses', color: '#1E293B', icon: '🕶️', reason: 'UV protection with retro pilot flair.' },
-      { name: 'White Platform Canvas Sneakers', category: 'Shoes', color: '#FFFFFF', icon: '👟', reason: 'Clean urban staple bridging casual and street wear.' },
-      { name: 'Woven Leather Belt', category: 'Bracelet', color: '#78350F', icon: '📿', reason: 'Vintage brass buckle detail.' },
+      {
+        id: 'u-bag',
+        name: 'Crossbody Mini Sling Bag',
+        category: 'Bag',
+        color: '#1e3a8a',
+        icon: '👜',
+        position: 'top-left',
+        swatchLabel: 'STREET CAPSULE',
+        reason: 'Compact cordura sling with matte royal blue hardware clips.',
+        price: '$65',
+      },
+      {
+        id: 'u-jacket',
+        name: 'Boxy Cropped Denim Trucker',
+        category: 'Other',
+        color: '#93c5fd',
+        icon: '🧥',
+        position: 'top-right',
+        reason: 'Soft stone-washed denim with dropped shoulders and raw hem.',
+        price: '$105',
+      },
+      {
+        id: 'u-pants',
+        name: 'Utility Cargo Joggers',
+        category: 'Other',
+        color: '#334155',
+        icon: '👖',
+        position: 'bottom-left',
+        reason: 'Articulated knee seams and magnetic snap cargo pockets.',
+        price: '$88',
+      },
+      {
+        id: 'u-shoes',
+        name: 'Ivory Platform Court Sneakers',
+        category: 'Shoes',
+        color: '#fffff0',
+        icon: '👟',
+        position: 'bottom-right',
+        reason: 'Chunky ivory vulcanized rubber sole with premium calf leather.',
+        price: '$125',
+      },
     ],
   },
   {
-    id: 'hp-stl-8',
-    code: 'HP STL 8',
-    title: 'Minimalist Monochrome Evening',
-    category: 'Evening Glam',
-    tagline: 'Sleek midnight satin slip with tailored tuxedo blazer & sculptural silver',
-    styleImpact: 'High',
-    palette: ['#0F172A', '#334155', '#C0C0C0', '#F8FAFC'],
-    items: [
-      { name: 'Midnight Satin Floor Slip Gown', category: 'Other', color: '#0F172A', icon: '👗', reason: 'Liquid satin drape for evening cocktail impact.' },
-      { name: 'Draped Tailored Tuxedo Jacket', category: 'Other', color: '#1E293B', icon: '🧥', reason: 'Sharp contrast over fluid satin.' },
-      { name: 'Sculptural Silver Cuff Bracelet', category: 'Bracelet', color: '#C0C0C0', icon: '📿', reason: 'Architectural metalwork for minimal luxury.' },
-      { name: 'Minimalist Ankle-Strap Stiletto Heels', category: 'Shoes', color: '#0F172A', icon: '👠', reason: 'Clean lines that elongate the silhouette.' },
-      { name: 'Micro Velvet Minaudière Clutch', category: 'Bag', color: '#1E293B', icon: '👜', reason: 'Compact luxury for gala and evening events.' },
-    ],
-  },
-  {
-    id: 'hp-stl-9',
-    code: 'HP STL 9',
-    title: 'Active Weekend Athleisure',
-    category: 'Sport & Active',
-    tagline: 'Seamless ribbed compression set with oversized fleece zip hoodie',
-    styleImpact: 'Low',
-    palette: ['#475569', '#38BDF8', '#F1F5F9', '#0284C7'],
-    items: [
-      { name: 'Seamless Ribbed Compression Crop Tank', category: 'Other', color: '#38BDF8', icon: '🎽', reason: 'Moisture-wicking athletic support.' },
-      { name: 'High-Waist Sculpting Yoga Trackpants', category: 'Other', color: '#475569', icon: '🩳', reason: '4-way stretch fabric for active movement.' },
-      { name: 'Oversized French Terry Zip Hoodie', category: 'Other', color: '#E2E8F0', icon: '🧥', reason: 'Cozy post-workout layering.' },
-      { name: 'Cushioned Performance Runners', category: 'Shoes', color: '#FFFFFF', icon: '👟', reason: 'Impact absorption and modern running silhouette.' },
-      { name: 'Sport Smartwatch Band', category: 'Watch', color: '#0284C7', icon: '⌚', reason: 'Lightweight silicone strap for fitness tracking.' },
-    ],
-  },
-  {
-    id: 'hp-stl-10',
-    code: 'HP STL 10',
-    title: 'Royal Heritage Celebration',
+    id: 'look-brand-hero',
+    code: 'LOOK 04',
+    titleSerif: 'Signature',
+    titleSans: 'HERO ENSEMBLE',
     category: 'Grand Festive',
-    tagline: 'Handcrafted zari silk ensemble with antique brooch & royal mojaris',
+    tagline: 'Pantaloons flagship coordinated festive silhouette with ivory brocade and royal blue accents.',
     styleImpact: 'High',
-    palette: ['#7C2D12', '#D97706', '#FEF3C7', '#451A03'],
+    modelImage: '/images/branding/hero-banner.jpg',
+    themeColor: '#1e3a8a',
+    tintPanel1: 'bg-[#dbeafe]/50',
+    tintPanel2: 'bg-[#fdfbf7]',
+    palette: ['#0a192f', '#1e3a8a', '#fffff0', '#eae3d2'],
     items: [
-      { name: 'Handcrafted Zari Silk Kurta Ensemble', category: 'Other', color: '#7C2D12', icon: '👘', reason: 'Rich brocade weaving for celebratory weddings.' },
-      { name: 'Pure Silk Draped Dupatta Trousers', category: 'Other', color: '#FEF3C7', icon: '🧣', reason: 'Lustrous drape with antique gold border.' },
-      { name: 'Antique Royal Brooch Pin', category: 'Jewelry', color: '#D97706', icon: '👑', reason: 'Vintage regal accent for chest lapel.' },
-      { name: 'Velvet Hand-Embroidered Mojaris', category: 'Shoes', color: '#451A03', icon: '👞', reason: 'Traditional artisanal footwear.' },
-      { name: 'Classic Gold Cuban Chain', category: 'Chain', color: '#F59E0B', icon: '📿', reason: 'Timeless warmth and festive celebration.' },
-    ],
-  },
-  {
-    id: 'hp-stl-1',
-    code: 'HP STL 1',
-    title: 'Modern Festive Fusion',
-    category: 'Indo-Western',
-    tagline: 'Coral embellished crop top with floral flared palazzos & sheer cape',
-    styleImpact: 'High',
-    image: '/images/branding/womens-ethnic-fusion.jpg',
-    palette: ['#FB923C', '#FDE047', '#F472B6', '#FFF7ED'],
-    items: [
-      { name: 'Coral Peach Embellished Crop Top', category: 'Jewelry', color: '#FB923C', icon: '👚', reason: 'Intricate golden embroidery on festive silk.' },
-      { name: 'High-Waist Flared Floral Palazzos', category: 'Other', color: '#FFF7ED', icon: '👖', reason: 'Vibrant printed crepe with fluid flare.' },
-      { name: 'Sheer Organza Matching Cape Jacket', category: 'Other', color: '#FB923C', icon: '🧥', reason: 'Airy bohemian layering with embroidered border.' },
-      { name: 'Kundan Drop Chandelier Earrings', category: 'Jewelry', color: '#FDE047', icon: '💍', reason: 'Festive statement ear jewelry.' },
-      { name: 'Metallic Rose-Gold Stiletto Sandals', category: 'Shoes', color: '#F472B6', icon: '👡', reason: 'Glamorous height and celebratory shine.' },
-    ],
-  },
-  {
-    id: 'stl-hp2',
-    code: 'STL HP2',
-    title: 'Urban Pastel Streetwear',
-    category: 'Western Chic',
-    tagline: 'Lavender cropped denim jacket with olive utility cargo joggers',
-    styleImpact: 'Medium',
-    image: '/images/branding/urban-western-casual.jpg',
-    palette: ['#C084FC', '#65A30D', '#F8FAFC', '#1E293B'],
-    items: [
-      { name: 'Pastel Lavender Cropped Denim Jacket', category: 'Other', color: '#C084FC', icon: '🧥', reason: 'Frayed hem detail in trendsetting pastel wash.' },
-      { name: 'High-Waisted Olive Utility Cargo Pants', category: 'Other', color: '#65A30D', icon: '👖', reason: 'Functional cargo pockets with elastic cuff hem.' },
-      { name: 'Graphic Minimalist White Crewneck Tee', category: 'Other', color: '#FFFFFF', icon: '👕', reason: 'Crisp organic cotton layering base.' },
-      { name: 'Chunky White Platform Sneakers', category: 'Shoes', color: '#FFFFFF', icon: '👟', reason: 'Comfortable street-smart silhouette.' },
-      { name: 'Minimalist Silver Hoop Earrings', category: 'Jewelry', color: '#E2E8F0', icon: '💍', reason: 'Sleek metallic daily accessory.' },
-    ],
-  },
-  {
-    id: 'stl-hp3',
-    code: 'STLHP3',
-    title: "Men's Smart Ethnic Casual",
-    category: 'Smart Ethnic',
-    tagline: 'Printed teal linen short kurta with textured beige Nehru waistcoat',
-    styleImpact: 'High',
-    image: '/images/branding/mens-smart-casual.jpg',
-    palette: ['#0D9488', '#D97706', '#F8FAFC', '#78350F'],
-    items: [
-      { name: 'Printed Teal-Green Linen Short Kurta', category: 'Other', color: '#0D9488', icon: '👔', reason: 'Breathable linen with subtle geometric ethnic print.' },
-      { name: 'Textured Beige Nehru Waistcoat Jacket', category: 'Other', color: '#D97706', icon: '🧥', reason: 'Structured mandarin collar waistcoat.' },
-      { name: 'Slim-Fit Tailored Ivory Chinos', category: 'Other', color: '#F8FAFC', icon: '👖', reason: 'Sharp tapered cut for clean contrast.' },
-      { name: 'Tan Leather Penny Loafers', category: 'Shoes', color: '#78350F', icon: '👞', reason: 'Hand-burnished leather for smart casual poise.' },
-      { name: 'Minimalist Chronograph Watch', category: 'Watch', color: '#1E293B', icon: '⌚', reason: 'Polished steel dial with leather strap.' },
-    ],
-  },
-  {
-    id: 'hp-stl-4',
-    code: 'HP STL 4',
-    title: 'Contemporary Office Chic',
-    category: 'Workwear',
-    tagline: 'Tailored double-breasted blazer with pleated high-waist trousers',
-    styleImpact: 'High',
-    palette: ['#1E3A8A', '#E0E7FF', '#94A3B8', '#0F172A'],
-    items: [
-      { name: 'Tailored Navy Double-Breasted Blazer', category: 'Other', color: '#1E3A8A', icon: '🧥', reason: 'Sharp shoulder line for confident boardroom presence.' },
-      { name: 'Ivory Crepe Silk V-Neck Camisole', category: 'Other', color: '#FFFFFF', icon: '👚', reason: 'Soft luxury underlayer for business styling.' },
-      { name: 'Pleated High-Waist Navy Trousers', category: 'Other', color: '#1E3A8A', icon: '👖', reason: 'Elongating wide-leg cut with structured pleats.' },
-      { name: 'Structured Leather Work Laptop Tote', category: 'Bag', color: '#0F172A', icon: '👜', reason: 'Dedicated laptop compartment with gold hardware.' },
-      { name: 'Pointed-Toe Leather Pumps', category: 'Shoes', color: '#0F172A', icon: '👠', reason: 'Timeless professional height and comfort.' },
-    ],
-  },
-  {
-    id: 'hp-stl-5',
-    code: 'HP STL 5',
-    title: 'Sunset Bohemian Resort',
-    category: 'Resort Vacation',
-    tagline: 'Tiered floral maxi sundress with woven straw tote & layered beads',
-    styleImpact: 'Medium',
-    palette: ['#E11D48', '#FB923C', '#FEF08A', '#78350F'],
-    items: [
-      { name: 'Tiered Sunset Floral Maxi Sundress', category: 'Other', color: '#E11D48', icon: '👗', reason: 'Fluid tiered skirt in radiant sunset tones.' },
-      { name: 'Lightweight Linen Draped Shrug', category: 'Other', color: '#FEF08A', icon: '🧥', reason: 'Breezy sun protection for outdoor strolling.' },
-      { name: 'Handwoven Jute Crossbody Tote', category: 'Bag', color: '#78350F', icon: '👜', reason: 'Artisanal woven texture for vacation essentials.' },
-      { name: 'Layered Bohemian Beaded Necklaces', category: 'Chain', color: '#FB923C', icon: '📿', reason: 'Playful multi-strand beads with golden charms.' },
-      { name: 'Strappy Espadrille Wedge Sandals', category: 'Shoes', color: '#78350F', icon: '👡', reason: 'Natural rope sole for beachside style.' },
+      {
+        id: 'h-chain',
+        name: 'Sculpted Golden Link Chain',
+        category: 'Chain',
+        color: '#eae3d2',
+        icon: '📿',
+        position: 'top-left',
+        swatchLabel: 'ICONIC PIECE',
+        reason: 'Architectural links bringing radiant warmth to royal blue silk.',
+        price: '$95',
+      },
+      {
+        id: 'h-kurta',
+        name: 'Brocade Structured Nehru Jacket',
+        category: 'Other',
+        color: '#1e3a8a',
+        icon: '🧥',
+        position: 'top-right',
+        reason: 'Tailored mandarin collar with self-textured zari weave.',
+        price: '$160',
+      },
+      {
+        id: 'h-chinos',
+        name: 'Tapered Tailored Ivory Trousers',
+        category: 'Other',
+        color: '#FAF8F5',
+        icon: '👖',
+        position: 'bottom-left',
+        reason: 'Crisp front crease and comfortable stretch cotton twill.',
+        price: '$90',
+      },
+      {
+        id: 'h-shoes',
+        name: 'Burnished Royal Leather Loafers',
+        category: 'Shoes',
+        color: '#0f172a',
+        icon: '👞',
+        position: 'bottom-right',
+        reason: 'Hand-finished edge with tonal saddle strap.',
+        price: '$140',
+      },
     ],
   },
 ];
@@ -213,6 +292,7 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [activeLookIndex, setActiveLookIndex] = useState(0);
   const [collectedLookIds, setCollectedLookIds] = useState<string[]>([]);
+  const [selectedItemForInspect, setSelectedItemForInspect] = useState<LookStoryItem | null>(null);
 
   const { items, addToWishlist, wishlist, addItem } = collection;
   const activeLook = CURATED_LOOKS_DATA[activeLookIndex];
@@ -252,7 +332,9 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
         });
       }
     }
-    setCollectedLookIds((prev) => [...prev, story.id]);
+    if (!collectedLookIds.includes(story.id)) {
+      setCollectedLookIds((prev) => [...prev, story.id]);
+    }
     onTrySuggestion?.();
   };
 
@@ -266,255 +348,455 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
     }
   };
 
+  const nextLook = () => {
+    setActiveLookIndex((prev) => (prev + 1) % CURATED_LOOKS_DATA.length);
+  };
+
+  const prevLook = () => {
+    setActiveLookIndex((prev) => (prev - 1 + CURATED_LOOKS_DATA.length) % CURATED_LOOKS_DATA.length);
+  };
+
   return (
     <>
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         title="Sign In to Save Curated Looks"
-        message="Sign in to save curated Pantaloons lookbook items directly into your personal digital wardrobe."
+        message="Sign in to save curated moodboard looks and pieces directly into your personal digital wardrobe."
       />
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full space-y-8"
-      >
+      <div className="w-full space-y-8">
         {/* ========================================================= */}
-        {/* 1. CURATED LOOKS FOR YOU — HEADER & TAB SELECTOR          */}
+        {/* TOP SECTION HEADER: Curated Looks For You                */}
         {/* ========================================================= */}
-        <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-white/10 p-6 md:p-8 shadow-2xl space-y-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-300 text-xs font-semibold uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-pink-400" />
-                <span>Pantaloons Fashion Intelligence</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
-                Curated Looks For You
-              </h2>
-              <p className="text-slate-400 text-sm md:text-base max-w-xl">
-                Explore hand-styled outfit stories from <strong>HP STL 1</strong> to{' '}
-                <strong>HP STL 10</strong>. One-click collect or test individual style pieces.
-              </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-[#FAF8F5]/15">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e3a8a]/20 border border-[#FAF8F5]/20 text-[#FAF8F5] text-xs font-semibold uppercase tracking-widest mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#fffff0]" />
+              <span>AuraStyle Lookbook Capsule</span>
             </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => handleShopAll(activeLook)}
-                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/30 hover:scale-105 transition-all"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                <span>Shop All &bull; {activeLook.code}</span>
-              </button>
-            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-[#FAF8F5] tracking-tight font-serif">
+              Curated Looks For You
+            </h2>
+            <p className="text-[#FAF8F5]/70 text-sm md:text-base max-w-xl mt-1">
+              Hand-styled magazine moodboards in <strong>Royal Blue & Ivory</strong>. One-click collect full ensembles or curate individual pieces.
+            </p>
           </div>
 
-          {/* LOOK STORY TABS (HP STL 6, HP STL 7, HP STL 8, etc.) */}
-          <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide">
-            {CURATED_LOOKS_DATA.map((look, idx) => {
-              const isActive = activeLookIndex === idx;
-              const isCollected = collectedLookIds.includes(look.id);
-              return (
-                <button
-                  key={look.id}
-                  onClick={() => setActiveLookIndex(idx)}
-                  className={`shrink-0 px-4 py-2.5 rounded-2xl border text-xs font-bold transition-all duration-300 flex items-center gap-2.5 ${
-                    isActive
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-indigo-400/50 shadow-lg shadow-indigo-500/30 ring-1 ring-white/20'
-                      : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <span className="font-mono tracking-wider">{look.code}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-                  <span className="font-normal text-white/80">{look.category}</span>
-                  {isCollected && (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
-                  )}
-                </button>
-              );
-            })}
+          {/* Quick Look Selector Tabs */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={prevLook}
+              className="p-2.5 rounded-full bg-[#1e3a8a]/40 border border-[#FAF8F5]/20 text-[#FAF8F5] hover:bg-[#1e3a8a] transition-all"
+              aria-label="Previous Look"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <span className="text-xs font-mono text-[#FAF8F5]/80 px-2 font-semibold">
+              {activeLookIndex + 1} / {CURATED_LOOKS_DATA.length}
+            </span>
+            <button
+              onClick={nextLook}
+              className="p-2.5 rounded-full bg-[#1e3a8a]/40 border border-[#FAF8F5]/20 text-[#FAF8F5] hover:bg-[#1e3a8a] transition-all"
+              aria-label="Next Look"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
+        {/* Tab category pills */}
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          {CURATED_LOOKS_DATA.map((look, idx) => {
+            const isActive = activeLookIndex === idx;
+            const isCollected = collectedLookIds.includes(look.id);
+            return (
+              <button
+                key={look.id}
+                onClick={() => setActiveLookIndex(idx)}
+                className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-2 border ${
+                  isActive
+                    ? 'bg-[#FAF8F5] text-[#0a192f] border-[#FAF8F5] shadow-lg shadow-[#1e3a8a]/30 scale-105'
+                    : 'bg-[#0f254e]/60 border-[#FAF8F5]/10 text-[#FAF8F5]/70 hover:bg-[#16366f] hover:text-[#FAF8F5]'
+                }`}
+              >
+                <span>{look.titleSerif}</span>
+                <span className="opacity-60 text-[10px] uppercase font-mono">{look.titleSans}</span>
+                {isCollected && <CheckCircle2 className="w-3.5 h-3.5 text-[#2563eb]" />}
+              </button>
+            );
+          })}
+        </div>
+
         {/* ========================================================= */}
-        {/* 2. ACTIVE CURATED LOOK DETAIL SHOWCASE                    */}
+        {/* MOODBOARD EDITORIAL CARD (MATCHING USER REFERENCE IMAGE)  */}
         {/* ========================================================= */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeLook.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.35 }}
+            className="relative rounded-3xl bg-[#FAF8F5] text-[#0a192f] p-6 md:p-10 shadow-2xl border border-[#FAF8F5]/30 overflow-hidden"
           >
-            {/* Left Card: Look Hero & Palette (5 Cols) */}
-            <div className="lg:col-span-5 rounded-3xl bg-slate-900/80 border border-white/10 p-6 space-y-6 shadow-xl backdrop-blur-xl sticky top-24">
-              {/* Image Preview if available */}
-              {activeLook.image && (
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+            {/* Background tinted geometric color blocks (like reference photo) */}
+            <div className="absolute inset-0 pointer-events-none grid grid-cols-12 grid-rows-12 opacity-60">
+              <div className="col-span-7 row-span-6 bg-[#dbeafe]/60 rounded-3xl m-2" />
+              <div className="col-span-5 row-span-8 bg-[#eae3d2]/70 rounded-3xl m-2" />
+              <div className="col-span-6 row-span-6 bg-[#f4efeb] rounded-3xl m-2" />
+              <div className="col-span-6 row-span-6 bg-[#bfdbfe]/40 rounded-3xl m-2" />
+            </div>
+
+            {/* Sparkle & Starburst Decorative Elements */}
+            <div className="absolute top-8 left-8 text-[#1e3a8a]/30 pointer-events-none select-none text-xl">
+              ✦ ✧
+            </div>
+            <div className="absolute top-20 right-12 text-[#1e3a8a]/30 pointer-events-none select-none text-2xl">
+              ✧ ✦
+            </div>
+            <div className="absolute bottom-16 left-12 text-[#1e3a8a]/20 pointer-events-none select-none text-lg">
+              ✦
+            </div>
+
+            {/* Content Container */}
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* ======================================================= */}
+              {/* LEFT & CENTER: THE MOODBOARD COLLAGE (7 Cols)          */}
+              {/* ======================================================= */}
+              <div className="lg:col-span-7 relative min-h-[480px] sm:min-h-[540px] md:min-h-[580px] flex items-center justify-center">
+                
+                {/* Look Title (Top/Left of Moodboard Card) */}
+                <div className="absolute top-2 left-2 sm:left-4 z-20">
+                  <div className="font-serif text-3xl sm:text-4xl text-[#0a192f] font-normal leading-tight">
+                    {activeLook.titleSerif}
+                  </div>
+                  <div className="text-[11px] sm:text-xs font-sans tracking-[0.25em] text-[#1e3a8a] font-black uppercase">
+                    {activeLook.titleSans}
+                  </div>
+                </div>
+
+                {/* Floating Item 1 (Top-Left): Backpack / Bag + Swatch Label */}
+                {activeLook.items.find((i) => i.position === 'top-left') && (() => {
+                  const item = activeLook.items.find((i) => i.position === 'top-left')!;
+                  const inCol = isItemInCollection(item.name);
+                  return (
+                    <div className="absolute top-14 sm:top-16 left-0 sm:left-4 z-20 flex flex-col items-start gap-1">
+                      <button
+                        onClick={() => setSelectedItemForInspect(item)}
+                        className="group relative bg-[#0a192f] text-[#FAF8F5] p-3.5 sm:p-4 rounded-2xl shadow-xl border-2 border-[#FAF8F5] hover:scale-105 transition-all flex flex-col items-center justify-center cursor-pointer"
+                        title="Click to inspect item"
+                      >
+                        <span className="text-3xl sm:text-4xl">{item.icon}</span>
+                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#1e3a8a] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow">
+                          {inCol ? '✓' : '+'}
+                        </span>
+                      </button>
+                      {item.swatchLabel && (
+                        <div className="bg-[#FAF8F5] text-[#0a192f] border border-[#0a192f]/20 px-2 py-0.5 rounded shadow-sm text-[9px] font-mono font-black tracking-wider uppercase">
+                          {item.swatchLabel}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Floating Item 2 (Top-Right): Jacket / Overshirt */}
+                {activeLook.items.find((i) => i.position === 'top-right') && (() => {
+                  const item = activeLook.items.find((i) => i.position === 'top-right')!;
+                  const inCol = isItemInCollection(item.name);
+                  return (
+                    <div className="absolute top-2 sm:top-4 right-0 sm:right-4 z-20">
+                      <button
+                        onClick={() => setSelectedItemForInspect(item)}
+                        className="group relative bg-white text-[#0a192f] p-4 sm:p-5 rounded-2xl shadow-xl border-2 border-[#1e3a8a]/20 hover:scale-105 transition-all flex flex-col items-center justify-center cursor-pointer"
+                        title="Click to inspect item"
+                      >
+                        <span className="text-3xl sm:text-4xl">{item.icon}</span>
+                        <div className="text-[10px] font-bold text-[#1e3a8a] mt-1 line-clamp-1 max-w-[80px] text-center">
+                          {item.name.split(' ')[0]}
+                        </div>
+                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#1e3a8a] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow">
+                          {inCol ? '✓' : '+'}
+                        </span>
+                      </button>
+                    </div>
+                  );
+                })()}
+
+                {/* Central Model Figure (Cutout Style) */}
+                <div className="relative z-10 w-52 sm:w-64 md:w-72 h-[380px] sm:h-[440px] md:h-[480px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white mx-auto flex items-center justify-center bg-[#0a192f]/5">
                   <img
-                    src={activeLook.image}
-                    alt={activeLook.title}
-                    className="w-full h-full object-cover object-top"
+                    src={activeLook.modelImage}
+                    alt={activeLook.titleSerif + ' ' + activeLook.titleSans}
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                    <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-black/60 backdrop-blur-md text-white border border-white/20">
+                  {/* Subtle vignette */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/40 via-transparent to-transparent pointer-events-none" />
+                </div>
+
+                {/* Floating Item 3 (Bottom-Left): Trousers / Jeans */}
+                {activeLook.items.find((i) => i.position === 'bottom-left') && (() => {
+                  const item = activeLook.items.find((i) => i.position === 'bottom-left')!;
+                  const inCol = isItemInCollection(item.name);
+                  return (
+                    <div className="absolute bottom-4 sm:bottom-8 left-2 sm:left-6 z-20">
+                      <button
+                        onClick={() => setSelectedItemForInspect(item)}
+                        className="group relative bg-white text-[#0a192f] p-3.5 sm:p-4 rounded-2xl shadow-xl border-2 border-[#1e3a8a]/20 hover:scale-105 transition-all flex flex-col items-center justify-center cursor-pointer"
+                        title="Click to inspect item"
+                      >
+                        <span className="text-3xl sm:text-4xl">{item.icon}</span>
+                        <div className="text-[10px] font-bold text-[#0a192f] mt-1">
+                          {item.name.split(' ').slice(-1)[0]}
+                        </div>
+                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#1e3a8a] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow">
+                          {inCol ? '✓' : '+'}
+                        </span>
+                      </button>
+                    </div>
+                  );
+                })()}
+
+                {/* Floating Item 4 (Bottom-Right): Shoes / Footwear */}
+                {activeLook.items.find((i) => i.position === 'bottom-right') && (() => {
+                  const item = activeLook.items.find((i) => i.position === 'bottom-right')!;
+                  const inCol = isItemInCollection(item.name);
+                  return (
+                    <div className="absolute bottom-16 sm:bottom-20 right-2 sm:right-6 z-20">
+                      <button
+                        onClick={() => setSelectedItemForInspect(item)}
+                        className="group relative bg-[#0a192f] text-white p-3.5 sm:p-4 rounded-2xl shadow-xl border-2 border-[#FAF8F5] hover:scale-105 transition-all flex flex-col items-center justify-center cursor-pointer"
+                        title="Click to inspect item"
+                      >
+                        <span className="text-2xl sm:text-3xl">{item.icon}</span>
+                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#2563eb] text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow">
+                          {inCol ? '✓' : '+'}
+                        </span>
+                      </button>
+                    </div>
+                  );
+                })()}
+
+                {/* Shop All Pill Button (Bottom Center of Look Collage) */}
+                <div className="absolute bottom-2 right-4 sm:right-8 z-30">
+                  <button
+                    onClick={() => handleShopAll(activeLook)}
+                    className="px-5 py-2.5 rounded-full bg-[#FAF8F5] hover:bg-white text-[#0a192f] border-2 border-[#0a192f] font-bold text-xs sm:text-sm flex items-center gap-2 shadow-xl hover:scale-105 active:scale-95 transition-all"
+                  >
+                    <ShoppingBag className="w-4 h-4 text-[#1e3a8a]" />
+                    <span>Shop All</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* ======================================================= */}
+              {/* RIGHT SIDE: LOOK STORY DETAILS & BREAKDOWN (5 Cols)     */}
+              {/* ======================================================= */}
+              <div className="lg:col-span-5 space-y-6 bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-[#1e3a8a]/10 shadow-lg">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs font-bold text-[#1e3a8a] uppercase tracking-wider">
                       {activeLook.code} &bull; {activeLook.category}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#1e3a8a]/10 text-[#1e3a8a] text-[11px] font-bold">
                       {activeLook.styleImpact} Impact
                     </span>
                   </div>
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-indigo-400 font-bold uppercase tracking-wider">
-                    {activeLook.code}
-                  </span>
-                  <span className="text-xs text-slate-400 font-medium">{activeLook.category}</span>
-                </div>
-                <h3 className="text-2xl font-bold text-white leading-snug">{activeLook.title}</h3>
-                <p className="text-sm text-slate-300 leading-relaxed">{activeLook.tagline}</p>
-              </div>
-
-              {/* Curated Color Harmonized Swatches */}
-              <div className="space-y-2 pt-2 border-t border-white/10">
-                <span className="text-xs font-mono uppercase text-slate-400">
-                  Look Harmonized Palette
-                </span>
-                <div className="flex items-center gap-2">
-                  {activeLook.palette.map((hex, pIdx) => (
-                    <div key={pIdx} className="flex items-center gap-1.5">
-                      <span
-                        className="w-7 h-7 rounded-xl border border-white/20 shadow-md"
-                        style={{ backgroundColor: hex }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Shop All Trigger */}
-              <button
-                onClick={() => handleShopAll(activeLook)}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02]"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                <span>Shop All {activeLook.items.length} Items ({activeLook.code})</span>
-              </button>
-            </div>
-
-            {/* Right Card: Individual Items in this Look Story (7 Cols) */}
-            <div className="lg:col-span-7 space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Shirt className="w-5 h-5 text-indigo-400" />
-                    <span>Included Style Pieces in {activeLook.code}</span>
-                  </h4>
-                  <p className="text-xs text-slate-400">
-                    Add individual items to your collection or wishlist
+                  <h3 className="text-2xl font-serif font-black text-[#0a192f]">
+                    {activeLook.titleSerif} {activeLook.titleSans}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#0a192f]/80 leading-relaxed">
+                    {activeLook.tagline}
                   </p>
                 </div>
-                <span className="text-xs font-mono text-indigo-300 font-semibold">
-                  {activeLook.items.length} Curated Pieces
-                </span>
-              </div>
 
-              <div className="grid grid-cols-1 gap-3.5">
-                {activeLook.items.map((item, iIdx) => {
-                  const inCol = isItemInCollection(item.name);
-                  const inWish = isInWishlist(item.name);
+                {/* Color Harmony Palette */}
+                <div className="space-y-2 pt-2 border-t border-[#0a192f]/10">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-[#0a192f]/60 font-semibold">
+                    Royal Blue & Ivory Palette Sync
+                  </span>
+                  <div className="flex items-center gap-2">
+                    {activeLook.palette.map((hex, pIdx) => (
+                      <div
+                        key={pIdx}
+                        className="w-7 h-7 rounded-xl border border-[#0a192f]/20 shadow-sm"
+                        style={{ backgroundColor: hex }}
+                        title={hex}
+                      />
+                    ))}
+                  </div>
+                </div>
 
-                  return (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: iIdx * 0.05 }}
-                      className={`p-4 rounded-2xl border transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-                        inCol
-                          ? 'bg-emerald-950/30 border-emerald-500/30 shadow-md'
-                          : 'bg-white/5 border-white/10 hover:bg-white/10'
-                      }`}
-                    >
-                      <div className="flex items-start sm:items-center gap-3.5 flex-1">
+                {/* Included Pieces List with 1-click add */}
+                <div className="space-y-2.5 pt-2 border-t border-[#0a192f]/10">
+                  <div className="flex items-center justify-between text-xs text-[#0a192f]/70 font-semibold">
+                    <span>Curated Pieces ({activeLook.items.length})</span>
+                    <span>Click to collect</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {activeLook.items.map((item) => {
+                      const inCol = isItemInCollection(item.name);
+                      const inWish = isInWishlist(item.name);
+
+                      return (
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl border border-white/10 shrink-0 shadow-inner"
-                          style={{ backgroundColor: item.color + '25' }}
-                        >
-                          {item.icon}
-                        </div>
-                        <div className="space-y-1 overflow-hidden">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/10 text-indigo-300 font-mono">
-                              {item.category}
-                            </span>
-                            <h5 className="text-base font-bold text-white">{item.name}</h5>
-                          </div>
-                          <p className="text-xs text-slate-300 leading-relaxed">{item.reason}</p>
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                        <button
-                          onClick={() => handleAddItem(item)}
-                          disabled={inCol}
-                          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                          key={item.id}
+                          className={`p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
                             inCol
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                              : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md'
+                              ? 'bg-[#1e3a8a]/10 border-[#1e3a8a]/30'
+                              : 'bg-[#FAF8F5] border-[#0a192f]/10 hover:border-[#1e3a8a]/40'
                           }`}
                         >
-                          {inCol ? (
-                            <>
-                              <Check className="w-3.5 h-3.5" />
-                              <span>In Collection</span>
-                            </>
-                          ) : (
-                            <>
-                              <Plus className="w-3.5 h-3.5" />
-                              <span>Add to Wardrobe</span>
-                            </>
-                          )}
-                        </button>
+                          <div
+                            onClick={() => setSelectedItemForInspect(item)}
+                            className="flex items-center gap-3 flex-1 cursor-pointer"
+                          >
+                            <span className="text-xl">{item.icon}</span>
+                            <div>
+                              <div className="text-xs font-bold text-[#0a192f] line-clamp-1">
+                                {item.name}
+                              </div>
+                              <div className="text-[10px] text-[#0a192f]/60">
+                                {item.category} &bull; {item.price || '$99'}
+                              </div>
+                            </div>
+                          </div>
 
-                        <button
-                          onClick={() => handleAddToWishlist(item)}
-                          disabled={inWish}
-                          className={`p-2 rounded-xl border transition-all ${
-                            inWish
-                              ? 'bg-pink-500/20 border-pink-500/30 text-pink-300'
-                              : 'bg-white/5 border-white/10 text-white/60 hover:bg-pink-500/10 hover:text-pink-300 hover:border-pink-500/20'
-                          }`}
-                          title={inWish ? 'In Wishlist' : 'Add to Wishlist'}
-                        >
-                          <Heart className={`w-4 h-4 ${inWish ? 'fill-current' : ''}`} />
-                        </button>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              onClick={() => handleAddItem(item)}
+                              disabled={inCol}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all ${
+                                inCol
+                                  ? 'bg-[#1e3a8a] text-white'
+                                  : 'bg-[#0a192f] hover:bg-[#1e3a8a] text-white'
+                              }`}
+                            >
+                              {inCol ? (
+                                <>
+                                  <Check className="w-3 h-3" />
+                                  <span>Added</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Plus className="w-3 h-3" />
+                                  <span>Collect</span>
+                                </>
+                              )}
+                            </button>
+
+                            <button
+                              onClick={() => handleAddToWishlist(item)}
+                              className={`p-1.5 rounded-lg border transition-all ${
+                                inWish
+                                  ? 'bg-[#1e3a8a]/20 border-[#1e3a8a] text-[#1e3a8a]'
+                                  : 'border-[#0a192f]/20 text-[#0a192f]/60 hover:text-[#1e3a8a]'
+                              }`}
+                              title={inWish ? 'In Wishlist' : 'Add to Wishlist'}
+                            >
+                              <Heart className={`w-3.5 h-3.5 ${inWish ? 'fill-current' : ''}`} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Big Shop All Button */}
+                <button
+                  onClick={() => handleShopAll(activeLook)}
+                  className="w-full py-3.5 rounded-xl bg-[#1e3a8a] hover:bg-[#16366f] text-[#FAF8F5] font-bold text-sm flex items-center justify-center gap-2 shadow-xl shadow-[#1e3a8a]/25 transition-all hover:scale-[1.01]"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>Collect Entire Look &bull; {activeLook.code}</span>
+                </button>
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
 
         {/* ========================================================= */}
-        {/* 3. ACTIVE WISHLIST OVERVIEW                                */}
+        {/* ITEM INSPECTION MODAL                                     */}
+        {/* ========================================================= */}
+        <AnimatePresence>
+          {selectedItemForInspect && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full max-w-md bg-[#FAF8F5] text-[#0a192f] rounded-3xl p-6 border-2 border-[#1e3a8a]/20 shadow-2xl space-y-4"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-14 h-14 rounded-2xl bg-[#1e3a8a]/10 flex items-center justify-center text-3xl border border-[#1e3a8a]/20">
+                      {selectedItemForInspect.icon}
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-[#1e3a8a] text-white font-bold">
+                        {selectedItemForInspect.category}
+                      </span>
+                      <h4 className="text-lg font-bold text-[#0a192f] mt-0.5">
+                        {selectedItemForInspect.name}
+                      </h4>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setSelectedItemForInspect(null)}
+                    className="w-8 h-8 rounded-full bg-[#0a192f]/10 flex items-center justify-center text-[#0a192f] font-bold hover:bg-[#0a192f]/20"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="bg-white p-4 rounded-2xl border border-[#0a192f]/10 space-y-2">
+                  <div className="text-xs font-bold text-[#1e3a8a] flex items-center gap-1.5">
+                    <Info className="w-3.5 h-3.5" />
+                    <span>Stylist Harmonization Note</span>
+                  </div>
+                  <p className="text-xs text-[#0a192f]/80 leading-relaxed">
+                    {selectedItemForInspect.reason}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <button
+                    onClick={() => {
+                      handleAddItem(selectedItemForInspect);
+                      setSelectedItemForInspect(null);
+                    }}
+                    className="flex-1 py-3 rounded-xl bg-[#1e3a8a] hover:bg-[#16366f] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add to Digital Wardrobe</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleAddToWishlist(selectedItemForInspect);
+                      setSelectedItemForInspect(null);
+                    }}
+                    className="p-3 rounded-xl border border-[#1e3a8a]/30 text-[#1e3a8a] hover:bg-[#1e3a8a]/10"
+                    title="Save to Wishlist"
+                  >
+                    <Heart className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* ========================================================= */}
+        {/* SAVED WISHLIST OVERVIEW                                    */}
         {/* ========================================================= */}
         {wishlist.length > 0 && (
-          <div className="rounded-3xl bg-pink-500/5 border border-pink-500/15 p-6 space-y-3">
+          <div className="rounded-2xl bg-[#0f254e]/50 border border-[#FAF8F5]/15 p-6 space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-pink-300 flex items-center gap-2">
-                <Heart className="w-4 h-4 fill-current text-pink-400" />
+              <h4 className="text-sm font-bold text-[#FAF8F5] flex items-center gap-2">
+                <Heart className="w-4 h-4 fill-current text-[#fffff0]" />
                 <span>Your Saved Wishlist ({wishlist.length} items)</span>
               </h4>
             </div>
@@ -522,16 +804,16 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
               {wishlist.map((wItem) => (
                 <span
                   key={wItem.id}
-                  className="px-3.5 py-1.5 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-200 text-xs font-semibold flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-xl bg-[#FAF8F5]/10 border border-[#FAF8F5]/20 text-[#FAF8F5] text-xs font-semibold flex items-center gap-1.5"
                 >
-                  <Tag className="w-3 h-3 text-pink-400" />
+                  <Tag className="w-3 h-3 text-[#FAF8F5]" />
                   {wItem.name}
                 </span>
               ))}
             </div>
           </div>
         )}
-      </motion.div>
+      </div>
     </>
   );
 }

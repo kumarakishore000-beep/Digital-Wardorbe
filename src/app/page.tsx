@@ -3,8 +3,9 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Sparkles, ArrowRight, Palette, Zap, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowRight, Palette, Zap, ShieldCheck, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import SocialCards, { type CardItem } from '@/components/ui/card-fan-carousel';
+import AuraStyleLogo from '@/components/AuraStyleLogo';
 
 // Dynamic import for the 3D gallery since it uses WebGL/Three.js and must be client-only
 const InfiniteGallery = dynamic(
@@ -13,88 +14,90 @@ const InfiniteGallery = dynamic(
 );
 
 const HERO_IMAGES = [
-  { src: '/images/branding/hero-banner.jpg', alt: 'Pantaloons Campaign Hero Banner' },
-  { src: '/images/branding/womens-ethnic-fusion.jpg', alt: 'Women Indo-Western Festive Fusion' },
-  { src: '/images/branding/mens-smart-casual.jpg', alt: 'Men Smart Casual Festive Wear' },
-  { src: '/images/branding/urban-western-casual.jpg', alt: 'Urban Western Casual Collection' },
-  { src: 'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600&auto=format&fit=crop', alt: 'Fashion Editorial 1' },
-  { src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop', alt: 'Fashion Editorial 2' },
-  { src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop', alt: 'Fashion Editorial 3' },
-  { src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop', alt: 'Fashion Editorial 4' },
+  { src: '/images/branding/hero-banner.jpg', alt: 'Campaign Hero Banner' },
+  { src: '/images/branding/womens-ethnic-fusion.jpg', alt: 'Royal Festive Fusion' },
+  { src: '/images/branding/mens-smart-casual.jpg', alt: 'Men Smart Casual Wear' },
+  { src: '/images/branding/urban-western-casual.jpg', alt: 'Urban Casual Collection' },
+  { src: 'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600&auto=format&fit=crop', alt: 'Editorial 1' },
+  { src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop', alt: 'Editorial 2' },
+  { src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop', alt: 'Editorial 3' },
+  { src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop', alt: 'Editorial 4' },
 ];
 
 const FAN_CARDS: CardItem[] = [
-  { imgUrl: '/images/branding/womens-ethnic-fusion.jpg', alt: 'Indo-Western Festive Fusion Look' },
-  { imgUrl: '/images/branding/mens-smart-casual.jpg', alt: 'Smart Ethnic Nehru Waistcoat Ensemble' },
+  { imgUrl: '/images/branding/womens-ethnic-fusion.jpg', alt: 'Royal Festive Fusion Look' },
+  { imgUrl: '/images/branding/mens-smart-casual.jpg', alt: 'Smart Tailored Ensemble' },
   { imgUrl: '/images/branding/urban-western-casual.jpg', alt: 'Pastel Streetwear Denim & Cargo' },
-  { imgUrl: '/images/branding/hero-banner.jpg', alt: 'Pantaloons Festive Brand Campaign' },
+  { imgUrl: '/images/branding/hero-banner.jpg', alt: 'AuraStyle Signature Look' },
   { imgUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=700&fit=crop', alt: 'Couture Editorial' },
   { imgUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=700&fit=crop', alt: 'Runway Silhouette' },
-  { imgUrl: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=700&fit=crop', alt: 'Modern Chic' },
-  { imgUrl: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=700&fit=crop', alt: 'Urban Street Fashion' },
 ];
 
-const BRAND_LOOKBOOKS = [
+const LOOKBOOK_PREVIEWS = [
   {
-    title: 'Festive Indo-Western Fusion',
-    category: "Women's Collection",
-    image: '/images/branding/womens-ethnic-fusion.jpg',
-    description: 'Coral-peach embellished crop top with floral flared palazzos and sheer cape jacket.',
-    tag: 'Trending Festive',
-  },
-  {
-    title: "Men's Smart Ethnic Casual",
-    category: "Men's Collection",
+    titleSerif: 'Casual',
+    titleSans: 'WORKPLACES',
+    category: 'Smart Casual',
     image: '/images/branding/mens-smart-casual.jpg',
-    description: 'Printed teal linen short kurta with a textured beige Nehru waistcoat and slim trousers.',
-    tag: 'Festive Classic',
+    tagline: 'Technical commuter backpack, utility zip jacket, indigo denim & gum sole sneakers.',
+    tag: 'Trending Workwear',
+    color: '#1e3a8a',
   },
   {
-    title: 'Urban Pastel Streetwear',
-    category: 'Western Chic',
+    titleSerif: 'Regal',
+    titleSans: 'CELEBRATION',
+    category: 'Indo-Western',
+    image: '/images/branding/womens-ethnic-fusion.jpg',
+    tagline: 'Embroidered silk cape, heritage royal blue choker & fluid palazzo trousers.',
+    tag: 'Festive Luxury',
+    color: '#1e3a8a',
+  },
+  {
+    titleSerif: 'Pastel',
+    titleSans: 'STREETWEAR',
+    category: 'Urban Chic',
     image: '/images/branding/urban-western-casual.jpg',
-    description: 'Lavender cropped denim jacket paired with olive high-waist utility cargo pants.',
-    tag: 'Street Style',
+    tagline: 'Cropped washed denim trucker with utility cargo trousers & ivory court sneakers.',
+    tag: 'Street Capsule',
+    color: '#1e3a8a',
   },
   {
-    title: 'Brand Campaign Hero Ensemble',
-    category: 'Seasonal Campaign',
+    titleSerif: 'Signature',
+    titleSans: 'HERO ENSEMBLE',
+    category: 'Seasonal Flagship',
     image: '/images/branding/hero-banner.jpg',
-    description: 'Joyful group showcase featuring coordinated contemporary ethnic and modern western styles.',
-    tag: 'Signature Campaign',
+    tagline: 'Bespoke textured waistcoat paired with crisp ivory chinos and burnished loafers.',
+    tag: 'Atelier Signature',
+    color: '#1e3a8a',
   },
 ];
 
 const FEATURES = [
   {
-    icon: <Sparkles className="w-6 h-6" />,
-    title: 'AI Style Analysis',
-    description: 'Upload any outfit piece and get AI-powered style suggestions with matching accessories.',
-    gradient: 'from-indigo-500 to-purple-500',
+    icon: <Sparkles className="w-6 h-6 text-[#fffff0]" />,
+    title: 'Curated Lookbooks',
+    description: 'Explore moodboard collages with model silhouettes, floating product cutouts & 1-click Shop All.',
   },
   {
-    icon: <Palette className="w-6 h-6" />,
-    title: 'Color Lab',
-    description: 'Explore color harmonies and find the perfect palette for your wardrobe.',
-    gradient: 'from-pink-500 to-rose-500',
+    icon: <Palette className="w-6 h-6 text-[#fffff0]" />,
+    title: 'Harmonic Color Lab',
+    description: 'Precision chromatic tools harmonizing primary palettes, complementary tones, and metallic accents.',
   },
   {
-    icon: <Zap className="w-6 h-6" />,
-    title: 'Smart Collection',
-    description: 'Build and organize your digital wardrobe with intelligent categorization.',
-    gradient: 'from-amber-500 to-orange-500',
+    icon: <Zap className="w-6 h-6 text-[#fffff0]" />,
+    title: 'Intelligent Wardrobe',
+    description: 'Digitize your closet with automated tagging, piece pairing, and occasion styling.',
   },
   {
-    icon: <ShieldCheck className="w-6 h-6" />,
-    title: 'Style Rewards',
-    description: 'Earn points and badges as you explore and refine your personal style.',
-    gradient: 'from-emerald-500 to-teal-500',
+    icon: <ShieldCheck className="w-6 h-6 text-[#fffff0]" />,
+    title: 'Atelier AI Stylist',
+    description: '24/7 fashion assistant analyzing weather, dress code, and harmonic proportions.',
   },
 ];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 overflow-x-hidden">
+    <div className="min-h-screen bg-[#0a192f] text-[#FAF8F5] overflow-x-hidden selection:bg-[#1e3a8a] selection:text-[#fffff0]">
       {/* ===== 3D Gallery Hero ===== */}
       <section className="relative h-screen w-full">
         <InfiniteGallery
@@ -107,35 +110,35 @@ export default function LandingPage() {
         />
 
         {/* Overlay content */}
-        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center text-center px-4">
+        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-[#0a192f]/40 via-[#0a192f]/60 to-[#0a192f]">
           <div className="pointer-events-auto space-y-8 max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full px-4 py-1.5 text-xs font-medium text-indigo-300">
-              <Sparkles className="w-3.5 h-3.5" />
-              AI-Powered Fashion Intelligence
+            <div className="inline-flex items-center gap-2 bg-[#FAF8F5]/10 backdrop-blur-xl border border-[#FAF8F5]/20 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wider text-[#FAF8F5] uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-[#fffff0]" />
+              Royal Blue & Ivory Collection
             </div>
-            <h1 className="text-5xl md:text-7xl font-black tracking-tight mix-blend-exclusion">
-              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-                AuraStyle
-              </span>
-              <br />
-              <span className="italic font-serif text-4xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300">
-                AI
+            
+            <h1 className="text-5xl md:text-8xl font-serif font-black tracking-tight text-[#FAF8F5]">
+              AuraStyle
+              <span className="block italic text-3xl md:text-5xl font-normal text-[#93c5fd] mt-2 font-sans tracking-wide">
+                Fashion Intelligence
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-white/60 max-w-lg mx-auto leading-relaxed">
-              Your personal AI stylist. Upload, analyze, and perfect your wardrobe with intelligent fashion recommendations.
+
+            <p className="text-base md:text-xl text-[#FAF8F5]/80 max-w-lg mx-auto leading-relaxed font-light">
+              Your bespoke AI stylist. Curated editorial moodboards, wardrobe digitizer, and harmonic color intelligence.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
               <Link
                 href="/register"
-                className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-105"
+                className="flex items-center gap-2 bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold py-3.5 px-8 rounded-full transition-all duration-300 shadow-xl shadow-[#1e3a8a]/40 hover:scale-105 border border-[#FAF8F5]"
               >
-                Get Started Free
-                <ArrowRight className="w-4 h-4" />
+                <span>Explore Curated Looks</span>
+                <ArrowRight className="w-4 h-4 text-[#1e3a8a]" />
               </Link>
               <Link
                 href="/login"
-                className="flex items-center gap-2 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 hover:border-white/20 text-white font-medium py-3.5 px-8 rounded-xl transition-all duration-300"
+                className="flex items-center gap-2 bg-[#1e3a8a]/60 hover:bg-[#1e3a8a] backdrop-blur-xl border border-[#FAF8F5]/30 text-[#FAF8F5] font-semibold py-3.5 px-8 rounded-full transition-all duration-300 shadow-md"
               >
                 Sign In
               </Link>
@@ -145,113 +148,78 @@ export default function LandingPage() {
 
         {/* Bottom hint */}
         <div className="absolute bottom-8 left-0 right-0 text-center pointer-events-none">
-          <p className="text-xs text-white/30 font-mono uppercase tracking-wider">
-            Scroll to explore • Use mouse wheel or arrow keys
+          <p className="text-xs text-[#FAF8F5]/50 font-mono uppercase tracking-widest">
+            ✦ Scroll or Swipe to explore ✦
           </p>
         </div>
       </section>
 
-      {/* ===== Features ===== */}
-      <section className="relative py-24 px-4">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-slate-900 to-slate-900" />
-        <div className="relative container mx-auto max-w-6xl">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
-              Everything You Need to
-              <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
-                Elevate Your Style
-              </span>
-            </h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">
-              Powerful tools designed to transform how you approach fashion.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURES.map((feature, index) => (
-              <div
-                key={index}
-                className="glass-card rounded-2xl p-6 hover:border-white/15 transition-all duration-500 group hover:-translate-y-1"
-              >
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  {feature.icon}
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== Brand Campaign Lookbook Showcase (Pantaloons Collection) ===== */}
-      <section className="relative py-20 px-4 bg-slate-950/60 border-y border-white/5">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+      {/* ===== Curated Looks Moodboard Highlight ===== */}
+      <section className="relative py-24 px-4 bg-[#0a192f] border-t border-[#FAF8F5]/10">
+        <div className="container mx-auto max-w-6xl space-y-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" />
-                Featured Editorial Collections
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e3a8a]/40 border border-[#FAF8F5]/20 text-[#FAF8F5] text-xs font-semibold uppercase tracking-widest">
+                <Sparkles className="w-3.5 h-3.5 text-[#fffff0]" />
+                Curated Looks For You
               </div>
-              <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white">
-                Pantaloons Inspired Lookbooks
+              <h2 className="text-3xl md:text-5xl font-serif font-black tracking-tight text-[#FAF8F5]">
+                Editorial Moodboard Stories
               </h2>
-              <p className="text-slate-400 text-base max-w-xl">
-                Explore vibrant contemporary ethnic fusion, modern festive cuts, and effortless western casuals styled by AuraStyle AI.
+              <p className="text-[#FAF8F5]/70 text-base max-w-xl">
+                Collage lookbooks pairing silhouette models with floating coordinates and one-click wardrobe additions.
               </p>
             </div>
+
             <Link
-              href="/register"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-semibold border border-white/10 transition-all self-start md:self-auto"
+              href="/dashboard"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold text-sm shadow-xl transition-all hover:scale-105"
             >
-              <span>Explore Wardrobe AI</span>
-              <ArrowRight className="w-4 h-4" />
+              <ShoppingBag className="w-4 h-4 text-[#1e3a8a]" />
+              <span>Open Lookbook Studio</span>
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {BRAND_LOOKBOOKS.map((look, index) => (
+            {LOOKBOOK_PREVIEWS.map((look, index) => (
               <div
                 key={index}
-                className="group relative rounded-3xl overflow-hidden bg-slate-900/80 border border-white/10 hover:border-indigo-500/50 transition-all duration-500 shadow-xl hover:-translate-y-2 flex flex-col"
+                className="group relative rounded-3xl overflow-hidden bg-[#FAF8F5] text-[#0a192f] p-4 shadow-xl border border-[#FAF8F5]/40 hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between"
               >
-                {/* Image Container */}
-                <div className="relative aspect-[3/4] overflow-hidden">
+                {/* Image container */}
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 bg-[#0a192f]/5">
                   <img
                     src={look.image}
-                    alt={look.title}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                    alt={look.titleSerif}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                  
-                  {/* Floating Tag */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/60 backdrop-blur-md text-white border border-white/20 shadow-md">
-                      {look.tag}
-                    </span>
+                  <div className="absolute top-3 left-3 bg-[#FAF8F5] text-[#0a192f] border border-[#0a192f]/20 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase shadow">
+                    {look.tag}
+                  </div>
+                  <div className="absolute bottom-3 right-3 text-[#1e3a8a] text-lg select-none">
+                    ✦ ✧
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-3 bg-slate-900/90">
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-mono text-indigo-300 uppercase tracking-wider">
-                      {look.category}
-                    </span>
-                    <h3 className="text-lg font-bold text-white leading-snug group-hover:text-indigo-300 transition-colors">
-                      {look.title}
-                    </h3>
-                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
-                      {look.description}
+                <div className="space-y-2 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="font-serif text-2xl text-[#0a192f] leading-none">
+                      {look.titleSerif}
+                    </div>
+                    <div className="text-[10px] font-sans font-black tracking-[0.2em] text-[#1e3a8a] uppercase">
+                      {look.titleSans}
+                    </div>
+                    <p className="text-xs text-[#0a192f]/70 mt-2 line-clamp-2 leading-relaxed">
+                      {look.tagline}
                     </p>
                   </div>
 
                   <Link
                     href="/dashboard"
-                    className="w-full py-2.5 rounded-xl bg-white/5 hover:bg-indigo-600/80 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all duration-300 border border-white/10"
+                    className="w-full py-2.5 mt-3 rounded-xl bg-[#0a192f] hover:bg-[#1e3a8a] text-[#FAF8F5] text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md"
                   >
-                    <span>Style This Look</span>
+                    <span>Shop Look</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -261,16 +229,68 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ===== Fan Carousel Showcase ===== */}
-      <section className="relative py-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-indigo-950/30 to-slate-900" />
-        <div className="relative">
-          <div className="text-center mb-8 space-y-3">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Curated Inspiration
+      {/* ===== Brand Monogram & Aesthetic Identity Showcase ===== */}
+      <section className="relative py-24 px-4 bg-[#071326] border-t border-[#FAF8F5]/10">
+        <div className="container mx-auto max-w-5xl space-y-10">
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1e3a8a]/40 border border-[#FAF8F5]/20 text-[#FAF8F5] text-xs font-mono tracking-widest uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-[#fffff0]" />
+              <span>Aesthetic Identity</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-serif font-black tracking-tight text-[#FAF8F5]">
+              The AuraStyle Hallmark
             </h2>
-            <p className="text-slate-400 text-sm max-w-md mx-auto">
-              Browse through stunning visual collections to spark your next style evolution.
+            <p className="text-[#FAF8F5]/70 text-sm md:text-base max-w-lg mx-auto">
+              Our signature floral AS monogram and curated fashion iconography, symbolizing bespoke beauty and wardrobe longevity.
+            </p>
+          </div>
+
+          <AuraStyleLogo variant="showcase" />
+        </div>
+      </section>
+
+      {/* ===== Features ===== */}
+      <section className="relative py-24 px-4 bg-[#050d1a] border-t border-[#FAF8F5]/10">
+        <div className="container mx-auto max-w-6xl space-y-16">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl md:text-5xl font-serif font-black tracking-tight text-[#FAF8F5]">
+              Everything You Need to
+              <br />
+              <span className="text-[#93c5fd] font-sans text-3xl md:text-4xl font-normal">
+                Refine Your Aesthetic
+              </span>
+            </h2>
+            <p className="text-[#FAF8F5]/70 text-base max-w-xl mx-auto">
+              Luxury fashion technology designed to curate, organize, and elevate your personal wardrobe.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {FEATURES.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-[#0f254e]/50 border border-[#FAF8F5]/15 rounded-3xl p-6 hover:border-[#FAF8F5]/40 transition-all duration-500 group hover:-translate-y-1 shadow-lg"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#1e3a8a] border border-[#FAF8F5]/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
+                  {feature.icon}
+                </div>
+                <h3 className="text-lg font-serif font-bold text-[#FAF8F5] mb-2">{feature.title}</h3>
+                <p className="text-xs text-[#FAF8F5]/70 leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Fan Carousel Showcase ===== */}
+      <section className="relative py-20 bg-[#0a192f] border-t border-[#FAF8F5]/10">
+        <div className="relative">
+          <div className="text-center mb-8 space-y-2">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#FAF8F5]">
+              Curated Style Inspiration
+            </h2>
+            <p className="text-[#FAF8F5]/60 text-sm max-w-md mx-auto">
+              Explore bespoke silhouettes and couture archives in Royal Blue & Ivory.
             </p>
           </div>
           <SocialCards cards={FAN_CARDS} />
@@ -278,39 +298,33 @@ export default function LandingPage() {
       </section>
 
       {/* ===== CTA ===== */}
-      <section className="relative py-24 px-4">
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-slate-900 to-slate-900" />
-        <div className="relative container mx-auto max-w-2xl text-center space-y-8">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
-            Ready to Transform
+      <section className="relative py-24 px-4 bg-[#050d1a] border-t border-[#FAF8F5]/15">
+        <div className="container mx-auto max-w-2xl text-center space-y-8">
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#FAF8F5]">
+            Ready to Perfect
             <br />
             Your Wardrobe?
           </h2>
-          <p className="text-slate-400 text-lg">
-            Join thousands of fashion-forward users who trust AuraStyle AI.
+          <p className="text-[#FAF8F5]/70 text-base">
+            Join the digital fashion revolution with bespoke recommendations in Royal Blue & Ivory.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/register"
-              className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-105"
+              className="flex items-center gap-2 bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold py-3.5 px-8 rounded-full transition-all duration-300 shadow-xl shadow-[#1e3a8a]/30 hover:scale-105"
             >
-              Start for Free
-              <ArrowRight className="w-4 h-4" />
+              <span>Get Started Free</span>
+              <ArrowRight className="w-4 h-4 text-[#1e3a8a]" />
             </Link>
           </div>
         </div>
       </section>
 
       {/* ===== Footer ===== */}
-      <footer className="border-t border-white/5 py-8 px-4">
-        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">A</span>
-            </div>
-            <span>AuraStyle AI</span>
-          </div>
-          <p>&copy; {new Date().getFullYear()} AuraStyle AI. All rights reserved.</p>
+      <footer className="border-t border-[#FAF8F5]/10 py-8 px-4 bg-[#050d1a]">
+        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#FAF8F5]/60">
+          <AuraStyleLogo variant="full" />
+          <p>&copy; {new Date().getFullYear()} AuraStyle AI. All rights reserved. Dressed for your moments.</p>
         </div>
       </footer>
     </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Shirt, Link as LinkIcon, Gem, Sparkles, Watch } from "lucide-react";
+import AuraStyleLogo from "@/components/AuraStyleLogo";
 
 export const metadata: Metadata = {
   title: "Sign In — AuraStyle AI",
@@ -12,44 +12,23 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex bg-slate-950 text-slate-100">
-      {/* Left side: Colorful Image & Branding (hidden on mobile) */}
-      <div className="hidden lg:flex flex-col w-1/2 relative overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 items-center justify-center p-12">
-        {/* Background decorative elements */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/20 rounded-full blur-[100px] mix-blend-overlay" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-black/20 rounded-full blur-[100px] mix-blend-overlay" />
-        
-        {/* Floating Icons */}
-        <div className="absolute top-[20%] left-[20%] text-white/30 transform -rotate-12 animate-[pulse_4s_ease-in-out_infinite]">
-          <Shirt className="w-24 h-24 drop-shadow-2xl" />
-        </div>
-        <div className="absolute top-[30%] right-[20%] text-white/30 transform rotate-45 animate-[pulse_5s_ease-in-out_infinite]">
-          <LinkIcon className="w-16 h-16 drop-shadow-2xl" />
-        </div>
-        <div className="absolute bottom-[20%] left-[30%] text-white/30 transform rotate-12 animate-[pulse_6s_ease-in-out_infinite]">
-          <Gem className="w-20 h-20 drop-shadow-2xl" />
-        </div>
-        <div className="absolute bottom-[30%] right-[15%] text-white/30 transform -rotate-45 animate-[pulse_4.5s_ease-in-out_infinite]">
-          <Watch className="w-20 h-20 drop-shadow-2xl" />
-        </div>
+    <div className="min-h-screen flex bg-[#0a192f] text-[#FAF8F5] selection:bg-[#1e3a8a] selection:text-[#fffff0]">
+      {/* Left side: Editorial Lookbook & Floral AS Branding (hidden on mobile) */}
+      <div className="hidden lg:flex flex-col w-1/2 relative overflow-hidden bg-[#071326] items-center justify-center p-12 border-r border-[#FAF8F5]/10">
+        {/* Ambient Glows */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#1e3a8a]/40 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#38BDF8]/10 rounded-full blur-[120px]" />
 
-        <div className="relative z-10 max-w-md text-center space-y-6">
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-[32px] bg-white/10 backdrop-blur-xl shadow-2xl mb-4 border border-white/20">
-            <Sparkles className="w-12 h-12 text-white" />
-          </div>
-          <h1 className="text-5xl font-black text-white tracking-tight">AuraStyle AI</h1>
-          <p className="text-xl text-white/90 font-medium leading-relaxed">
-            Discover your perfect look with AI-powered styling and fashion matching.
-          </p>
+        <div className="relative z-10 w-full max-w-lg">
+          <AuraStyleLogo variant="showcase" className="border-0 shadow-none bg-transparent p-0" />
         </div>
       </div>
 
       {/* Right side: Form Container */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
-        {/* Decorative subtle glows for mobile */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[100px] lg:hidden" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden bg-[#0a192f]">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#1e3a8a]/20 rounded-full blur-[100px] lg:hidden" />
         
-        <div className="w-full max-w-[380px] z-10">
+        <div className="w-full max-w-[400px] z-10">
           {children}
         </div>
       </div>

@@ -21,17 +21,17 @@ export default function AppLayout({
   // Show loading state while checking auth
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a192f] text-[#FAF8F5]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-3 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
-          <p className="text-slate-400 text-sm">Loading...</p>
+          <div className="w-10 h-10 border-3 border-[#FAF8F5]/20 border-t-[#FAF8F5] rounded-full animate-spin" />
+          <p className="text-[#FAF8F5]/60 text-xs font-mono tracking-widest uppercase">AuraStyle Atelier Loading...</p>
         </div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return null; // Will redirect
+    return null;
   }
 
   return <>{children}</>;

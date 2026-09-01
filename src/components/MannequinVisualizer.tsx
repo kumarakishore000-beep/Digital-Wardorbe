@@ -1,21 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
-  User,
   ZoomIn,
   ZoomOut,
   Check,
   Layers,
-  Tag,
   Sliders,
   Bookmark,
   RefreshCw,
   CheckCircle2,
   Lock,
   Wand2,
+  Shirt,
 } from 'lucide-react';
 import { Gender, useAuth } from '@/hooks/useAuth';
 import { useCollection } from '@/hooks/useCollection';
@@ -37,28 +36,28 @@ export type SkinTone =
 export interface OutfitConfig {
   title?: string;
   topType:
-    | 'shirt'
-    | 'tshirt'
-    | 'kurti'
-    | 'kurta'
-    | 'saree'
-    | 'salwar'
-    | 'top'
-    | 'croptop'
-    | 'gown'
-    | 'skirt'
-    | 'shrug'
-    | 'blazer'
-    | 'jacket';
+  | 'shirt'
+  | 'tshirt'
+  | 'kurti'
+  | 'kurta'
+  | 'saree'
+  | 'salwar'
+  | 'top'
+  | 'croptop'
+  | 'gown'
+  | 'shrug'
+  | 'blazer'
+  | 'jacket'
+  | 'skirt';
   topColor: string;
   bottomType:
-    | 'jeans'
-    | 'trousers'
-    | 'salwar_bottom'
-    | 'skirt'
-    | 'chinos'
-    | 'tracks'
-    | 'gown_skirt';
+  | 'jeans'
+  | 'trousers'
+  | 'salwar_bottom'
+  | 'skirt'
+  | 'chinos'
+  | 'tracks'
+  | 'gown_skirt';
   bottomColor: string;
   outerwearColor?: string;
   accentColor?: string;
@@ -126,7 +125,6 @@ export const SKIN_TONES: Record<SkinTone, SkinToneDetails> = {
     shadow: '#21110A',
     icon: '🏿',
   },
-  // Backward compatibility keys
   white: {
     label: 'Fair Sand',
     base: '#FFE0BD',
@@ -150,153 +148,117 @@ export const SKIN_TONES: Record<SkinTone, SkinToneDetails> = {
   },
 };
 
-export interface RealGarmentData {
+export interface GarmentSilhouette {
   id: string;
   key: OutfitConfig['topType'];
   title: string;
   category: string;
   gender: 'female' | 'male' | 'both';
-  image: string;
-  texture: string;
   suggestedBottom: OutfitConfig['bottomType'];
   defaultTopColor: string;
   defaultBottomColor: string;
   description: string;
 }
 
-export const REAL_GARMENT_COLLECTION: RealGarmentData[] = [
-  // Women's Real Clothes Options
+export const SILHOUETTES: GarmentSilhouette[] = [
   {
     id: 'w-gown',
     key: 'gown',
-    title: 'Velvet Evening Gown',
-    category: 'Formal Evening',
+    title: 'Silk Gala Evening Gown',
+    category: 'Haute Couture',
     gender: 'female',
-    image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&auto=format&fit=crop',
-    texture: 'Plush Velvet with Satin Sheen',
     suggestedBottom: 'gown_skirt',
-    defaultTopColor: '#4C1D95',
-    defaultBottomColor: '#312E81',
-    description: 'Floor-length plush velvet evening gown with structured waist silhouette.',
-  },
-  {
-    id: 'w-kurti',
-    key: 'kurti',
-    title: 'Chanderi Silk Ethnic Kurti',
-    category: 'Ethnic Fusion',
-    gender: 'female',
-    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop',
-    texture: 'Chanderi Silk with Zardozi Gold Embroidery',
-    suggestedBottom: 'salwar_bottom',
-    defaultTopColor: '#059669',
-    defaultBottomColor: '#F8FAFC',
-    description: 'Traditional hand-embroidered silk kurti paired with fluid off-white bottom.',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#1E3A8A',
+    description: 'Floor-length sculpted gala gown with gold waist cinnabar belt.',
   },
   {
     id: 'w-saree',
     key: 'saree',
-    title: 'Kanjivaram Royal Silk Saree',
-    category: 'Heritage Ethnic',
+    title: 'Heritage Silk Saree',
+    category: 'Ethnic Festive',
     gender: 'female',
-    image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=800&auto=format&fit=crop',
-    texture: 'Pure Mulberry Silk with Gold Zari Border',
     suggestedBottom: 'skirt',
-    defaultTopColor: '#DC2626',
-    defaultBottomColor: '#B91C1C',
-    description: 'Rich royal Kanjivaram silk saree with woven zari borders and elegant drape.',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#FAF8F5',
+    description: 'Mulberry silk saree with gold zari border flowing across shoulder.',
   },
   {
-    id: 'w-skirt',
-    key: 'skirt',
-    title: 'Pleated Accordion Chiffon Skirt',
-    category: 'Casual Chic',
+    id: 'w-kurti',
+    key: 'kurti',
+    title: 'Chanderi Silk Kurti',
+    category: 'Ethnic Fusion',
     gender: 'female',
-    image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0afe1?w=800&auto=format&fit=crop',
-    texture: 'Fine Accordion Pleated Chiffon',
-    suggestedBottom: 'skirt',
-    defaultTopColor: '#F43F5E',
-    defaultBottomColor: '#BE123C',
-    description: 'High-waisted pleated skirt creating a fluid movement drape.',
+    suggestedBottom: 'salwar_bottom',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#FAF8F5',
+    description: 'Side-slit silk tunic paired with tailored fluid bottoms.',
   },
   {
     id: 'w-blazer',
     key: 'blazer',
-    title: 'Tailored Women Executive Blazer',
-    category: 'Corporate Power',
+    title: 'Tailored Power Blazer',
+    category: 'Executive Suiting',
     gender: 'female',
-    image: 'https://images.unsplash.com/photo-1548624149-f1b96a4a0f44?w=800&auto=format&fit=crop',
-    texture: 'Italian Wool Blend',
     suggestedBottom: 'trousers',
-    defaultTopColor: '#0F172A',
-    defaultBottomColor: '#1E293B',
-    description: 'Sharp-lapel tailored blazer for executive business attire.',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#0A192F',
+    description: 'Structured sharp blazer with tailored contour and pocket accents.',
   },
-
-  // Men's Real Clothes Options
   {
-    id: 'm-kurta',
-    key: 'kurta',
-    title: 'Raw Silk Festive Kurta',
-    category: 'Festive Ethnic',
-    gender: 'male',
-    image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=800&auto=format&fit=crop',
-    texture: 'Textured Raw Silk with Gold Buttons',
-    suggestedBottom: 'salwar_bottom',
-    defaultTopColor: '#B45309',
-    defaultBottomColor: '#FEF3C7',
-    description: 'Traditional royal raw silk kurta paired with churidar bottom.',
+    id: 'w-skirt',
+    key: 'top',
+    title: 'Silk Blouse & Pleated Skirt',
+    category: 'Cocktail Chic',
+    gender: 'female',
+    suggestedBottom: 'skirt',
+    defaultTopColor: '#FAF8F5',
+    defaultBottomColor: '#1E3A8A',
+    description: 'Woven silk blouse paired with high-waist accordion pleated skirt.',
   },
   {
     id: 'm-suit',
     key: 'blazer',
-    title: 'Tuxedo Formal Blazer & Suit',
-    category: 'Gala Formal',
+    title: 'Bespoke Tailored Suit',
+    category: 'Executive Suiting',
     gender: 'male',
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&auto=format&fit=crop',
-    texture: 'Super 120s Fine Wool Satin Lapel',
     suggestedBottom: 'trousers',
-    defaultTopColor: '#0F172A',
-    defaultBottomColor: '#020617',
-    description: 'Classic double-breasted formal tuxedo suit jacket with satin lapels.',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#1E3A8A',
+    description: 'Structured two-piece tailored jacket with sharp peak lapels and trousers.',
+  },
+  {
+    id: 'm-kurta',
+    key: 'kurta',
+    title: 'Bandhgala Ethnic Kurta',
+    category: 'Royal Ethnic',
+    gender: 'male',
+    suggestedBottom: 'salwar_bottom',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#FAF8F5',
+    description: 'Bandhgala raw silk kurta with gold button placket and churidar bottom.',
   },
   {
     id: 'm-shirt',
     key: 'shirt',
-    title: 'Crisp Egyptian Linen Shirt',
+    title: 'Oxford Shirt & Chinos',
     category: 'Smart Casual',
     gender: 'male',
-    image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&auto=format&fit=crop',
-    texture: 'Breathable Egyptian Linen',
     suggestedBottom: 'chinos',
-    defaultTopColor: '#F8FAFC',
-    defaultBottomColor: '#15803D',
-    description: 'Breathable linen shirt paired with tailored chinos.',
+    defaultTopColor: '#FAF8F5',
+    defaultBottomColor: '#1E3A8A',
+    description: 'Crisp woven cotton shirt with point collar and tailored chinos.',
   },
   {
-    id: 'm-jacket',
-    key: 'jacket',
-    title: 'Vintage Biker Leather Jacket',
-    category: 'Streetwear',
+    id: 'm-shrug',
+    key: 'shrug',
+    title: 'Knit Cardigan & Denim',
+    category: 'Urban Layered',
     gender: 'male',
-    image: 'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=800&auto=format&fit=crop',
-    texture: 'Full-Grain Burnished Leather',
     suggestedBottom: 'jeans',
-    defaultTopColor: '#18181B',
-    defaultBottomColor: '#1E293B',
-    description: 'Heavyweight full-grain leather motorcycle jacket with metallic zips.',
-  },
-  {
-    id: 'm-tshirt',
-    key: 'tshirt',
-    title: 'Heavyweight Cotton Tee & Tracks',
-    category: 'Athleisure',
-    gender: 'male',
-    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop',
-    texture: '240 GSM Organic Combed Cotton',
-    suggestedBottom: 'tracks',
-    defaultTopColor: '#3B82F6',
-    defaultBottomColor: '#0F172A',
-    description: 'Ultra-soft crewneck t-shirt paired with tapered athletic track trousers.',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#0F254E',
+    description: 'Fine-spun knit cardigan layered over dark selvedge denim.',
   },
 ];
 
@@ -314,88 +276,79 @@ export default function MannequinVisualizer({
   const rewards = useRewards();
 
   const [skinTone, setSkinTone] = useState<SkinTone>('golden_olive');
-  const [activeGender, setActiveGender] = useState<Gender>(() => gender);
+  const [activeGender, setActiveGender] = useState<Gender>(gender);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isWalkInActive, setIsWalkInActive] = useState(false);
-
-  // View Mode: 'human_tryon' (Real Human Model Virtual Try-On), 'real_draped' (Studio Draped Model), 'model_photo' (Photorealistic Model)
-  const [viewMode, setViewMode] = useState<'human_tryon' | 'real_draped' | 'model_photo'>('human_tryon');
-
-  // Drape & Fit State
   const [fitStyle, setFitStyle] = useState<'slim' | 'regular' | 'oversized'>('regular');
-  const [clothOpacity, setClothOpacity] = useState<number>(0.92);
-  const [toneAdjustment, setToneAdjustment] = useState<number>(0);
+  const [mannequinForm, setMannequinForm] = useState<'human' | 'dress_form'>('human');
+  
+  // Local outfit override when user clicks silhouettes
+  const [localOutfit, setLocalOutfit] = useState<OutfitConfig | null>(null);
 
-  // Gemini AI Suggestion State
   const [isAiSuggesting, setIsAiSuggesting] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState<ClothSuggestionResponse | null>(null);
-
-  // Auth Gate Modal State
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // Sync parent gender
+  useEffect(() => {
+    setActiveGender(gender);
+    setLocalOutfit(null);
+  }, [gender]);
+
+  // Sync parent outfit
+  useEffect(() => {
+    if (outfit) {
+      setLocalOutfit(null);
+    }
+  }, [outfit]);
+
   const handleGenderToggle = (newGender: Gender) => {
     setActiveGender(newGender);
+    setLocalOutfit(null);
     onGenderChange?.(newGender);
     setAiSuggestion(null);
   };
 
   const skin = SKIN_TONES[skinTone] || SKIN_TONES.golden_olive;
 
-  // Compute fine-tuned skin colors
-  const adjustColorHex = (hex: string, amount: number) => {
-    const num = parseInt(hex.replace('#', ''), 16);
-    const r = Math.min(255, Math.max(0, (num >> 16) + amount));
-    const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + amount));
-    const b = Math.min(255, Math.max(0, (num & 0x0000ff) + amount));
-    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-  };
-
-  const activeSkinBase = adjustColorHex(skin.base, toneAdjustment);
-  const activeSkinHighlight = adjustColorHex(skin.highlight, toneAdjustment);
-  const activeSkinShadow = adjustColorHex(skin.shadow, toneAdjustment);
-
-  // Selected current outfit config
-  const currentOutfit: OutfitConfig = outfit || (activeGender === 'male'
+  // Active outfit configuration (Local override > prop outfit > default)
+  const activeOutfit: OutfitConfig = localOutfit || outfit || (activeGender === 'male'
     ? {
-        title: 'Tailored Linen & Chinos Combo',
-        topType: 'shirt',
-        topColor: '#FFFFFF',
-        bottomType: 'chinos',
-        bottomColor: '#15803D',
-        outerwearColor: '#1E293B',
-        accentColor: '#8B5CF6',
-        description: 'Crisp White Linen Shirt with Green Chinos on Real Male Model.',
-      }
+      title: 'Signature Tailored Suit',
+      topType: 'blazer',
+      topColor: '#1E3A8A',
+      bottomType: 'trousers',
+      bottomColor: '#1E3A8A',
+      outerwearColor: '#FAF8F5',
+      accentColor: '#D4A343',
+      description: 'Structured two-piece tailored jacket with sharp lapels.',
+    }
     : {
-        title: 'Chanderi Silk Ethnic Kurti Look',
-        topType: 'kurti',
-        topColor: '#059669',
-        bottomType: 'salwar_bottom',
-        bottomColor: '#F8FAFC',
-        accentColor: '#F59E0B',
-        description: 'Emerald Green Silk Kurti on Real Female Model.',
-      });
+      title: 'Silk Gala Evening Gown',
+      topType: 'gown',
+      topColor: '#1E3A8A',
+      bottomType: 'gown_skirt',
+      bottomColor: '#1E3A8A',
+      accentColor: '#D4A343',
+      description: 'Sculpted floor-length silk gala gown with gold waist accents.',
+    });
 
-  // Real Garments filtered by gender
-  const availableRealClothes = REAL_GARMENT_COLLECTION.filter(
+  const availableSilhouettes = SILHOUETTES.filter(
     (g) => g.gender === activeGender || g.gender === 'both'
   );
 
-  const activeRealGarment =
-    availableRealClothes.find((g) => g.key === currentOutfit.topType) ||
-    availableRealClothes[0] ||
-    REAL_GARMENT_COLLECTION[0];
-
-  const handleSelectRealGarment = (garment: RealGarmentData) => {
+  const handleSelectSilhouette = (sil: GarmentSilhouette) => {
     const updatedOutfit: OutfitConfig = {
-      title: garment.title,
-      topType: garment.key,
-      topColor: garment.defaultTopColor,
-      bottomType: garment.suggestedBottom,
-      bottomColor: garment.defaultBottomColor,
-      description: garment.description,
+      title: sil.title,
+      topType: sil.key,
+      topColor: activeOutfit.topColor || sil.defaultTopColor,
+      bottomType: sil.suggestedBottom,
+      bottomColor: activeOutfit.bottomColor || sil.defaultBottomColor,
+      accentColor: activeOutfit.accentColor || '#D4A343',
+      description: sil.description,
     };
+    setLocalOutfit(updatedOutfit);
     onGarmentChange?.(updatedOutfit);
   };
 
@@ -409,9 +362,9 @@ export default function MannequinVisualizer({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           gender: activeGender,
-          occasion: 'Formal Event & Evening Wear',
+          occasion: 'Formal Gala & Evening Event',
           weather: 'Mild Breezy',
-          colorPreference: currentOutfit.topColor,
+          colorPreference: activeOutfit.topColor,
           skinTone: skin.label,
         }),
       });
@@ -422,13 +375,14 @@ export default function MannequinVisualizer({
 
         const newOutfitConfig: OutfitConfig = {
           title: data.title,
-          topType: (data.suggestedClothKey || 'shirt') as OutfitConfig['topType'],
-          topColor: data.recommendedTopColor || '#FFFFFF',
-          bottomType: 'chinos',
-          bottomColor: data.recommendedBottomColor || '#1E293B',
-          accentColor: data.recommendedAccentColor,
+          topType: (data.suggestedClothKey || 'blazer') as OutfitConfig['topType'],
+          topColor: data.recommendedTopColor || '#1E3A8A',
+          bottomType: 'trousers',
+          bottomColor: data.recommendedBottomColor || '#FAF8F5',
+          accentColor: data.recommendedAccentColor || '#D4A343',
           description: data.aiStylistRationale,
         };
+        setLocalOutfit(newOutfitConfig);
         onGarmentChange?.(newOutfitConfig);
         rewards.earnPoints('try_suggestion');
       }
@@ -444,139 +398,127 @@ export default function MannequinVisualizer({
       setIsLoginModalOpen(true);
       return;
     }
-    performSaveAction(`${activeRealGarment.id}-${currentOutfit.topType}`);
-  };
-
-  const performSaveAction = (outfitId = 'outfit-saved') => {
-    const itemToSave = {
-      id: outfitId,
-      name: currentOutfit.title || activeRealGarment.title,
+    const outfitItem = {
+      id: Date.now().toString(),
+      name: activeOutfit.title || 'Curated Outfit Look',
       category: 'Other' as const,
-      color: currentOutfit.topColor,
-      imageUrl: activeRealGarment.image,
-      tags: ['Draped Mannequin', activeGender, skin.label],
+      color: activeOutfit.topColor,
+      tags: [activeGender, activeOutfit.topType, activeOutfit.bottomType],
+      notes: activeOutfit.description || 'Draped on interactive studio mannequin',
+      createdAt: new Date().toISOString(),
     };
-
-    collection.addItem(itemToSave);
-    onSaveOutfit?.(currentOutfit);
-    rewards.earnPoints('save_outfit');
-
+    collection.addItem(outfitItem);
+    rewards.earnPoints('add_to_collection');
+    onSaveOutfit?.(activeOutfit);
     setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 2500);
+    setTimeout(() => setSavedSuccess(false), 3000);
   };
+
+  const topColor = activeOutfit.topColor || '#1E3A8A';
+  const bottomColor = activeOutfit.bottomColor || '#FAF8F5';
+  const accentColor = activeOutfit.accentColor || '#D4A343';
+  const outerwearColor = activeOutfit.outerwearColor || '#0A192F';
 
   return (
-    <div className={`relative w-full flex flex-col items-center select-none ${className}`}>
-      {/* Auth Gate Modal */}
+    <div className={`w-full flex flex-col items-center select-none text-[#FAF8F5] ${className}`}>
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        onSuccess={performSaveAction}
-        title="Sign In to Save Your Outfit"
-        message="Create an account or sign in to save your customized outfit to your personal wardrobe collection."
+        title="Sign In to Save Look"
+        message="Sign in to save this complete curated outfit to your digital wardrobe collection."
       />
 
-      {/* TOP HEADER CONTROLS BAR */}
+      {/* TOP CONTROLS & SKIN TONE BAR */}
       {showControls && (
-        <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-6 p-4 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-xl z-10 relative">
-          {/* Gender Selector */}
-          <div className="flex items-center gap-1 bg-black/50 p-1 rounded-2xl border border-white/10">
+        <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 z-10 relative">
+          {/* Gender Tabs */}
+          <div className="flex items-center gap-1.5 p-1 bg-[#050d1a] rounded-2xl border border-[#FAF8F5]/15">
             <button
               onClick={() => handleGenderToggle('female')}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
                 activeGender === 'female'
-                  ? 'bg-pink-500/20 text-pink-300 border border-pink-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md font-bold'
+                  : 'text-[#FAF8F5]/60 hover:text-white'
               }`}
             >
-              <span>👗 Female Model</span>
+              <span>👗</span>
+              <span>Women</span>
             </button>
-
             <button
               onClick={() => handleGenderToggle('male')}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
                 activeGender === 'male'
-                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md font-bold'
+                  : 'text-[#FAF8F5]/60 hover:text-white'
               }`}
             >
-              <span>👔 Male Model</span>
+              <span>👔</span>
+              <span>Men</span>
             </button>
           </div>
 
-          {/* Skin Tone Selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-slate-300 hidden sm:inline-flex items-center gap-1">
-              <User className="w-3.5 h-3.5 text-indigo-400" /> Skin Tone:
-            </span>
-            <div className="flex items-center gap-1 bg-black/50 p-1 rounded-2xl border border-white/10">
+          {/* Model Form Selector: Human vs Dress Form */}
+          <div className="flex items-center bg-[#050d1a] p-1 rounded-2xl border border-[#FAF8F5]/15 text-xs">
+            <button
+              onClick={() => setMannequinForm('human')}
+              className={`px-2.5 py-1 rounded-xl font-semibold transition-all ${
+                mannequinForm === 'human'
+                  ? 'bg-[#1e3a8a] text-white shadow-sm font-bold'
+                  : 'text-[#FAF8F5]/60 hover:text-white'
+              }`}
+            >
+              Human Model
+            </button>
+            <button
+              onClick={() => setMannequinForm('dress_form')}
+              className={`px-2.5 py-1 rounded-xl font-semibold transition-all ${
+                mannequinForm === 'dress_form'
+                  ? 'bg-[#1e3a8a] text-white shadow-sm font-bold'
+                  : 'text-[#FAF8F5]/60 hover:text-white'
+              }`}
+            >
+              Atelier Form
+            </button>
+          </div>
+
+          {/* Skin Tone Selector (only for Human Model) */}
+          {mannequinForm === 'human' && (
+            <div className="flex items-center gap-1.5 bg-[#050d1a] p-1 rounded-2xl border border-[#FAF8F5]/15">
               {(['soft_ivory', 'warm_almond', 'golden_olive', 'bronze_tan', 'rich_espresso', 'deep_ebony'] as SkinTone[]).map((toneKey) => (
                 <button
                   key={toneKey}
                   onClick={() => setSkinTone(toneKey)}
-                  className={`px-2 py-1 rounded-xl text-xs font-medium flex items-center gap-1 transition-all ${
-                    skinTone === toneKey
-                      ? 'bg-white/20 text-white border border-white/30 shadow-inner'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
                   title={SKIN_TONES[toneKey].label}
+                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                    skinTone === toneKey
+                      ? 'ring-2 ring-[#FAF8F5] scale-110 shadow-md'
+                      : 'opacity-70 hover:opacity-100'
+                  }`}
+                  style={{ backgroundColor: SKIN_TONES[toneKey].base }}
                 >
-                  <span>{SKIN_TONES[toneKey].icon}</span>
+                  {skinTone === toneKey && <Check className="w-3 h-3 text-[#0a192f] stroke-[3]" />}
                 </button>
               ))}
             </div>
-          </div>
+          )}
 
-          {/* View Mode & Zoom */}
-          <div className="flex items-center gap-2 ml-auto sm:ml-0">
-            <div className="flex items-center gap-1 bg-black/50 p-1 rounded-2xl border border-white/10 text-xs">
-              <button
-                onClick={() => setViewMode('human_tryon')}
-                className={`px-2.5 py-1 rounded-xl font-semibold transition-all ${
-                  viewMode === 'human_tryon'
-                    ? 'bg-indigo-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Human Model
-              </button>
-              <button
-                onClick={() => setViewMode('real_draped')}
-                className={`px-2.5 py-1 rounded-xl font-semibold transition-all ${
-                  viewMode === 'real_draped'
-                    ? 'bg-indigo-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Studio Contour
-              </button>
-              <button
-                onClick={() => setViewMode('model_photo')}
-                className={`px-2.5 py-1 rounded-xl font-semibold transition-all ${
-                  viewMode === 'model_photo'
-                    ? 'bg-indigo-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Editorial
-              </button>
-            </div>
-
+          {/* View Toggles & Actions */}
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setIsWalkInActive(!isWalkInActive)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition-all ${
                 isWalkInActive
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white border-amber-400 shadow-lg animate-pulse'
-                  : 'bg-white/5 hover:bg-white/10 text-slate-300 border-white/10'
+                  ? 'bg-[#FAF8F5] text-[#0a192f] border-white shadow-lg animate-pulse'
+                  : 'bg-[#0a192f] text-[#FAF8F5]/70 border-[#FAF8F5]/15 hover:bg-[#16366f]/40'
               }`}
             >
               <span>🏃‍♂️</span>
-              <span>{isWalkInActive ? 'Runway Active' : 'Runway Walk'}</span>
+              <span>{isWalkInActive ? 'Active Walk' : 'Runway Walk'}</span>
             </button>
 
             <button
               onClick={() => setIsZoomed(!isZoomed)}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition-colors border border-white/10"
+              className="p-2 rounded-xl bg-[#0a192f] text-[#FAF8F5]/70 hover:text-white transition-colors border border-[#FAF8F5]/15"
               title={isZoomed ? 'Zoom Out' : 'Zoom In'}
             >
               {isZoomed ? <ZoomOut className="w-4 h-4" /> : <ZoomIn className="w-4 h-4" />}
@@ -585,51 +527,37 @@ export default function MannequinVisualizer({
         </div>
       )}
 
-      {/* REAL CLOTH OPTION SELECTOR STRIP */}
+      {/* QUICK SILHOUETTE SELECTOR STRIP */}
       {showControls && (
-        <div className="w-full mb-6 z-10 relative space-y-2">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <Layers className="w-4 h-4 text-pink-400" />
-              Real Garment Selection ({activeGender === 'female' ? "Women's Collection" : "Men's Collection"}):
-            </p>
-            <span className="text-[11px] text-slate-400">
-              Select clothing item to wear on real model
+        <div className="w-full mb-4 z-10 relative space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-mono text-[#FAF8F5]/70">
+            <span className="flex items-center gap-1.5 font-bold uppercase text-[#93c5fd]">
+              <Layers className="w-3.5 h-3.5" />
+              Interactive Silhouette Draping
             </span>
+            <span>Click any style to dress mannequin</span>
           </div>
 
-          <div className="flex items-center gap-3 overflow-x-auto pb-3 scrollbar-hide">
-            {availableRealClothes.map((garment) => {
-              const isSelected = currentOutfit.topType === garment.key;
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {availableSilhouettes.map((sil) => {
+              const isSelected = activeOutfit.topType === sil.key && (activeOutfit.title === sil.title || !localOutfit);
               return (
                 <button
-                  key={garment.id}
-                  onClick={() => handleSelectRealGarment(garment)}
-                  className={`group relative shrink-0 w-36 rounded-2xl overflow-hidden border transition-all text-left ${
+                  key={sil.id}
+                  onClick={() => handleSelectSilhouette(sil)}
+                  className={`group relative shrink-0 px-3 py-2 rounded-xl border transition-all text-left flex items-center gap-2 ${
                     isSelected
-                      ? 'border-pink-500 ring-2 ring-pink-500/50 shadow-xl scale-105 bg-gradient-to-b from-pink-950/40 to-slate-900'
-                      : 'border-white/10 hover:border-white/30 bg-black/40 hover:bg-white/5'
+                      ? 'border-[#FAF8F5] bg-[#FAF8F5] text-[#0a192f] shadow-md scale-105 font-bold'
+                      : 'border-[#FAF8F5]/15 bg-[#0a192f]/70 text-[#FAF8F5] hover:bg-[#16366f]/40'
                   }`}
                 >
-                  <div className="h-24 w-full overflow-hidden relative">
-                    <img
-                      src={garment.image}
-                      alt={garment.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    {isSelected && (
-                      <span className="absolute top-2 right-2 p-1 rounded-full bg-pink-500 text-white shadow-md">
-                        <Check className="w-3 h-3" />
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-2 space-y-0.5">
-                    <span className="text-[9px] uppercase font-bold text-pink-300 tracking-wider block truncate">
-                      {garment.category}
-                    </span>
-                    <p className="text-xs font-bold text-white truncate leading-tight">{garment.title}</p>
-                    <p className="text-[10px] text-slate-400 truncate">{garment.texture}</p>
+                  <span
+                    className="w-3 h-3 rounded-full border border-black/20 shrink-0"
+                    style={{ backgroundColor: isSelected ? topColor : sil.defaultTopColor }}
+                  />
+                  <div className="overflow-hidden">
+                    <p className="text-xs truncate max-w-[120px]">{sil.title}</p>
+                    <p className={`text-[9px] uppercase font-mono ${isSelected ? 'text-[#1e3a8a]' : 'text-[#FAF8F5]/60'}`}>{sil.category}</p>
                   </div>
                 </button>
               );
@@ -638,291 +566,524 @@ export default function MannequinVisualizer({
         </div>
       )}
 
-      {/* GEMINI AI CLOTH SUGGESTION & ACTIONS BAR */}
-      <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-6 p-4 rounded-2xl bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-slate-900 border border-purple-500/30 z-10 relative">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30">
-            <Wand2 className="w-5 h-5 animate-pulse" />
+      {/* GEMINI AI ASSISTANT BANNER */}
+      {showControls && (
+        <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 p-3 rounded-2xl bg-[#0f254e]/60 border border-[#FAF8F5]/15 z-10 relative">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-[#1e3a8a] text-white">
+              <Wand2 className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                AI Mannequin Stylist
+                <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#1e3a8a]/40 text-[#93c5fd] font-mono border border-[#FAF8F5]/20">
+                  Gemini Flash
+                </span>
+              </h4>
+              <p className="text-[11px] text-[#FAF8F5]/70">
+                Auto-generate harmonic draping and color proportions
+              </p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
-              Gemini AI Real Model Stylist
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                Gemini 3.6 Flash
-              </span>
-            </h4>
-            <p className="text-xs text-slate-300">
-              Get AI outfit suggestions draped directly on the real human model
-            </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleFetchAiSuggestion}
+              disabled={isAiSuggesting}
+              className="px-3.5 py-1.5 rounded-xl bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 disabled:opacity-50"
+            >
+              {isAiSuggesting ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>Draping...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 text-[#fffff0]" />
+                  <span>AI Styling Suggestion</span>
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={handleSaveOutfitClick}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                savedSuccess
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-[#FAF8F5] hover:bg-white text-[#0a192f] shadow-md'
+              }`}
+            >
+              {savedSuccess ? (
+                <>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                  <span>Saved!</span>
+                </>
+              ) : (
+                <>
+                  <Bookmark className="w-3.5 h-3.5 text-[#1e3a8a]" />
+                  <span>Save Look</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
+      )}
 
-        <div className="flex items-center gap-2 ml-auto sm:ml-0">
-          <button
-            onClick={handleFetchAiSuggestion}
-            disabled={isAiSuggesting}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold text-xs shadow-lg shadow-purple-500/25 transition-all flex items-center gap-2 disabled:opacity-50"
-          >
-            {isAiSuggesting ? (
-              <>
-                <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Asking Gemini AI...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4" />
-                <span>Ask Gemini AI Suggestion</span>
-              </>
-            )}
-          </button>
-
-          <button
-            onClick={handleSaveOutfitClick}
-            className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all ${
-              savedSuccess
-                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-transparent shadow-lg shadow-emerald-500/20'
-            }`}
-          >
-            {savedSuccess ? (
-              <>
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Saved to Wardrobe!</span>
-              </>
-            ) : (
-              <>
-                {!isAuthenticated ? <Lock className="w-3.5 h-3.5" /> : <Bookmark className="w-3.5 h-3.5" />}
-                <span>{isAuthenticated ? 'Save Outfit' : 'Sign In to Save'}</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* GEMINI AI SUGGESTION CARD */}
+      {/* AI SUGGESTION FEEDBACK CARD */}
       <AnimatePresence>
         {aiSuggestion && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="w-full mb-6 p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-xs space-y-2 z-10 relative"
+            className="w-full mb-4 p-3.5 rounded-2xl bg-[#0a192f] border border-[#FAF8F5]/20 text-xs space-y-1.5 z-10 relative"
           >
             <div className="flex items-center justify-between">
-              <span className="font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-indigo-400" />
-                Gemini AI Recommendation: {aiSuggestion.title}
+              <span className="font-bold text-[#93c5fd] uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#38BDF8]" />
+                Gemini Style Advice: {aiSuggestion.title}
               </span>
-              <span className="text-[10px] text-amber-300 font-medium px-2 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/20">
+              <span className="text-[10px] text-[#fffff0] font-mono px-2 py-0.5 rounded-full bg-[#1e3a8a]/50">
                 Fit: {aiSuggestion.fitRecommendation.toUpperCase()}
               </span>
             </div>
-            <p className="text-slate-200 leading-relaxed">{aiSuggestion.aiStylistRationale}</p>
+            <p className="text-[#FAF8F5]/80 leading-relaxed text-[11px]">{aiSuggestion.aiStylistRationale}</p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* MAIN VISUALIZATION DISPLAY ENGINE */}
-      <div className="relative w-full flex items-center justify-center py-4">
-        <AnimatePresence mode="wait">
-          {viewMode === 'human_tryon' ? (
-            /* REAL HUMAN MODEL VIRTUAL TRY-ON ENGINE */
-            <motion.div
-              key="human_tryon"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={
-                isWalkInActive
-                  ? { scale: [1, 1.03, 1], y: [0, -8, 0] }
-                  : { scale: isZoomed ? 1.15 : 1 }
-              }
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={
-                isWalkInActive
-                  ? { repeat: Infinity, duration: 2.2, ease: 'easeInOut' }
-                  : { type: 'spring', stiffness: 200, damping: 20 }
-              }
-              className="relative w-80 h-[500px] rounded-3xl overflow-hidden border-2 border-indigo-500/40 shadow-2xl bg-gradient-to-b from-slate-900 via-indigo-950/40 to-slate-950 flex flex-col items-center justify-center p-4 group"
+      {/* ========================================================= */}
+      {/* CORE INTERACTIVE MANNEQUIN VISUALIZATION CANVAS           */}
+      {/* ========================================================= */}
+      <div className="relative w-full flex items-center justify-center py-2">
+        <motion.div
+          key="vector_mannequin"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={
+            isWalkInActive
+              ? { scale: [1, 1.02, 1], y: [0, -6, 0] }
+              : { scale: isZoomed ? 1.15 : 1 }
+          }
+          transition={
+            isWalkInActive
+              ? { repeat: Infinity, duration: 2, ease: 'easeInOut' }
+              : { type: 'spring', stiffness: 200, damping: 20 }
+          }
+          className="relative w-80 h-[500px] rounded-3xl overflow-hidden border border-[#FAF8F5]/20 shadow-2xl bg-gradient-to-b from-[#0f254e] via-[#0a192f] to-[#050d1a] flex flex-col items-center justify-center p-4 group"
+        >
+          {/* Spotlight Ambient Radial Glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,_rgba(30,58,138,0.4)_0%,_rgba(10,25,47,0.95)_100%)] pointer-events-none" />
+
+          {/* DYNAMIC VECTOR MANNEQUIN & CLOTHING DRAPING SVG */}
+          <div
+            className="relative w-full h-full flex flex-col items-center justify-center transition-all duration-300 z-10"
+            style={{
+              transform: `scale(${fitStyle === 'slim' ? 0.94 : fitStyle === 'oversized' ? 1.06 : 1})`,
+            }}
+          >
+            <svg
+              className="w-64 h-[440px] drop-shadow-2xl"
+              viewBox="0 0 240 440"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Ambient Spotlight & Runway Backdrop */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/15 via-purple-900/10 to-black pointer-events-none" />
+              <defs>
+                {/* Skin Gradient */}
+                <linearGradient id={`mannequinSkin-${skinTone}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor={skin.highlight} />
+                  <stop offset="50%" stopColor={skin.base} />
+                  <stop offset="100%" stopColor={skin.shadow} />
+                </linearGradient>
 
-              {/* REAL HUMAN AVATAR & CLOTH DRAPE LAYER */}
-              <div
-                className="relative w-full h-full flex flex-col items-center justify-center transition-all duration-300"
-                style={{
-                  transform: `scale(${
-                    fitStyle === 'slim' ? 0.92 : fitStyle === 'oversized' ? 1.08 : 1
-                  })`,
-                }}
-              >
-                {/* SVG REAL HUMAN MODEL FIGURE */}
-                <svg
-                  className="absolute w-60 h-[440px] drop-shadow-2xl z-0"
-                  viewBox="0 0 240 440"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <defs>
-                    <linearGradient id={`humanSkinGrad-${skinTone}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor={activeSkinHighlight} />
-                      <stop offset="50%" stopColor={activeSkinBase} />
-                      <stop offset="100%" stopColor={activeSkinShadow} />
-                    </linearGradient>
-                    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#1E293B" />
-                      <stop offset="100%" stopColor="#020617" />
-                    </linearGradient>
-                  </defs>
+                {/* Dress Form Tailor Linen Texture */}
+                <linearGradient id="dressFormLinen" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#FAF8F5" />
+                  <stop offset="60%" stopColor="#EAE3D2" />
+                  <stop offset="100%" stopColor="#C8BC9F" />
+                </linearGradient>
 
-                  {/* Female vs Male Real Human Body Shapes */}
-                  {activeGender === 'female' ? (
-                    <g>
-                      {/* Female Hair (Stylized Wavy Flow) */}
-                      <path
-                        d="M95 40 C95 20, 145 20, 145 40 C155 55, 155 85, 145 105 C135 110, 105 110, 95 105 C85 85, 85 55, 95 40 Z"
-                        fill="url(#hairGrad)"
-                      />
-                      {/* Head & Neck */}
-                      <ellipse cx="120" cy="48" rx="18" ry="22" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      <rect x="112" y="66" width="16" height="22" rx="4" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      {/* Shoulders & Bust */}
-                      <path
-                        d="M80 88 Q120 98 160 88 L152 170 Q120 180 88 170 Z"
-                        fill={`url(#humanSkinGrad-${skinTone})`}
-                      />
-                      {/* Arms */}
-                      <path d="M78 90 L62 185 L72 188 L85 96 Z" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      <path d="M162 90 L178 185 L168 188 L155 96 Z" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      {/* Legs */}
-                      <rect x="96" y="170" width="20" height="210" rx="6" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      <rect x="124" y="170" width="20" height="210" rx="6" fill={`url(#humanSkinGrad-${skinTone})`} />
-                    </g>
-                  ) : (
-                    <g>
-                      {/* Male Hair (Short Tapered Style) */}
-                      <path
-                        d="M98 38 C98 25, 142 25, 142 38 C145 48, 138 52, 120 52 C102 52, 95 48, 98 38 Z"
-                        fill="url(#hairGrad)"
-                      />
-                      {/* Male Head & Neck */}
-                      <ellipse cx="120" cy="48" rx="20" ry="24" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      <rect x="110" y="68" width="20" height="24" rx="4" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      {/* Broad Shoulders & Torso */}
-                      <path
-                        d="M72 90 Q120 96 168 90 L156 180 Q120 185 84 180 Z"
-                        fill={`url(#humanSkinGrad-${skinTone})`}
-                      />
-                      {/* Masculine Arms */}
-                      <path d="M70 92 L54 195 L66 198 L80 100 Z" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      <path d="M170 92 L186 195 L174 198 L160 100 Z" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      {/* Legs */}
-                      <rect x="94" y="180" width="23" height="205" rx="6" fill={`url(#humanSkinGrad-${skinTone})`} />
-                      <rect x="123" y="180" width="23" height="205" rx="6" fill={`url(#humanSkinGrad-${skinTone})`} />
-                    </g>
+                {/* Polished Walnut Wooden Finial */}
+                <linearGradient id="walnutWood" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#8B4513" />
+                  <stop offset="50%" stopColor="#5C2E0B" />
+                  <stop offset="100%" stopColor="#2E1705" />
+                </linearGradient>
+
+                {/* Brushed Metal Chrome Stand */}
+                <linearGradient id="chromeStand" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#475569" />
+                  <stop offset="50%" stopColor="#CBD5E1" />
+                  <stop offset="100%" stopColor="#334155" />
+                </linearGradient>
+
+                {/* Hair Gradient */}
+                <linearGradient id="hairShineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#1E293B" />
+                  <stop offset="60%" stopColor="#0F172A" />
+                  <stop offset="100%" stopColor="#020617" />
+                </linearGradient>
+
+                {/* Dynamic Fabric Shading Overlays */}
+                <linearGradient id="topFabricGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.25" />
+                  <stop offset="50%" stopColor="#000000" stopOpacity="0.0" />
+                  <stop offset="100%" stopColor="#000000" stopOpacity="0.35" />
+                </linearGradient>
+
+                <linearGradient id="bottomFabricGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.15" />
+                  <stop offset="50%" stopColor="#000000" stopOpacity="0.0" />
+                  <stop offset="100%" stopColor="#000000" stopOpacity="0.4" />
+                </linearGradient>
+              </defs>
+
+              {/* ================================================= */}
+              {/* 1. DRESS FORM STAND OR HUMAN BASE                 */}
+              {/* ================================================= */}
+              {mannequinForm === 'dress_form' ? (
+                <g id="dress-form-base">
+                  {/* Chrome Central Pole */}
+                  <rect x="117" y="160" width="6" height="240" rx="2" fill="url(#chromeStand)" />
+                  {/* Tripod Cast Iron Feet */}
+                  <path d="M120 400 L80 430 L90 432 L120 406 Z" fill="url(#chromeStand)" />
+                  <path d="M120 400 L160 430 L150 432 L120 406 Z" fill="url(#chromeStand)" />
+                  <circle cx="120" cy="400" r="7" fill="url(#chromeStand)" />
+                  {/* Wooden Neck Finial Cap */}
+                  <ellipse cx="120" cy="62" rx="14" ry="8" fill="url(#walnutWood)" />
+                  <rect x="116" y="52" width="8" height="12" rx="2" fill="url(#walnutWood)" />
+                  <circle cx="120" cy="50" r="6" fill="url(#walnutWood)" />
+                  {/* Torso Linen Form */}
+                  <path
+                    d="M80 84 Q120 92 160 84 L152 185 Q120 195 88 185 Z"
+                    fill="url(#dressFormLinen)"
+                  />
+                  {/* Form Tailor Stitch Lines */}
+                  <line x1="120" y1="84" x2="120" y2="190" stroke="#8B7E66" strokeDasharray="3 3" strokeWidth="1.2" />
+                  <path d="M88 135 Q120 145 152 135" stroke="#8B7E66" strokeDasharray="3 3" strokeWidth="1.2" fill="none" />
+                </g>
+              ) : activeGender === 'female' ? (
+                <g id="female-body">
+                  {/* Hair Silhouette */}
+                  <path
+                    d="M94 42 C94 20, 146 20, 146 42 C158 60, 158 90, 148 115 C136 120, 104 120, 92 115 C82 90, 82 60, 94 42 Z"
+                    fill="url(#hairShineGrad)"
+                  />
+                  {/* Head & Neck */}
+                  <ellipse cx="120" cy="48" rx="17" ry="21" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <rect x="113" y="66" width="14" height="20" rx="3" fill={`url(#mannequinSkin-${skinTone})`} />
+                  {/* Shoulders & Arms */}
+                  <path d="M82 86 Q120 94 158 86 L150 170 Q120 178 90 170 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <path d="M80 88 L64 185 L74 188 L87 94 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <path d="M160 88 L176 185 L166 188 L153 94 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                  {/* Legs */}
+                  <rect x="98" y="170" width="18" height="215" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <rect x="124" y="170" width="18" height="215" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                </g>
+              ) : (
+                <g id="male-body">
+                  {/* Male Hair */}
+                  <path
+                    d="M96 36 C96 22, 144 22, 144 36 C148 48, 140 54, 120 54 C100 54, 92 48, 96 36 Z"
+                    fill="url(#hairShineGrad)"
+                  />
+                  {/* Head & Neck */}
+                  <ellipse cx="120" cy="46" rx="19" ry="23" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <rect x="111" y="66" width="18" height="22" rx="4" fill={`url(#mannequinSkin-${skinTone})`} />
+                  {/* Broad Torso & Arms */}
+                  <path d="M72 88 Q120 96 168 88 L156 180 Q120 186 84 180 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <path d="M70 90 L54 195 L66 198 L80 98 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <path d="M170 90 L186 195 L174 198 L160 98 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                  {/* Legs */}
+                  <rect x="94" y="180" width="22" height="210" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                  <rect x="124" y="180" width="22" height="210" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                </g>
+              )}
+
+              {/* ================================================= */}
+              {/* 2. DYNAMIC BOTTOM GARMENTS LAYER                  */}
+              {/* ================================================= */}
+              {activeOutfit.bottomType === 'skirt' || activeOutfit.topType === 'saree' ? (
+                <g id="draped-skirt">
+                  {/* Accordion / Flared Skirt */}
+                  <path
+                    d="M86 150 L154 150 L174 330 Q120 345 66 330 Z"
+                    fill={bottomColor}
+                  />
+                  <path
+                    d="M86 150 L154 150 L174 330 Q120 345 66 330 Z"
+                    fill="url(#bottomFabricGrad)"
+                  />
+                  {/* Skirt Pleat Lines */}
+                  <line x1="102" y1="152" x2="92" y2="332" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
+                  <line x1="120" y1="152" x2="120" y2="336" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
+                  <line x1="138" y1="152" x2="148" y2="332" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
+                  {/* Waistband */}
+                  <rect x="86" y="148" width="68" height="6" rx="2" fill={accentColor} />
+                </g>
+              ) : activeOutfit.bottomType === 'gown_skirt' || activeOutfit.topType === 'gown' ? (
+                <g id="draped-gown-skirt">
+                  {/* Floor Length Gown Skirt */}
+                  <path
+                    d="M88 140 L152 140 L180 395 Q120 410 60 395 Z"
+                    fill={bottomColor}
+                  />
+                  <path
+                    d="M88 140 L152 140 L180 395 Q120 410 60 395 Z"
+                    fill="url(#bottomFabricGrad)"
+                  />
+                  {/* Flowing Gown Drapes */}
+                  <path d="M110 142 Q105 270 90 398" stroke="#000" strokeOpacity="0.2" strokeWidth="2" fill="none" />
+                  <path d="M130 142 Q135 270 150 398" stroke="#000" strokeOpacity="0.2" strokeWidth="2" fill="none" />
+                </g>
+              ) : activeOutfit.bottomType === 'salwar_bottom' ? (
+                <g id="draped-salwar">
+                  {/* Gathered Salwar / Churidar Pants */}
+                  <path
+                    d="M86 160 L154 160 L146 385 L124 385 L120 220 L116 385 L94 385 Z"
+                    fill={bottomColor}
+                  />
+                  <path
+                    d="M86 160 L154 160 L146 385 L124 385 L120 220 L116 385 L94 385 Z"
+                    fill="url(#bottomFabricGrad)"
+                  />
+                  {/* Gather pleats */}
+                  <path d="M96 340 Q106 345 116 340" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" fill="none" />
+                  <path d="M124 340 Q134 345 144 340" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" fill="none" />
+                </g>
+              ) : (
+                /* Tailored Trousers / Chinos / Jeans */
+                <g id="draped-trousers">
+                  {/* Left & Right Pant Legs */}
+                  <path
+                    d="M86 165 L154 165 L150 388 L126 388 L120 220 L114 388 L90 388 Z"
+                    fill={bottomColor}
+                  />
+                  <path
+                    d="M86 165 L154 165 L150 388 L126 388 L120 220 L114 388 L90 388 Z"
+                    fill="url(#bottomFabricGrad)"
+                  />
+                  {/* Pressed Center Creases */}
+                  <line x1="102" y1="170" x2="102" y2="385" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
+                  <line x1="138" y1="170" x2="138" y2="385" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
+                  {/* Waistband */}
+                  <rect x="86" y="165" width="68" height="8" rx="2" fill={bottomColor} />
+                  <rect x="86" y="165" width="68" height="8" rx="2" fill="#000" fillOpacity="0.15" />
+                </g>
+              )}
+
+              {/* Shoes (for human model) */}
+              {mannequinForm === 'human' && (
+                <g id="shoes">
+                  <path d="M88 388 L104 388 L108 402 L84 402 Z" fill="#0A192F" />
+                  <path d="M136 388 L152 388 L156 402 L132 402 Z" fill="#0A192F" />
+                  <line x1="84" y1="400" x2="108" y2="400" stroke="#FAF8F5" strokeWidth="1.5" />
+                  <line x1="132" y1="400" x2="156" y2="400" stroke="#FAF8F5" strokeWidth="1.5" />
+                </g>
+              )}
+
+              {/* ================================================= */}
+              {/* 3. DYNAMIC TOP GARMENTS LAYER                     */}
+              {/* ================================================= */}
+              {activeOutfit.topType === 'kurti' ? (
+                <g id="draped-kurti">
+                  {/* Ethnic Kurti with Side Slits */}
+                  <path
+                    d="M80 86 L160 86 L154 260 L140 260 L140 180 L100 180 L100 260 L86 260 Z"
+                    fill={topColor}
+                  />
+                  <path
+                    d="M80 86 L160 86 L154 260 L140 260 L140 180 L100 180 L100 260 L86 260 Z"
+                    fill="url(#topFabricGrad)"
+                  />
+                  {/* Sleeves */}
+                  {mannequinForm === 'human' && (
+                    <>
+                      <path d="M80 86 L62 165 L76 167 L88 94 Z" fill={topColor} />
+                      <path d="M160 86 L178 165 L164 167 L152 94 Z" fill={topColor} />
+                    </>
                   )}
-                </svg>
-
-                {/* REAL CLOTHING GARMENT OVERLAY */}
-                <div
-                  className="relative z-10 w-64 h-[380px] rounded-2xl overflow-hidden border border-white/20 shadow-2xl group-hover:scale-[1.02] transition-transform duration-500"
-                  style={{ opacity: clothOpacity }}
-                >
-                  <img
-                    src={activeRealGarment.image}
-                    alt={activeRealGarment.title}
-                    className="w-full h-full object-cover"
+                  {/* Neckline Embroidery */}
+                  <path d="M106 86 C108 115, 132 115, 134 86" stroke={accentColor} strokeWidth="3.5" fill="none" />
+                  <circle cx="120" cy="120" r="2.5" fill={accentColor} />
+                  <circle cx="120" cy="132" r="2.5" fill={accentColor} />
+                </g>
+              ) : activeOutfit.topType === 'saree' ? (
+                <g id="draped-saree">
+                  {/* Fitted Blouse */}
+                  <path d="M82 86 L158 86 L150 145 L90 145 Z" fill={topColor} />
+                  {/* Diagonal Pleated Pallu Drape across chest */}
+                  <path
+                    d="M82 86 L105 86 L152 170 L140 175 Z"
+                    fill={topColor}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 mix-blend-multiply pointer-events-none" />
-                  <div className="absolute inset-0 bg-indigo-500/10 mix-blend-overlay pointer-events-none" />
-
-                  {/* Fabric Texture Badge */}
-                  <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 text-[10px] font-bold text-amber-300 flex items-center gap-1 shadow-lg">
-                    <Tag className="w-3 h-3 text-amber-400" />
-                    <span>{activeRealGarment.texture}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Garment Details Card */}
-              <div className="absolute bottom-3 left-3 right-3 bg-black/85 backdrop-blur-md p-3 rounded-2xl border border-white/10 z-20 flex items-center justify-between">
-                <div>
-                  <span className="text-[9px] uppercase font-bold text-pink-300 tracking-wider flex items-center gap-1">
-                    <span>{activeGender === 'female' ? '👗 Female' : '👔 Male'} Model Virtual Try-On</span>
-                  </span>
-                  <h5 className="text-xs font-bold text-white truncate max-w-[180px]">
-                    {activeRealGarment.title}
-                  </h5>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className="w-3.5 h-3.5 rounded-full border border-white/40 shadow-sm"
-                    style={{ backgroundColor: currentOutfit.topColor }}
+                  <path d="M82 86 L105 86 L152 170 L140 175 Z" fill="#000" fillOpacity="0.15" />
+                  {/* Zari Gold Border Accent */}
+                  <line x1="82" y1="86" x2="152" y2="170" stroke={accentColor} strokeWidth="3" />
+                  {/* Saree Sleeve */}
+                  {mannequinForm === 'human' && (
+                    <path d="M160 86 L174 135 L162 137 L152 94 Z" fill={topColor} />
+                  )}
+                </g>
+              ) : activeOutfit.topType === 'gown' ? (
+                <g id="draped-gown-top">
+                  {/* Fitted Sweetheart Bodice */}
+                  <path
+                    d="M84 94 Q120 106 156 94 L152 150 Q120 160 88 150 Z"
+                    fill={topColor}
                   />
-                  <span className="text-[10px] text-slate-300 font-mono">
-                    {currentOutfit.topColor}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          ) : viewMode === 'real_draped' ? (
-            /* STUDIO DRAPED CONTOUR VIEW */
-            <motion.div
-              key="real_draped"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: isZoomed ? 1.15 : 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-80 h-[480px] rounded-3xl overflow-hidden border-2 border-indigo-500/40 shadow-2xl bg-gradient-to-b from-slate-900 via-indigo-950/40 to-slate-950 flex flex-col items-center justify-center p-4 group"
-            >
-              <div className="relative z-10 w-64 h-[360px] rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
-                <img
-                  src={activeRealGarment.image}
-                  alt={activeRealGarment.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-          ) : (
-            /* EDITORIAL FASHION MODEL VIEW */
-            <motion.div
-              key="model_photo"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: isZoomed ? 1.15 : 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-72 h-[420px] rounded-3xl overflow-hidden border-2 border-indigo-500/40 shadow-2xl"
-            >
-              <img
-                src={activeRealGarment.image}
-                alt={activeRealGarment.title}
-                className="w-full h-full object-cover"
+                  <path
+                    d="M84 94 Q120 106 156 94 L152 150 Q120 160 88 150 Z"
+                    fill="url(#topFabricGrad)"
+                  />
+                  {/* Metallic Gold Waist Belt Accent */}
+                  <rect x="88" y="142" width="64" height="6" rx="2" fill={accentColor} />
+                </g>
+              ) : activeOutfit.topType === 'blazer' ? (
+                <g id="draped-blazer">
+                  {/* Underlayer Shirt / Camisole */}
+                  <path d="M106 86 L134 86 L128 170 L112 170 Z" fill="#FAF8F5" />
+                  <path d="M112 86 L120 108 L128 86" stroke="#0A192F" strokeWidth="1.5" fill="none" />
+                  
+                  {/* Tailored Jacket Bodice */}
+                  <path
+                    d="M74 88 L166 88 L158 190 L130 190 L120 135 L110 190 L82 190 Z"
+                    fill={topColor}
+                  />
+                  <path
+                    d="M74 88 L166 88 L158 190 L130 190 L120 135 L110 190 L82 190 Z"
+                    fill="url(#topFabricGrad)"
+                  />
+                  {/* Jacket Sleeves */}
+                  {mannequinForm === 'human' && (
+                    <>
+                      <path d="M74 88 L56 185 L70 188 L84 96 Z" fill={topColor} />
+                      <path d="M166 88 L184 185 L170 188 L156 96 Z" fill={topColor} />
+                    </>
+                  )}
+                  {/* Lapels */}
+                  <path d="M92 88 L114 135 L96 135 Z" fill="#000" fillOpacity="0.25" />
+                  <path d="M148 88 L126 135 L144 135 Z" fill="#000" fillOpacity="0.25" />
+                  {/* Buttons */}
+                  <circle cx="120" cy="148" r="2" fill={accentColor} />
+                  <circle cx="120" cy="162" r="2" fill={accentColor} />
+                  {/* Pocket Square */}
+                  <path d="M142 120 L152 120 L150 124 L144 124 Z" fill={accentColor} />
+                </g>
+              ) : activeOutfit.topType === 'kurta' ? (
+                <g id="draped-kurta">
+                  {/* Bandhgala / Mandarin Kurta */}
+                  <path
+                    d="M74 88 L166 88 L158 240 L136 240 L136 175 L104 175 L104 240 L82 240 Z"
+                    fill={topColor}
+                  />
+                  <path
+                    d="M74 88 L166 88 L158 240 L136 240 L136 175 L104 175 L104 240 L82 240 Z"
+                    fill="url(#topFabricGrad)"
+                  />
+                  {/* Sleeves */}
+                  {mannequinForm === 'human' && (
+                    <>
+                      <path d="M74 88 L58 185 L70 188 L84 96 Z" fill={topColor} />
+                      <path d="M166 88 L182 185 L170 188 L156 96 Z" fill={topColor} />
+                    </>
+                  )}
+                  {/* Bandhgala Collar & Placket */}
+                  <rect x="110" y="80" width="20" height="8" rx="2" fill={topColor} />
+                  <line x1="120" y1="88" x2="120" y2="155" stroke={accentColor} strokeWidth="2" />
+                  <circle cx="120" cy="100" r="1.5" fill={accentColor} />
+                  <circle cx="120" cy="112" r="1.5" fill={accentColor} />
+                  <circle cx="120" cy="124" r="1.5" fill={accentColor} />
+                </g>
+              ) : (
+                /* Classic Shirt / Blouse / Top */
+                <g id="draped-shirt">
+                  <path
+                    d="M76 88 L164 88 L154 180 L86 180 Z"
+                    fill={topColor}
+                  />
+                  <path
+                    d="M76 88 L164 88 L154 180 L86 180 Z"
+                    fill="url(#topFabricGrad)"
+                  />
+                  {/* Sleeves */}
+                  {mannequinForm === 'human' && (
+                    <>
+                      <path d="M76 88 L60 175 L72 178 L86 96 Z" fill={topColor} />
+                      <path d="M164 88 L180 175 L168 178 L154 96 Z" fill={topColor} />
+                    </>
+                  )}
+                  {/* Collar & Buttons */}
+                  <path d="M108 86 L120 104 L132 86" stroke="#000" strokeOpacity="0.3" strokeWidth="2" fill="none" />
+                  <line x1="120" y1="104" x2="120" y2="175" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
+                  <circle cx="120" cy="118" r="1.5" fill="#000" fillOpacity="0.4" />
+                  <circle cx="120" cy="136" r="1.5" fill="#000" fillOpacity="0.4" />
+                  <circle cx="120" cy="154" r="1.5" fill="#000" fillOpacity="0.4" />
+                </g>
+              )}
+
+              {/* Outerwear Shrug Layer (if specified) */}
+              {activeOutfit.topType === 'shrug' && (
+                <g id="shrug-outerwear">
+                  <path d="M70 88 L96 88 L90 180 L76 185 Z" fill={outerwearColor} />
+                  <path d="M170 88 L144 88 L150 180 L164 185 Z" fill={outerwearColor} />
+                  {mannequinForm === 'human' && (
+                    <>
+                      <path d="M70 88 L52 185 L66 188 L78 96 Z" fill={outerwearColor} />
+                      <path d="M170 88 L188 185 L174 188 L162 96 Z" fill={outerwearColor} />
+                    </>
+                  )}
+                </g>
+              )}
+            </svg>
+          </div>
+
+          {/* Bottom Draped Info Strip */}
+          <div className="absolute bottom-3 left-3 right-3 bg-[#0a192f]/90 backdrop-blur-md p-2.5 rounded-2xl border border-[#FAF8F5]/15 z-20 flex items-center justify-between">
+            <div>
+              <span className="text-[9px] uppercase font-mono font-bold text-[#93c5fd] flex items-center gap-1">
+                <Shirt className="w-3 h-3 text-[#38BDF8]" />
+                <span>{mannequinForm === 'dress_form' ? 'Atelier Form' : `${activeGender === 'female' ? 'Women' : 'Men'} Silhouette`}</span>
+              </span>
+              <h5 className="text-xs font-serif font-bold text-white truncate max-w-[170px]">
+                {activeOutfit.title}
+              </h5>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span
+                className="w-3.5 h-3.5 rounded-full border border-white/40 shadow-sm"
+                style={{ backgroundColor: topColor }}
+                title={`Top: ${topColor}`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <span className="text-[10px] uppercase font-bold text-indigo-300 tracking-wider">
-                  Photorealistic Editorial Model
-                </span>
-                <h5 className="text-sm font-extrabold">{activeRealGarment.title}</h5>
-                <p className="text-xs text-slate-300">{activeRealGarment.description}</p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <span
+                className="w-3.5 h-3.5 rounded-full border border-white/40 shadow-sm"
+                style={{ backgroundColor: bottomColor }}
+                title={`Bottom: ${bottomColor}`}
+              />
+              <span
+                className="w-3.5 h-3.5 rounded-full border border-white/40 shadow-sm"
+                style={{ backgroundColor: accentColor }}
+                title={`Accent: ${accentColor}`}
+              />
+            </div>
+          </div>
+        </motion.div>
       </div>
 
-      {/* DRAPE & FIT ADJUSTMENT CONTROLS */}
+      {/* FIT CONTROLS */}
       {showControls && (
-        <div className="w-full mt-4 pt-4 border-t border-white/10 z-10 relative flex flex-wrap items-center justify-between gap-4 text-xs">
+        <div className="w-full mt-3 pt-3 border-t border-[#FAF8F5]/10 z-10 relative flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-[#FAF8F5]/70">
           <div className="flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-purple-400" />
-            <span className="font-bold text-slate-300">Garment Fit:</span>
-            <div className="flex bg-black/40 p-1 rounded-xl border border-white/10">
+            <Sliders className="w-3.5 h-3.5 text-[#93c5fd]" />
+            <span>Garment Fit:</span>
+            <div className="flex bg-[#050d1a] p-0.5 rounded-xl border border-[#FAF8F5]/15">
               {(['slim', 'regular', 'oversized'] as const).map((fit) => (
                 <button
                   key={fit}
                   onClick={() => setFitStyle(fit)}
                   className={`px-2.5 py-1 rounded-lg font-medium capitalize transition-all ${
                     fitStyle === fit
-                      ? 'bg-purple-500 text-white shadow-sm'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#1e3a8a] text-white shadow-sm font-bold'
+                      : 'text-[#FAF8F5]/60 hover:text-white'
                   }`}
                 >
                   {fit}
@@ -931,32 +1092,11 @@ export default function MannequinVisualizer({
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-slate-400">Drape Opacity:</span>
-              <input
-                type="range"
-                min="0.5"
-                max="1"
-                step="0.05"
-                value={clothOpacity}
-                onChange={(e) => setClothOpacity(parseFloat(e.target.value))}
-                className="w-20 accent-pink-500 cursor-pointer"
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-slate-400">Skin Tone Shade:</span>
-              <input
-                type="range"
-                min="-30"
-                max="30"
-                step="2"
-                value={toneAdjustment}
-                onChange={(e) => setToneAdjustment(parseInt(e.target.value))}
-                className="w-20 accent-indigo-500 cursor-pointer"
-              />
-            </div>
+          <div className="flex items-center gap-2">
+            <span>Draped Palette:</span>
+            <span className="text-white font-bold">{topColor}</span>
+            <span>&bull;</span>
+            <span className="text-white font-bold">{bottomColor}</span>
           </div>
         </div>
       )}

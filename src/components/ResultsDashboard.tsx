@@ -55,15 +55,6 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   Bag: <ShoppingBag className="w-3 h-3" />,
 };
 
-const CATEGORY_COLORS: Record<string, { bg: string; border: string; text: string }> = {
-  Watch: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-300' },
-  Chain: { bg: 'bg-yellow-500/10', border: 'border-yellow-500/20', text: 'text-yellow-300' },
-  Bracelet: { bg: 'bg-pink-500/10', border: 'border-pink-500/20', text: 'text-pink-300' },
-  Shoes: { bg: 'bg-blue-500/10', border: 'border-blue-500/20', text: 'text-blue-300' },
-  Jewelry: { bg: 'bg-purple-500/10', border: 'border-purple-500/20', text: 'text-purple-300' },
-  Bag: { bg: 'bg-teal-500/10', border: 'border-teal-500/20', text: 'text-teal-300' },
-};
-
 export default function ResultsDashboard({ data, collection, onAddToCollection, onTrySuggestion }: ResultsDashboardProps) {
   const { isAuthenticated } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -101,7 +92,7 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
     collection.addItem({
       name: acc.styleName,
       category: (categoryMap[acc.category] || 'Other') as unknown as 'Watch' | 'Chain' | 'Bracelet' | 'Shoes' | 'Jewelry' | 'Bag' | 'Other',
-      color: colorPalette?.accent || '#8B5CF6',
+      color: colorPalette?.accent || '#1e3a8a',
     });
     onAddToCollection?.();
   };
@@ -115,47 +106,47 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
           if (pendingAcc) executeCollect(pendingAcc);
         }}
         title="Sign In to Collect Items"
-        message="Sign in or create an account to save accessory recommendations directly to your wardrobe collection."
+        message="Sign in to save accessory recommendations directly to your wardrobe collection."
       />
       <motion.div 
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="w-full max-w-5xl mx-auto space-y-8 pb-20"
+        className="w-full max-w-5xl mx-auto space-y-10 pb-20"
       >
       {/* Top Banner: Score & Assessment */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="col-span-1 bg-gradient-to-br from-indigo-900/80 to-purple-900/80 p-8 rounded-3xl border border-white/20 backdrop-blur-md flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10" />
-          <h2 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-indigo-200">
+        <div className="col-span-1 bg-[#1e3a8a] p-8 rounded-3xl border-2 border-[#FAF8F5]/30 flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#FAF8F5]/10 rounded-full blur-2xl -mr-10 -mt-10" />
+          <h2 className="text-6xl font-serif font-black text-[#FAF8F5]">
             {overallAssessment.compatibilityScore}
           </h2>
-          <p className="text-xl font-bold text-white mt-2">{overallAssessment.verdict}</p>
-          <div className="mt-4 flex items-center gap-2 bg-green-500/20 text-green-300 px-4 py-1.5 rounded-full text-sm font-medium border border-green-500/30">
-            <Check className="w-4 h-4" /> Score
+          <p className="text-lg font-serif font-bold text-[#FAF8F5] mt-2">{overallAssessment.verdict}</p>
+          <div className="mt-4 flex items-center gap-2 bg-[#FAF8F5] text-[#0a192f] px-4 py-1.5 rounded-full text-xs font-bold shadow-md">
+            <Check className="w-3.5 h-3.5 text-[#1e3a8a]" /> Harmonic Match
           </div>
         </div>
 
-        <div className="col-span-1 md:col-span-2 bg-black/30 p-8 rounded-3xl border border-white/10 backdrop-blur-md">
-          <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <Info className="w-5 h-5 text-indigo-400" /> Stylist Notes
+        <div className="col-span-1 md:col-span-2 bg-[#0f254e]/60 p-8 rounded-3xl border border-[#FAF8F5]/15 backdrop-blur-md space-y-4">
+          <h3 className="text-xl font-serif font-bold text-[#FAF8F5] flex items-center gap-2">
+            <Info className="w-5 h-5 text-[#93c5fd]" /> Stylist Harmonic Synthesis
           </h3>
-          <p className="text-white/80 leading-relaxed text-lg mb-4">
+          <p className="text-[#FAF8F5]/85 leading-relaxed text-sm">
             {overallAssessment.stylistNotes}
           </p>
-          <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 mb-4">
-            <p className="text-indigo-200 font-medium">✨ {overallAssessment.eventCompatibility}</p>
+          <div className="bg-[#1e3a8a]/40 border border-[#FAF8F5]/20 rounded-2xl p-3.5">
+            <p className="text-[#FAF8F5] font-serif text-sm">✦ {overallAssessment.eventCompatibility}</p>
           </div>
           {/* Context Tags */}
           {context && (
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-white/60">
+            <div className="flex flex-wrap gap-2 pt-1">
+              <span className="px-3 py-1 bg-[#0a192f] border border-[#FAF8F5]/15 rounded-full text-xs font-mono text-[#FAF8F5]/70">
                 📍 {context.setting}
               </span>
-              <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-white/60">
+              <span className="px-3 py-1 bg-[#0a192f] border border-[#FAF8F5]/15 rounded-full text-xs font-mono text-[#FAF8F5]/70">
                 👔 {context.formality}
               </span>
-              <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-white/60">
+              <span className="px-3 py-1 bg-[#0a192f] border border-[#FAF8F5]/15 rounded-full text-xs font-mono text-[#FAF8F5]/70">
                 🌤️ {context.weather}
               </span>
             </div>
@@ -164,8 +155,8 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
       </motion.div>
 
       {/* Color Palette */}
-      <motion.div variants={itemVariants} className="bg-black/30 p-6 rounded-3xl border border-white/10 backdrop-blur-md">
-        <h3 className="text-lg font-semibold text-white mb-4">Extracted Color Palette</h3>
+      <motion.div variants={itemVariants} className="bg-[#0f254e]/50 p-6 rounded-3xl border border-[#FAF8F5]/15 backdrop-blur-md">
+        <h3 className="text-base font-serif font-bold text-[#FAF8F5] mb-4">Extracted Harmonic Palette</h3>
         <div className="flex gap-4">
           {[
             { name: 'Primary', hex: colorPalette.primary },
@@ -174,12 +165,12 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
           ].map((color, idx) => (
             <div key={idx} className="flex-1 space-y-2">
               <div 
-                className="w-full h-24 rounded-2xl shadow-inner border border-white/10"
+                className="w-full h-20 rounded-2xl shadow-inner border border-[#FAF8F5]/20"
                 style={{ backgroundColor: color.hex }}
               />
               <div className="flex justify-between items-center px-1">
-                <span className="text-xs font-medium text-white/50 uppercase tracking-wider">{color.name}</span>
-                <span className="text-sm font-mono text-white/90">{color.hex}</span>
+                <span className="text-[10px] font-mono text-[#FAF8F5]/60 uppercase tracking-wider">{color.name}</span>
+                <span className="text-xs font-mono text-[#FAF8F5] font-semibold">{color.hex}</span>
               </div>
             </div>
           ))}
@@ -188,53 +179,52 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
 
       {/* Recommendations by Category */}
       <motion.div variants={itemVariants} className="space-y-6">
-        <h3 className="text-2xl font-bold text-white px-2">Curated Accessories</h3>
+        <h3 className="text-2xl font-serif font-bold text-[#FAF8F5] px-2">Curated Harmonic Coordinates</h3>
         
         {Object.entries(grouped).map(([category, items]) => {
-          const colors = CATEGORY_COLORS[category] || { bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', text: 'text-indigo-300' };
           return (
             <div key={category} className="space-y-3">
               <div className="flex items-center gap-2 px-2">
-                <div className={`p-1.5 rounded-lg ${colors.bg} ${colors.text}`}>
+                <div className="p-1.5 rounded-lg bg-[#1e3a8a] text-white">
                   {CATEGORY_ICONS[category] || <ShoppingBag className="w-4 h-4" />}
                 </div>
-                <h4 className={`text-sm font-bold uppercase tracking-widest ${colors.text}`}>{category}</h4>
+                <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#FAF8F5]">{category}</h4>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {items.map((acc: AccessoryRecommendationItem, idx: number) => (
                   <motion.div 
                     key={idx}
-                    whileHover={{ y: -5 }}
-                    className="bg-white/5 border border-white/10 p-5 rounded-2xl backdrop-blur-sm relative overflow-hidden group hover:bg-white/10 transition-colors duration-300"
+                    whileHover={{ y: -4 }}
+                    className="bg-[#0f254e]/40 border border-[#FAF8F5]/15 p-5 rounded-2xl backdrop-blur-sm relative overflow-hidden group hover:border-[#FAF8F5]/30 transition-all duration-300 flex flex-col justify-between"
                   >
-                    <div className="absolute top-4 right-4">
-                      {acc.inCloset ? (
-                        <div className="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-500/30 flex items-center gap-1">
-                          <Shirt className="w-3 h-3" /> In Closet
-                        </div>
-                      ) : (
-                        <div className="bg-purple-500/20 text-purple-300 text-xs font-bold px-3 py-1 rounded-full border border-purple-500/30 flex items-center gap-1">
-                          <ShoppingBag className="w-3 h-3" /> Buy Now
-                        </div>
-                      )}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-[#1e3a8a] text-[#FAF8F5] font-bold">
+                          {acc.material}
+                        </span>
+                        {acc.inCloset ? (
+                          <div className="bg-[#FAF8F5] text-[#0a192f] text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                            <Shirt className="w-3 h-3" /> In Closet
+                          </div>
+                        ) : (
+                          <div className="bg-[#1e3a8a]/60 text-[#FAF8F5] text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-[#FAF8F5]/20 flex items-center gap-1">
+                            <ShoppingBag className="w-3 h-3" /> Suggestion
+                          </div>
+                        )}
+                      </div>
+                      
+                      <h4 className="text-sm font-bold text-[#FAF8F5] mb-2">{acc.styleName}</h4>
+                      <p className="text-xs text-[#FAF8F5]/70 mb-4 leading-relaxed">
+                        {acc.reasoning}
+                      </p>
                     </div>
                     
-                    <h4 className="text-base font-bold text-white mb-2 pr-20">{acc.styleName}</h4>
-                    <p className="text-sm text-white/60 mb-5 leading-relaxed">
-                      {acc.reasoning}
-                    </p>
-                    
-                    <div className="flex gap-2">
-                      {!acc.inCloset && (
-                        <button className="flex-1 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-xl transition-colors duration-300 flex items-center justify-center gap-2">
-                          <ShoppingBag className="w-4 h-4" /> Shop
-                        </button>
-                      )}
+                    <div className="flex gap-2 pt-2 border-t border-[#FAF8F5]/10">
                       <button
                         onClick={() => handleAddToCollection(acc)}
-                        className="flex-1 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-sm font-semibold rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 border border-emerald-500/20"
+                        className="w-full py-2 bg-[#FAF8F5] hover:bg-white text-[#0a192f] text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md"
                       >
-                        <Plus className="w-4 h-4" /> Collect
+                        <Plus className="w-3.5 h-3.5 text-[#1e3a8a]" /> Collect to Wardrobe
                       </button>
                     </div>
                   </motion.div>
