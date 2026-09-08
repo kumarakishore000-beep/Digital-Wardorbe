@@ -82,12 +82,10 @@ Return a valid JSON matching this EXACT structure:
 Respond ONLY with valid JSON. Do not include markdown code block formatting.`;
 
     const modelsToTry = [
+      'gemini-3.6-flash',
+      'gemini-2.5-flash',
       'gemini-2.0-flash',
       'gemini-1.5-flash',
-      'gemini-1.5-pro',
-      'gemini-2.5-flash',
-      'gemini-3.6-flash',
-      'gemini-flash-latest',
     ];
 
     let geminiResponse: Response | null = null;

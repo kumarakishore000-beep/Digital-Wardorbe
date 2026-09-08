@@ -504,20 +504,58 @@ export default function OutfitAssistant({ onSaveToCollection }: OutfitAssistantP
 
               {/* Interactive AI Mannequin Preview */}
               <div className="relative z-10 my-4">
-                <MannequinVisualizer
-                  gender={selectedGender === 'male' ? 'male' : 'female'}
-                  outfit={{
-                    title: recommendation.title,
-                    topType: selectedGender === 'male' ? 'shirt' : 'kurti',
-                    topColor: recommendation.colorPalette[0]?.hex || '#1E3A8A',
-                    bottomType: selectedGender === 'male' ? 'chinos' : 'salwar_bottom',
-                    bottomColor: recommendation.colorPalette[1]?.hex || '#FAF8F5',
-                    outerwearColor: recommendation.colorPalette[2]?.hex,
-                    accentColor: recommendation.colorPalette[3]?.hex || '#D4A343',
-                    description: recommendation.overview,
-                  }}
-                  showControls={true}
-                />
+                {(() => {
+                  const combined = `${recommendation.title} ${recommendation.items?.upperBody || ''}`.toLowerCase();
+                  let topType: 'shirt' | 'kurti' | 'kurta' | 'saree' | 'gown' | 'blazer' | 'top' = 'gown';
+                  let bottomType: 'jeans' | 'trousers' | 'salwar_bottom' | 'skirt' | 'chinos' | 'gown_skirt' = 'gown_skirt';
+
+                  if (selectedGender === 'male') {
+                    if (combined.includes('kurta') || combined.includes('bandhgala') || combined.includes('ethnic')) {
+                      topType = 'kurta';
+                      bottomType = 'salwar_bottom';
+                    } else if (combined.includes('suit') || combined.includes('blazer') || combined.includes('tuxedo')) {
+                      topType = 'blazer';
+                      bottomType = 'trousers';
+                    } else {
+                      topType = 'shirt';
+                      bottomType = 'chinos';
+                    }
+                  } else {
+                    if (combined.includes('saree') || combined.includes('sari')) {
+                      topType = 'saree';
+                      bottomType = 'skirt';
+                    } else if (combined.includes('kurti') || combined.includes('salwar')) {
+                      topType = 'kurti';
+                      bottomType = 'salwar_bottom';
+                    } else if (combined.includes('blazer') || combined.includes('suit')) {
+                      topType = 'blazer';
+                      bottomType = 'trousers';
+                    } else if (combined.includes('skirt') || combined.includes('blouse')) {
+                      topType = 'top';
+                      bottomType = 'skirt';
+                    } else {
+                      topType = 'gown';
+                      bottomType = 'gown_skirt';
+                    }
+                  }
+
+                  return (
+                    <MannequinVisualizer
+                      gender={selectedGender === 'male' ? 'male' : 'female'}
+                      outfit={{
+                        title: recommendation.title,
+                        topType,
+                        topColor: recommendation.colorPalette[0]?.hex || '#0F172A',
+                        bottomType,
+                        bottomColor: recommendation.colorPalette[1]?.hex || '#FAF8F5',
+                        outerwearColor: recommendation.colorPalette[2]?.hex,
+                        accentColor: recommendation.colorPalette[3]?.hex || '#D4AF37',
+                        description: recommendation.overview,
+                      }}
+                      showControls={true}
+                    />
+                  );
+                })()}
               </div>
 
               {/* Walk-In Function & Entrance Styling Card */}
