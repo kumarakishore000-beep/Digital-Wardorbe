@@ -128,25 +128,19 @@ export default function LandingPage() {
               Your bespoke AI stylist. Curated editorial moodboards, wardrobe digitizer, and harmonic color intelligence.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 flex-wrap">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
               <Link
                 href="/register"
-                className="flex items-center gap-2 bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold py-3.5 px-7 rounded-full transition-all duration-300 shadow-xl shadow-[#1e3a8a]/40 hover:scale-105 border border-[#FAF8F5] text-xs sm:text-sm"
+                className="flex items-center gap-2 bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold py-3.5 px-8 rounded-full transition-all duration-300 shadow-xl shadow-[#1e3a8a]/40 hover:scale-105 border border-[#FAF8F5]"
               >
                 <span>Explore Curated Looks</span>
                 <ArrowRight className="w-4 h-4 text-[#1e3a8a]" />
               </Link>
               <Link
-                href="/dashboard"
-                className="flex items-center gap-2 bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white font-semibold py-3.5 px-6 rounded-full transition-all duration-300 shadow-lg hover:scale-105 border border-white/20 text-xs sm:text-sm"
+                href="/login"
+                className="flex items-center gap-2 bg-[#1e3a8a]/60 hover:bg-[#1e3a8a] backdrop-blur-xl border border-[#FAF8F5]/30 text-[#FAF8F5] font-semibold py-3.5 px-8 rounded-full transition-all duration-300 shadow-md hover:scale-105"
               >
-                <span>🎙️ Talk & Chat with AI</span>
-              </Link>
-              <Link
-                href="/talk-with-us"
-                className="flex items-center gap-2 bg-[#050d1a]/80 hover:bg-[#1e3a8a]/60 backdrop-blur-xl border border-[#38BDF8]/40 text-[#FAF8F5] font-semibold py-3.5 px-6 rounded-full transition-all duration-300 shadow-md text-xs sm:text-sm"
-              >
-                <span>📞 Talk with Us</span>
+                Sign In
               </Link>
             </div>
           </div>
@@ -331,16 +325,16 @@ export default function LandingPage() {
         <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#FAF8F5]/60">
           <AuraStyleLogo variant="full" />
           <div className="flex items-center gap-4 text-xs">
-            <Link href="/talk-with-us" className="hover:text-[#38BDF8] transition-colors">
-              Talk with Us
-            </Link>
-            <span>&bull;</span>
             <Link href="/dashboard" className="hover:text-[#38BDF8] transition-colors">
-              AI Stylist Chat
+              Connect with Fashion
             </Link>
             <span>&bull;</span>
-            <Link href="/talk-with-us" className="hover:text-[#38BDF8] transition-colors">
-              1-on-1 Consultation
+            <Link href="/login" className="hover:text-[#38BDF8] transition-colors">
+              Sign In
+            </Link>
+            <span>&bull;</span>
+            <Link href="/register" className="hover:text-[#38BDF8] transition-colors">
+              Create Account
             </Link>
           </div>
           <p>&copy; {new Date().getFullYear()} AuraStyle AI. All rights reserved. Dressed for your moments.</p>

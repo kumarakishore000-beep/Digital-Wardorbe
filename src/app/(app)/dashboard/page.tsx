@@ -10,17 +10,17 @@ import ColorPicker from '@/components/ColorPicker';
 import MyCollection from '@/components/MyCollection';
 import RewardsPanel from '@/components/RewardsPanel';
 import OutfitAssistant from '@/components/OutfitAssistant';
-import AiChatAssistant from '@/components/AiChatAssistant';
+import ConnectWithFashion from '@/components/ConnectWithFashion';
 import { useCollection } from '@/hooks/useCollection';
 import { useRewards } from '@/hooks/useRewards';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
-type Tab = 'analyzer' | 'assistant' | 'chat' | 'colors' | 'collection' | 'rewards';
+type Tab = 'analyzer' | 'connect' | 'assistant' | 'colors' | 'collection' | 'rewards';
 
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: 'analyzer', label: 'Curated Lookbook & Style AI', icon: <Sparkles className="w-4 h-4" /> },
-  { id: 'chat', label: '💬 Chat & Talk to AI', icon: <MessageSquare className="w-4 h-4 text-[#38BDF8]" /> },
+  { id: 'connect', label: '✨ Connect with Fashion', icon: <Radio className="w-4 h-4 text-[#38BDF8] animate-pulse" /> },
   { id: 'assistant', label: 'AI Outfit Assistant', icon: <Bot className="w-4 h-4" /> },
   { id: 'colors', label: 'Harmonic Color Lab', icon: <Palette className="w-4 h-4" /> },
   { id: 'collection', label: 'My Wardrobe Collection', icon: <Package className="w-4 h-4" /> },
@@ -83,6 +83,7 @@ export default function DashboardPage() {
         collectionCount={collection.totalCount}
         rewardPoints={rewards.points}
         rewardLevel={rewards.level}
+        onConnectClick={() => setActiveTab('connect')}
       />
       
       {/* Tab Navigation */}
@@ -192,17 +193,17 @@ export default function DashboardPage() {
             </motion.div>
           )}
 
-          {/* ===== AI CHAT & TALK ASSISTANT TAB ===== */}
-          {activeTab === 'chat' && (
+          {/* ===== CONNECT WITH FASHION TAB (AI VOICE TALKING + 3D WORKING MODEL) ===== */}
+          {activeTab === 'connect' && (
             <motion.div
-              key="chat"
+              key="connect"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
               className="w-full"
             >
-              <AiChatAssistant />
+              <ConnectWithFashion />
             </motion.div>
           )}
 
@@ -271,19 +272,19 @@ export default function DashboardPage() {
         </AnimatePresence>
       </main>
 
-      {/* Floating Quick Action: Chat & Talk to AI */}
-      {activeTab !== 'chat' && (
+      {/* Floating Quick Action: Connect with Fashion */}
+      {activeTab !== 'connect' && (
         <aside
-          aria-label="Quick AI Stylist Actions"
+          aria-label="Connect with Fashion"
           className="fixed bottom-6 right-6 z-50 flex items-center gap-2"
         >
           <button
-            onClick={() => setActiveTab('chat')}
-            className="flex items-center gap-2.5 bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white px-5 py-3 rounded-full shadow-2xl shadow-[#38BDF8]/30 hover:scale-105 transition-all font-semibold text-xs border border-white/20"
-            title="Chat or Talk to AI Stylist"
+            onClick={() => setActiveTab('connect')}
+            className="flex items-center gap-2.5 bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white px-5 py-3 rounded-full shadow-2xl shadow-[#38BDF8]/40 hover:scale-105 transition-all font-semibold text-xs border border-white/20"
+            title="Connect with Fashion AI (Voice & 3D Model)"
           >
             <Radio className="w-4 h-4 text-amber-300 animate-pulse" />
-            <span>Talk / Chat with AI</span>
+            <span>Connect with Fashion (AI Voice & 3D)</span>
           </button>
         </aside>
       )}

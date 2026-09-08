@@ -10,9 +10,10 @@ interface HeaderProps {
   collectionCount?: number;
   rewardPoints?: number;
   rewardLevel?: number;
+  onConnectClick?: () => void;
 }
 
-export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLevel = 1 }: HeaderProps) {
+export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLevel = 1, onConnectClick }: HeaderProps) {
   const { user, updateGender } = useAuth();
   const currentGender = user?.gender || 'female';
 
@@ -72,15 +73,26 @@ export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLe
           <span className="text-xs font-medium text-[#FAF8F5]/90">{weatherText}</span>
         </div>
 
-        {/* Talk with Us Concierge Link */}
-        <Link
-          href="/talk-with-us"
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#38BDF8]/40 bg-[#1e3a8a]/40 hover:bg-[#38BDF8] hover:text-[#0a192f] text-xs font-bold text-[#FAF8F5] transition-all duration-300 shadow-sm"
-          title="Talk with our personal stylists and atelier concierge"
-        >
-          <span className="text-sm">📞</span>
-          <span>Talk with Us</span>
-        </Link>
+        {/* Connect with Fashion Button */}
+        {onConnectClick ? (
+          <button
+            onClick={onConnectClick}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#38BDF8]/40 bg-[#1e3a8a]/40 hover:bg-[#38BDF8] hover:text-[#0a192f] text-xs font-bold text-[#FAF8F5] transition-all duration-300 shadow-sm"
+            title="Connect with Fashion AI & 3D Model inside page"
+          >
+            <span className="text-sm">✨</span>
+            <span>Connect with Fashion</span>
+          </button>
+        ) : (
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#38BDF8]/40 bg-[#1e3a8a]/40 hover:bg-[#38BDF8] hover:text-[#0a192f] text-xs font-bold text-[#FAF8F5] transition-all duration-300 shadow-sm"
+            title="Connect with Fashion AI & 3D Model inside page"
+          >
+            <span className="text-sm">✨</span>
+            <span>Connect with Fashion</span>
+          </Link>
+        )}
       </div>
     </header>
   );
