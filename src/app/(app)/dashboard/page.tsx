@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Palette, Package, Trophy, LogOut, Bot } from 'lucide-react';
+import { Sparkles, Palette, Package, Trophy, LogOut, Bot, MessageSquare, Radio } from 'lucide-react';
 import Header from '@/components/Header';
 import Uploader from '@/components/Uploader';
 import ResultsDashboard from '@/components/ResultsDashboard';
@@ -10,15 +10,17 @@ import ColorPicker from '@/components/ColorPicker';
 import MyCollection from '@/components/MyCollection';
 import RewardsPanel from '@/components/RewardsPanel';
 import OutfitAssistant from '@/components/OutfitAssistant';
+import AiChatAssistant from '@/components/AiChatAssistant';
 import { useCollection } from '@/hooks/useCollection';
 import { useRewards } from '@/hooks/useRewards';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
-type Tab = 'analyzer' | 'assistant' | 'colors' | 'collection' | 'rewards';
+type Tab = 'analyzer' | 'assistant' | 'chat' | 'colors' | 'collection' | 'rewards';
 
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: 'analyzer', label: 'Curated Lookbook & Style AI', icon: <Sparkles className="w-4 h-4" /> },
+  { id: 'chat', label: '💬 Chat & Talk to AI', icon: <MessageSquare className="w-4 h-4 text-[#38BDF8]" /> },
   { id: 'assistant', label: 'AI Outfit Assistant', icon: <Bot className="w-4 h-4" /> },
   { id: 'colors', label: 'Harmonic Color Lab', icon: <Palette className="w-4 h-4" /> },
   { id: 'collection', label: 'My Wardrobe Collection', icon: <Package className="w-4 h-4" /> },
@@ -190,6 +192,20 @@ export default function DashboardPage() {
             </motion.div>
           )}
 
+          {/* ===== AI CHAT & TALK ASSISTANT TAB ===== */}
+          {activeTab === 'chat' && (
+            <motion.div
+              key="chat"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="w-full"
+            >
+              <AiChatAssistant />
+            </motion.div>
+          )}
+
           {/* ===== AI OUTFIT ASSISTANT TAB ===== */}
           {activeTab === 'assistant' && (
             <motion.div
@@ -254,6 +270,23 @@ export default function DashboardPage() {
           )}
         </AnimatePresence>
       </main>
+
+      {/* Floating Quick Action: Chat & Talk to AI */}
+      {activeTab !== 'chat' && (
+        <aside
+          aria-label="Quick AI Stylist Actions"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2"
+        >
+          <button
+            onClick={() => setActiveTab('chat')}
+            className="flex items-center gap-2.5 bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white px-5 py-3 rounded-full shadow-2xl shadow-[#38BDF8]/30 hover:scale-105 transition-all font-semibold text-xs border border-white/20"
+            title="Chat or Talk to AI Stylist"
+          >
+            <Radio className="w-4 h-4 text-amber-300 animate-pulse" />
+            <span>Talk / Chat with AI</span>
+          </button>
+        </aside>
+      )}
     </div>
   );
 }

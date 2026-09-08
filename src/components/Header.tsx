@@ -67,10 +67,20 @@ export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLe
         )}
 
         {/* Weather */}
-        <div className="hidden sm:flex items-center gap-2 bg-[#050d1a]/60 px-4 py-1.5 rounded-full border border-[#FAF8F5]/10 shadow-inner">
+        <div className="hidden md:flex items-center gap-2 bg-[#050d1a]/60 px-4 py-1.5 rounded-full border border-[#FAF8F5]/10 shadow-inner">
           <WeatherIcon className="w-4 h-4 text-[#fffff0]" />
           <span className="text-xs font-medium text-[#FAF8F5]/90">{weatherText}</span>
         </div>
+
+        {/* Talk with Us Concierge Link */}
+        <Link
+          href="/talk-with-us"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#38BDF8]/40 bg-[#1e3a8a]/40 hover:bg-[#38BDF8] hover:text-[#0a192f] text-xs font-bold text-[#FAF8F5] transition-all duration-300 shadow-sm"
+          title="Talk with our personal stylists and atelier concierge"
+        >
+          <span className="text-sm">📞</span>
+          <span>Talk with Us</span>
+        </Link>
       </div>
     </header>
   );
