@@ -287,7 +287,7 @@ export default function Uploader({ onAnalyze, isAnalyzing }: UploaderProps) {
         </div>
       </div>
 
-      {/* Big Action CTA in Royal Blue & Ivory */}
+      {/* Big Action CTA */}
       <motion.button
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}

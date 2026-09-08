@@ -245,7 +245,7 @@ export default function OutfitAssistant({ onSaveToCollection }: OutfitAssistantP
           AI Outfit &amp; Walk-In Stylist
         </h1>
         <p className="text-[#FAF8F5]/75 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-light">
-          Complete head-to-toe styling in Royal Blue &amp; Ivory — covering wardrobe cuts, accessories, entrance presence tips, and live AI design ratings.
+          Complete head-to-toe styling — covering wardrobe cuts, accessories, entrance presence tips, and live AI design ratings.
         </p>
       </div>
 
@@ -413,7 +413,7 @@ export default function OutfitAssistant({ onSaveToCollection }: OutfitAssistantP
             ) : (
               <>
                 <Sparkles className="w-5 h-5 text-[#1e3a8a]" />
-                <span>Generate Curated Royal Blue &amp; Ivory Look</span>
+                <span>Generate Curated Look</span>
               </>
             )}
           </button>

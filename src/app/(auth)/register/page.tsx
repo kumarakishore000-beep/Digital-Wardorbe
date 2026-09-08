@@ -67,7 +67,7 @@ export default function RegisterPage() {
         <h1 className="text-2xl md:text-3xl font-serif font-bold text-[#FAF8F5] tracking-tight">
           Create Account
         </h1>
-        <p className="text-[#FAF8F5]/70 text-xs">Join AuraStyle AI in Royal Blue & Ivory</p>
+        <p className="text-[#FAF8F5]/70 text-xs">Join AuraStyle AI</p>
       </div>
 
       {/* Form */}

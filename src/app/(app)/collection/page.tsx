@@ -136,7 +136,7 @@ export default function CollectionPage() {
 
       {/* 1. TOP EDITORIAL ANNOUNCEMENT & NAVIGATION BAR */}
       <div className="bg-[#0A192F] text-[#FAF8F5] text-[11px] font-mono py-2 text-center tracking-widest uppercase border-b border-[#1E3A8A]/20">
-        <span>Royal Blue &amp; Ivory Capsule Collection &bull; Complimentary AI Wardrobe Styling</span>
+        <span>Capsule Collection &bull; Complimentary AI Wardrobe Styling</span>
       </div>
 
       <header className="sticky top-0 z-40 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#EAE3D2]">
@@ -187,7 +187,7 @@ export default function CollectionPage() {
         <div className="text-center space-y-6 max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1E3A8A]/10 text-[#1E3A8A] font-mono text-xs tracking-widest uppercase border border-[#1E3A8A]/20">
             <Sparkles className="w-3 h-3 text-[#1E3A8A]" />
-            <span>Royal Blue &amp; Ivory Digital Wardrobe</span>
+            <span>Digital Wardrobe Collection</span>
           </div>
 
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#0A192F] tracking-tight leading-[1.12]">
@@ -224,7 +224,7 @@ export default function CollectionPage() {
                 Lookbook Capsule Vol. 01
               </span>
               <h3 className="font-serif text-2xl md:text-4xl font-bold">
-                The Royal Blue &amp; Ivory Harmony
+                The Atelier Harmony
               </h3>
               <p className="text-white/80 text-xs md:text-sm font-light">
                 Discover pieces styled with architectural precision, fluid silks, and bespoke tailoring.
@@ -509,7 +509,7 @@ export default function CollectionPage() {
           </div>
 
           <div className="border-t border-[#EAE3D2] pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-[#0A192F]/60 gap-4">
-            <p>&copy; {new Date().getFullYear()} AuraStyle AI Atelier. Royal Blue &amp; Ivory Edition.</p>
+            <p>&copy; {new Date().getFullYear()} AuraStyle AI Atelier.</p>
             <div className="flex items-center gap-4">
               <span>VISA</span>
               <span>MASTERCARD</span>

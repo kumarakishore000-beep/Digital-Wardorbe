@@ -114,7 +114,7 @@ export default function LandingPage() {
           <div className="pointer-events-auto space-y-8 max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-[#FAF8F5]/10 backdrop-blur-xl border border-[#FAF8F5]/20 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wider text-[#FAF8F5] uppercase">
               <Sparkles className="w-3.5 h-3.5 text-[#fffff0]" />
-              Royal Blue & Ivory Collection
+              Bespoke Atelier Collection
             </div>
             
             <h1 className="text-5xl md:text-8xl font-serif font-black tracking-tight text-[#FAF8F5]">
@@ -290,7 +290,7 @@ export default function LandingPage() {
               Curated Style Inspiration
             </h2>
             <p className="text-[#FAF8F5]/60 text-sm max-w-md mx-auto">
-              Explore bespoke silhouettes and couture archives in Royal Blue & Ivory.
+              Explore bespoke silhouettes and couture archives.
             </p>
           </div>
           <SocialCards cards={FAN_CARDS} />
@@ -306,7 +306,7 @@ export default function LandingPage() {
             Your Wardrobe?
           </h2>
           <p className="text-[#FAF8F5]/70 text-base">
-            Join the digital fashion revolution with bespoke recommendations in Royal Blue & Ivory.
+            Join the digital fashion revolution with bespoke AI recommendations.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

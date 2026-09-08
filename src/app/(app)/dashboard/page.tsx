@@ -83,7 +83,7 @@ export default function DashboardPage() {
         rewardLevel={rewards.level}
       />
       
-      {/* Tab Navigation in Royal Blue & Ivory */}
+      {/* Tab Navigation */}
       <nav className="sticky top-[73px] z-40 bg-[#0a192f]/95 backdrop-blur-xl border-b border-[#FAF8F5]/15">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-1.5 py-3 overflow-x-auto scrollbar-hide">

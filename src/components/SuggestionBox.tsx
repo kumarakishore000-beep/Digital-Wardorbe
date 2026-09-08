@@ -379,7 +379,7 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
               Curated Looks For You
             </h2>
             <p className="text-[#FAF8F5]/70 text-sm md:text-base max-w-xl mt-1">
-              Hand-styled magazine moodboards in <strong>Royal Blue & Ivory</strong>. One-click collect full ensembles or curate individual pieces.
+              Hand-styled magazine moodboards. One-click collect full ensembles or curate individual pieces.
             </p>
           </div>
 
@@ -614,7 +614,7 @@ export default function SuggestionBox({ collection, onTrySuggestion }: Suggestio
                 {/* Color Harmony Palette */}
                 <div className="space-y-2 pt-2 border-t border-[#0a192f]/10">
                   <span className="text-[11px] font-mono uppercase tracking-wider text-[#0a192f]/60 font-semibold">
-                    Royal Blue & Ivory Palette Sync
+                    Signature Palette Sync
                   </span>
                   <div className="flex items-center gap-2">
                     {activeLook.palette.map((hex, pIdx) => (
