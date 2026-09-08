@@ -17,6 +17,7 @@ import {
   Play,
   Pause,
   Compass,
+  GraduationCap,
   Palette,
   Briefcase,
   Heart,
@@ -183,7 +184,7 @@ export interface GarmentSilhouette {
   defaultAccentColor: string;
   description: string;
   fabricType: 'silk' | 'wool' | 'linen' | 'denim' | 'leather';
-  occasion: 'interview' | 'wedding' | 'cocktail' | 'casual';
+  occasion: 'interview' | 'wedding' | 'cocktail' | 'casual' | 'graduation' | 'resort';
   realModelImage: string;
   modelSource: string;
   fabricInfo: {
@@ -431,6 +432,154 @@ export const SILHOUETTES: GarmentSilhouette[] = [
       bracelet: { name: 'Woven Nautical Cord with Brass Shackle', style: 'Casual Cord', finish: 'Navy Cord & Brass', tip: 'Pairs with watches for effortless weekend texture.' },
     },
   },
+  // WOMEN - UNIVERSITY CONVOCATION & HONORS
+  {
+    id: 'w-grad-academic',
+    key: 'blazer',
+    title: 'Academic Honors Suiting (Convocation Ceremony)',
+    category: 'University Convocation & Honors',
+    gender: 'female',
+    suggestedBottom: 'skirt',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#FAF8F5',
+    defaultAccentColor: '#D4AF37',
+    description: 'Double-faced midnight navy wool blazer paired with an ivory pleated midi skirt and gold honor cords. Tailored for graduation stage walks.',
+    fabricType: 'wool',
+    occasion: 'graduation',
+    realModelImage: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop',
+    modelSource: 'Oxford & Ivy Lookbook / Vogue Campus Style',
+    fabricInfo: {
+      name: 'Super 130s Pure Wool Crepe & Silk Twill',
+      texture: 'Crisp, structured drape with sharp pressed pleats that flow gracefully as you walk across the stage',
+      gsm: '250 GSM Academic Suiting',
+      breathability: 'High',
+      care: 'Steam press pleats; store on clipped skirt hanger',
+    },
+    sizeAdvice: {
+      slim: 'Tailored waist contour with sharp peak lapels framing academic hoods and graduation stoles.',
+      regular: 'Comfortable structured drape allowing effortless sitting and standing during 3-hour ceremonies.',
+      oversized: 'Relaxed academic drape reminiscent of classic collegiate blazer silhouettes.',
+      tailoringBreak: 'Midi skirt hem rests exactly 2 inches below the knee for regal academic dignity.',
+    },
+    accessories: {
+      shoe: { name: 'Block-Heel 65mm Nappa Leather Pumps', style: 'Commencement Heel', finish: 'Midnight Navy Calfskin', tip: 'Sturdy block heel prevents wobbling on wooden stage ramps.' },
+      watch: { name: 'Roman Numeral Academic Dress Watch', style: 'Commencement Timepiece', finish: '18k Yellow Gold / White Dial', tip: 'Classic dial proportions honoring academic milestones.' },
+      ring: { name: 'Signet Class Ring Band', style: 'Honors Ring', finish: 'Solid Gold Finish', tip: 'Worn on right hand during diploma acceptance handshakes.' },
+      chain: { name: 'Gold Laurel Leaf Honors Pendant', style: 'Collarbone Pendant', finish: '18k Polished Gold', tip: 'Subtle intellectual symbolism resting cleanly against blouse.' },
+      bracelet: { name: 'Minimalist Gold Cable Bangle', style: 'Academic Bangle', finish: '18k Gold Finish', tip: 'Lightweight wrist accent that does not snag on graduation gown sleeves.' },
+    },
+  },
+  // WOMEN - AMALFI COAST RESORT SILK MAXI
+  {
+    id: 'w-resort-maxi',
+    key: 'gown',
+    title: 'Amalfi Coast Liquid Silk Maxi (Resort Soirée)',
+    category: 'Destination Resort & Summer Gala',
+    gender: 'female',
+    suggestedBottom: 'gown_skirt',
+    defaultTopColor: '#C2410C',
+    defaultBottomColor: '#C2410C',
+    defaultAccentColor: '#EAB308',
+    description: 'Breezy terracotta liquid silk maxi with cowl neckline, side slit, and open back designed for Mediterranean sunset galas.',
+    fabricType: 'silk',
+    occasion: 'resort',
+    realModelImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop',
+    modelSource: 'Vogue Resort Cruise Lookbook / Pinterest Summer Gala',
+    fabricInfo: {
+      name: 'Organic Mulberry Silk & Slub Linen Weave',
+      texture: 'Airy, featherweight weave that floats with sea breezes while maintaining luxurious silk luster',
+      gsm: '130 GSM Breathable Resort Silk',
+      breathability: 'High',
+      care: 'Delicate hand wash cold; dry flat in shade away from direct tropical sun',
+    },
+    sizeAdvice: {
+      slim: 'Bias-cut drape clinging gently to torso before flaring into a fluid mermaid hem.',
+      regular: 'Relaxed slip silhouette designed for warm evening dining and effortless movement.',
+      oversized: 'Bohemian resort caftan drape with wide flowing batwing sleeves.',
+      tailoringBreak: 'Floor-grazing hem calculated for flat woven leather sandals or espadrille wedges.',
+    },
+    accessories: {
+      shoe: { name: 'Strappy Metallic Gold Espadrille Wedges', style: 'Resort Wedge', finish: 'Woven Jute & Gold Leather', tip: 'Effortless stability on coastal cobblestones and sandy boardwalks.' },
+      watch: { name: 'Mother-of-Pearl Dial Bangle Timepiece', style: 'Resort Watch', finish: 'Warm Yellow Gold', tip: 'Iridescent dial reflects coastal sunsets beautifully.' },
+      ring: { name: 'Raw Hammered Citrine Gemstone Ring', style: 'Resort Gemstone', finish: '22k Gold Wire-Wrapped', tip: 'Sun-drenched warmth on the hand.' },
+      chain: { name: 'Layered Scallop Shell & Gold Coin Pendant', style: 'Oceanic Layered Chain', finish: '18k Gold Dipped', tip: 'Tumbles across the open décolletage.' },
+      bracelet: { name: 'Stack of Hammered Brass Bangles', style: 'Boho Luxe Stack', finish: 'Organic Brushed Brass', tip: 'Adds rhythmic movement and golden sheen.' },
+    },
+  },
+  // MEN - BLACK-TIE GROSGRAIN TUXEDO
+  {
+    id: 'm-tuxedo-blacktie',
+    key: 'blazer',
+    title: 'Midnight Peak-Lapel Tuxedo (Black-Tie Gala)',
+    category: 'Black-Tie Dinner & Cocktail Gala',
+    gender: 'male',
+    suggestedBottom: 'trousers',
+    defaultTopColor: '#0A192F',
+    defaultBottomColor: '#0A192F',
+    defaultAccentColor: '#FAF8F5',
+    description: 'Black-tie midnight navy wool-silk tuxedo with grosgrain silk peak lapels, braided side-stripe trousers, and Marcella bib shirt.',
+    fabricType: 'wool',
+    occasion: 'cocktail',
+    realModelImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop',
+    modelSource: 'GQ Black Tie Guide / Met Gala Menswear',
+    fabricInfo: {
+      name: 'Super 160s Worsted Wool with Mulberry Grosgrain Silk',
+      texture: 'Flawless formal finish with deep light-absorbing midnight tone and silk lapel sheen',
+      gsm: '280 GSM Formal Evening Suiting',
+      breathability: 'High',
+      care: 'Specialist formal garment dry clean; store in breathable canvas garment bag',
+    },
+    sizeAdvice: {
+      slim: 'Sculpted chest suppression with high armholes and no-break trouser hem.',
+      regular: 'Savile Row formal proportions with room for waist-cummerbund or evening waistcoat.',
+      oversized: 'Double-breasted Hollywood vintage tuxedo drape with wider sweeping lapels.',
+      tailoringBreak: 'Clean no-break trouser hem resting perfectly flush with patent leather footwear.',
+    },
+    accessories: {
+      shoe: { name: 'Patent Leather Evening Court Pumps', style: 'Formal Tuxedo Shoe', finish: 'Mirror-Gloss Patent Leather', tip: 'The black-tie gold standard for formal balls and galas.' },
+      watch: { name: 'Ultra-Thin Onyx Dial Evening Watch', style: 'Black-Tie Watch', finish: '18k White Gold / Black Alligator', tip: 'Ultra-slim 6.5mm case slips under pleated tuxedo cuffs.' },
+      ring: { name: 'Black Onyx & Platinum Signet Ring', style: 'Formal Signet', finish: 'Satin Platinum / Natural Onyx', tip: 'Subtle masculine elegance for evening wear.' },
+      chain: { name: 'Concealed Platinum Collar Link', style: 'Sub-Collar Chain', finish: '950 Solid Platinum', tip: 'Hidden beneath formal bowtie collar.' },
+      bracelet: { name: 'Black Titanium & Steel Clasp Cable', style: 'Formal Wrist Accent', finish: 'Brushed DLC Black Steel', tip: 'Understated accent matching tuxedo satin trim.' },
+    },
+  },
+  // MEN - AMALFI SLUB LINEN RESORT SHIRT & CHINOS
+  {
+    id: 'm-resort-linen',
+    key: 'shirt',
+    title: 'Slub Linen Resort Shirt & Chinos (Coastal Soirée)',
+    category: 'Destination Resort & Summer Gala',
+    gender: 'male',
+    suggestedBottom: 'chinos',
+    defaultTopColor: '#C2410C',
+    defaultBottomColor: '#FAF8F5',
+    defaultAccentColor: '#EAB308',
+    description: 'Garment-washed Italian slub linen shirt with camp collar, stone ivory relaxed chinos, and braided leather loafers.',
+    fabricType: 'linen',
+    occasion: 'resort',
+    realModelImage: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&auto=format&fit=crop',
+    modelSource: 'Pitti Uomo Cruise / GQ Riviera Style',
+    fabricInfo: {
+      name: '100% Normandy Pure Linen with Enzyme Wash',
+      texture: 'Airy, highly breathable open-weave linen with natural soft crumple and moisture-wicking drape',
+      gsm: '185 GSM Tropical Linen',
+      breathability: 'High',
+      care: 'Gentle wash cold, hang dry in breeze; avoid stiff ironing to preserve slub character',
+    },
+    sizeAdvice: {
+      slim: 'Tapered sleeves worn rolled to forearms; relaxed hem worn untucked over chinos.',
+      regular: 'Classic Riviera silhouette with generous chest ease for humid Mediterranean evenings.',
+      oversized: 'Airy camp-collar aesthetic with dropped shoulders and wide-leg linen trousers.',
+      tailoringBreak: 'Cropped ankle hem worn sockless over woven leather loafers or espadrilles.',
+    },
+    accessories: {
+      shoe: { name: 'Woven Calfskin Riviera Penny Loafers', style: 'Woven Loafer', finish: 'Caramel Woven Calfskin', tip: 'Woven leather allows air circulation while looking dressed-up.' },
+      watch: { name: 'Vintage Dive Watch on Tropical Rubber Strap', style: 'Resort Diver', finish: 'Brushed Steel / Navy Dial', tip: 'Waterproof luxury watch ready for yacht and sunset dinners.' },
+      ring: { name: 'Oxidized Silver Nautical Compass Ring', style: 'Artisan Signet', finish: '925 Sterling Silver', tip: 'Maritime flair on the left hand.' },
+      chain: { name: 'Raw Turquoise & Silver Bead Pendant', style: 'Resort Necklace', finish: 'Sterling Silver / Natural Stone', tip: 'Rests naturally at the open camp collar.' },
+      bracelet: { name: 'Braided Tan Saddle Leather Cord', style: 'Coastal Wrap', finish: 'Vegetable-Tanned Italian Leather', tip: 'Ages beautifully with sun and saltwater exposure.' },
+    },
+  },
 ];
 
 // Harmonic Fashion Presets
@@ -492,7 +641,7 @@ export default function MannequinVisualizer({
   // Sync parent outfit
   useEffect(() => {
     if (outfit && (!localOutfit || localOutfit.title !== outfit.title || localOutfit.topColor !== outfit.topColor)) {
-      setLocalOutfit(null);
+      setLocalOutfit(outfit);
     }
   }, [outfit]);
 
@@ -575,7 +724,7 @@ export default function MannequinVisualizer({
     onGarmentChange?.(updated);
   };
 
-  const handleQuickOccasion = (occ: 'interview' | 'wedding' | 'cocktail' | 'casual') => {
+  const handleQuickOccasion = (occ: 'interview' | 'wedding' | 'cocktail' | 'casual' | 'graduation' | 'resort') => {
     const match = availableSilhouettes.find((s) => s.occasion === occ) || availableSilhouettes[0];
     if (match) {
       handleSelectSilhouette(match);
@@ -777,8 +926,22 @@ export default function MannequinVisualizer({
               onClick={() => handleQuickOccasion('casual')}
               className="px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 shrink-0 transition-all border bg-[#0a192f] text-[#FAF8F5]/80 border-[#FAF8F5]/15 hover:bg-[#16366f]/50"
             >
-              <PartyPopper className="w-3.5 h-3.5 text-emerald-400" />
+              <PartyPopper className="w-3.5 h-3.5 text-blue-400" />
               <span>Smart Casual</span>
+            </button>
+            <button
+              onClick={() => handleQuickOccasion('graduation')}
+              className="px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 shrink-0 transition-all border bg-[#0a192f] text-[#FAF8F5]/80 border-[#FAF8F5]/15 hover:bg-[#16366f]/50"
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-purple-400" />
+              <span>Convocation</span>
+            </button>
+            <button
+              onClick={() => handleQuickOccasion('resort')}
+              className="px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 shrink-0 transition-all border bg-[#0a192f] text-[#FAF8F5]/80 border-[#FAF8F5]/15 hover:bg-[#16366f]/50"
+            >
+              <Compass className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Resort Soirée</span>
             </button>
           </div>
         </div>

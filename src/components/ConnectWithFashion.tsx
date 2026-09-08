@@ -6,11 +6,13 @@ import {
   Bot, Mic, MicOff, Volume2, VolumeX, Send, Sparkles, 
   RotateCcw, Star, ThumbsUp, CheckCircle2, MessageSquare, 
   Radio, Shirt, User, Briefcase, Heart, Gem, Scissors, 
-  Layers, Trophy, ArrowRight, MessageCircle
+  Layers, Trophy, ArrowRight, Eye, RefreshCw, Check, Sparkle,
+  GlassWater, PartyPopper, Compass, GraduationCap, Palette
 } from 'lucide-react';
-import MannequinVisualizer, { OutfitConfig } from '@/components/MannequinVisualizer';
+import MannequinVisualizer, { OutfitConfig, SILHOUETTES, GarmentSilhouette } from '@/components/MannequinVisualizer';
 import { useAuth, Gender } from '@/hooks/useAuth';
 import { useRewards } from '@/hooks/useRewards';
+import { ModelDressOption } from '@/app/api/model-dress-options/route';
 
 interface Message {
   id: string;
@@ -27,6 +29,105 @@ interface FeedbackEntry {
   futureSuggestions: string;
   date: string;
 }
+
+// 6 Target Occasions (Aiuta & Fits benchmark)
+const OCCASIONS = [
+  { id: 'interview', label: 'Job Interview & Executive', icon: Briefcase, color: '#38BDF8' },
+  { id: 'wedding', label: 'Royal Wedding & Sangeet', icon: Heart, color: '#F43F5E' },
+  { id: 'cocktail', label: 'Black-Tie Dinner & Cocktail', icon: GlassWater, color: '#F59E0B' },
+  { id: 'graduation', label: 'University Convocation', icon: GraduationCap, color: '#A855F7' },
+  { id: 'resort', label: 'Destination Resort & Soirée', icon: Compass, color: '#10B981' },
+  { id: 'casual', label: 'Smart Casual & Studio', icon: PartyPopper, color: '#3B82F6' },
+];
+
+// 5 Unique Dressing Model Archetypes (Aiuta virtual model benchmark)
+export const MODEL_ARCHETYPES = [
+  { id: 'runway', name: 'Haute Runway', scaleX: 0.95, scaleY: 1.05, desc: 'Tall, high-fashion elongated proportions' },
+  { id: 'hourglass', name: 'Sculpted Hourglass', scaleX: 1.04, scaleY: 1.0, desc: 'Defined waist suppression & curved contours' },
+  { id: 'athletic', name: 'Athletic Dynamic', scaleX: 1.08, scaleY: 1.02, desc: 'Broad shoulders & athletic posture' },
+  { id: 'sartorial', name: 'Savile Row Tailored', scaleX: 1.0, scaleY: 1.0, desc: 'Traditional British balanced drape' },
+  { id: 'petite', name: 'Petite Grace', scaleX: 0.93, scaleY: 0.94, desc: 'Slender, delicate high-waisted lines' },
+];
+
+// Editorial Style Referrals (Fits benchmark)
+const EDITORIAL_REFERRALS = [
+  {
+    id: 'ref-1',
+    title: 'The Modern Executive Power Suit',
+    source: 'GQ Business Archive & Vogue Editorial',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop',
+    tags: ['Super 140s Wool', '0.5" Cuff Reveal', 'Slight Break'],
+    whyItWorks: 'Single-breasted sculpted waist suppression with fluid ivory trousers creates calm intellectual authority.',
+    outfit: {
+      title: 'Savile Row Power Suiting (Executive Interview)',
+      topType: 'blazer' as const,
+      topColor: '#0F172A',
+      bottomType: 'trousers' as const,
+      bottomColor: '#FAF8F5',
+      outerwearColor: '#0A192F',
+      accentColor: '#D4AF37',
+      fabricType: 'wool' as const,
+      occasion: 'Job Interview & Executive Assessment',
+    }
+  },
+  {
+    id: 'ref-2',
+    title: 'Mulberry Liquid Silk Gala Gown',
+    source: 'Vogue Runway Haute Couture Lookbook',
+    image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&auto=format&fit=crop',
+    tags: ['19-Momme Silk', 'Bias Cut', 'Gold Hardware'],
+    whyItWorks: 'Fluid cowl neckline and floor-sweeping drape capture evening ambient lighting with mesmerizing sheen.',
+    outfit: {
+      title: 'Mulberry Silk Gala Gown (Luxury Wedding)',
+      topType: 'gown' as const,
+      topColor: '#881337',
+      bottomType: 'gown_skirt' as const,
+      bottomColor: '#881337',
+      outerwearColor: '#FAF8F5',
+      accentColor: '#D4AF37',
+      fabricType: 'silk' as const,
+      occasion: 'Luxury Wedding & Gala Reception',
+    }
+  },
+  {
+    id: 'ref-3',
+    title: 'Heritage Banarasi Zari Saree',
+    source: 'Pantaloons Lookbook & Grazia India',
+    image: '/images/branding/womens-ethnic-fusion.jpg',
+    tags: ['Katan Silk', 'Antique Gold Zari', 'Regal Brocade'],
+    whyItWorks: 'Substantial 320 GSM heavy silk holds architectural pleats effortlessly during traditional festivities.',
+    outfit: {
+      title: 'Heritage Banarasi Zari Saree (Festive Wedding)',
+      topType: 'saree' as const,
+      topColor: '#064E3B',
+      bottomType: 'skirt' as const,
+      bottomColor: '#064E3B',
+      outerwearColor: '#064E3B',
+      accentColor: '#F59E0B',
+      fabricType: 'silk' as const,
+      occasion: 'Royal Festive & Wedding',
+    }
+  },
+  {
+    id: 'ref-4',
+    title: 'Amalfi Coast Slub Linen Resort Wear',
+    source: 'Pitti Uomo Riviera / GQ Cruise',
+    image: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&auto=format&fit=crop',
+    tags: ['Normandy Linen', 'Camp Collar', 'Penny Loafers'],
+    whyItWorks: 'Breathable open-weave slub linen provides optimal airflow while maintaining sophisticated coastal poise.',
+    outfit: {
+      title: 'Slub Linen Resort Shirt & Chinos (Coastal Soirée)',
+      topType: 'shirt' as const,
+      topColor: '#C2410C',
+      bottomType: 'chinos' as const,
+      bottomColor: '#FAF8F5',
+      outerwearColor: '#1E293B',
+      accentColor: '#EAB308',
+      fabricType: 'linen' as const,
+      occasion: 'Destination Resort & Summer Gala',
+    }
+  }
+];
 
 export default function ConnectWithFashion() {
   const { user, updateGender } = useAuth();
@@ -46,16 +147,28 @@ export default function ConnectWithFashion() {
     occasion: 'Job Interview & Executive Assessment',
   });
 
-  // Mode: AI Talking & Chat vs Customer Satisfaction Feedback
-  const [activeSubTab, setActiveSubTab] = useState<'talk' | 'feedback'>('talk');
+  // Selected Occasion & Dressing Model Archetype
+  const [activeOccasion, setActiveOccasion] = useState('interview');
+  const [activeArchetype, setActiveArchetype] = useState(MODEL_ARCHETYPES[0]);
 
-  // AI Chat & Voice States
+  // Concept B 4 Right-Side Tabs:
+  // 1. 'wardrobe' (Acloset rack & 5-piece accessories)
+  // 2. 'gemini' (Aiuta Gemini Multi-Model Opinions)
+  // 3. 'referrals' (Fits Lookbook Referrals)
+  // 4. 'feedback' (Customer Satisfaction)
+  const [activeDeskTab, setActiveDeskTab] = useState<'wardrobe' | 'gemini' | 'referrals' | 'feedback'>('wardrobe');
+
+  // Gemini AI Multi-Model States
+  const [geminiOptions, setGeminiOptions] = useState<ModelDressOption[]>([]);
+  const [isGeneratingGemini, setIsGeneratingGemini] = useState(false);
+
+  // In-page Voice & Talk States
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init-msg',
       role: 'assistant',
-      content: `Welcome to **Connect with Fashion**! I am your personal AI styling companion.\n\nTalk with me naturally using **🎙️ Voice Mode** or type your questions below. Watch the **3D Working Model** adjust to your personal style for job interviews, weddings, accessories, and fabric fits!`,
-      voiceText: "Welcome to Connect with Fashion. Speak to me or type your questions, and watch the 3D model adapt in real time.",
+      content: `Welcome to **Connect with Fashion**! I am your personal AI stylist powered by Google Gemini.\n\nTap **🎙️ Voice Mode** to speak naturally or customize your 3D Catwalk Mannequin with our Acloset wardrobe rack and Gemini multi-model opinions.`,
+      voiceText: "Welcome to Connect with Fashion. Speak to me or customize the 3D model with Acloset wardrobe pieces and Gemini opinions.",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       suggestedQuestions: [
         "What should I wear to an executive job interview?",
@@ -65,47 +178,34 @@ export default function ConnectWithFashion() {
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingChat, setIsLoadingChat] = useState(false);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechTranscript, setSpeechTranscript] = useState('');
 
-  // Customer Feedback & Satisfaction States
+  // Customer Feedback States
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([
     '3D Catwalk Walk Model',
-    'AI Spoken Voice & Talking'
+    'AI Spoken Voice & Talking',
+    'Gemini AI Multi-Model Opinions'
   ]);
   const [futureSuggestions, setFutureSuggestions] = useState('');
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
-  const [pastFeedback, setPastFeedback] = useState<FeedbackEntry | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<unknown>(null);
 
-  // Initialize speech APIs and feedback from localStorage
+  // Initialize Speech APIs & load initial Gemini options
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Check saved feedback
-      const saved = localStorage.getItem('aurastyle_customer_feedback');
-      if (saved) {
-        try {
-          setPastFeedback(JSON.parse(saved));
-        } catch (e) {
-          console.warn(e);
-        }
-      }
-
-      // Check Speech Recognition
       const SpeechRecognition = 
         (window as unknown as { SpeechRecognition?: unknown }).SpeechRecognition || 
         (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition;
 
       if (SpeechRecognition) {
-        setSpeechSupported(true);
         try {
           // @ts-expect-error browser SpeechRecognition
           const recognition = new SpeechRecognition();
@@ -134,16 +234,47 @@ export default function ConnectWithFashion() {
       }
     }
 
+    // Auto-fetch initial Gemini options
+    fetchGeminiModelOptions();
+
     return () => {
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
     };
-  }, []);
+  }, [currentGender, activeOccasion]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading, speechTranscript]);
+  }, [messages, isLoadingChat, speechTranscript]);
+
+  // Fetch Gemini AI Multi-Model Opinions
+  const fetchGeminiModelOptions = async () => {
+    setIsGeneratingGemini(true);
+    try {
+      const occLabel = OCCASIONS.find(o => o.id === activeOccasion)?.label || 'Job Interview & Executive';
+      const res = await fetch('/api/model-dress-options', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          gender: currentGender,
+          occasion: occLabel,
+          preferredColor: currentOutfit.topColor || '#1E293B',
+          bodySilhouette: activeArchetype.id
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.options && data.options.length > 0) {
+          setGeminiOptions(data.options);
+        }
+      }
+    } catch (e) {
+      console.warn('Gemini options fetch error:', e);
+    } finally {
+      setIsGeneratingGemini(false);
+    }
+  };
 
   // Text-to-speech speaker
   const speakVoice = (text: string) => {
@@ -204,7 +335,7 @@ export default function ConnectWithFashion() {
 
   const handleSendMessage = async (text?: string) => {
     const message = (text || inputMessage).trim();
-    if (!message || isLoading) return;
+    if (!message || isLoadingChat) return;
 
     if (isListening) {
       try {
@@ -226,7 +357,7 @@ export default function ConnectWithFashion() {
     setMessages(prev => [...prev, userMsg]);
     setInputMessage('');
     setSpeechTranscript('');
-    setIsLoading(true);
+    setIsLoadingChat(true);
 
     try {
       const res = await fetch('/api/ai-chat', {
@@ -252,26 +383,35 @@ export default function ConnectWithFashion() {
 
       setMessages(prev => [...prev, assistantMsg]);
       speakVoice(data.voiceText || data.reply);
-
-      // Adapt 3D model occasion dynamically based on user prompt
-      const lower = message.toLowerCase();
-      if (lower.includes('interview') || lower.includes('job') || lower.includes('corporate')) {
-        setCurrentOutfit(prev => ({ ...prev, occasion: 'Job Interview & Executive Assessment' }));
-      } else if (lower.includes('wedding') || lower.includes('reception') || lower.includes('gala')) {
-        setCurrentOutfit(prev => ({ ...prev, occasion: 'Luxury Wedding & Gala Reception' }));
-      }
     } catch (e) {
       console.warn(e);
-      const fallbackMsg: Message = {
-        id: `a-${Date.now()}`,
-        role: 'assistant',
-        content: `I recommend pairing a structured Navy wool blazer with fluid Ivory trousers. Keep metal accents consistent across your watch, ring, and chain.`,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages(prev => [...prev, fallbackMsg]);
     } finally {
-      setIsLoading(false);
+      setIsLoadingChat(false);
     }
+  };
+
+  // 1-Click Drape Gemini Option onto 3D Model
+  const handleApplyGeminiOption = (opt: ModelDressOption) => {
+    const updated: OutfitConfig = {
+      title: opt.modelStyleName,
+      topType: opt.outfit.topType as OutfitConfig['topType'],
+      topColor: opt.outfit.topColor,
+      bottomType: opt.outfit.bottomType as OutfitConfig['bottomType'],
+      bottomColor: opt.outfit.bottomColor,
+      outerwearColor: opt.outfit.outerwearColor,
+      accentColor: opt.outfit.accentColor,
+      fabricType: opt.outfit.fabricType as OutfitConfig['fabricType'],
+      occasion: OCCASIONS.find(o => o.id === activeOccasion)?.label || 'Job Interview',
+      description: opt.geminiOpinion.whyItWorks,
+    };
+    setCurrentOutfit(updated);
+    rewards.earnPoints('try_suggestion');
+  };
+
+  // 1-Click Apply Editorial Style Referral
+  const handleApplyReferral = (refItem: typeof EDITORIAL_REFERRALS[0]) => {
+    setCurrentOutfit(refItem.outfit);
+    rewards.earnPoints('try_suggestion');
   };
 
   // Feedback Submission
@@ -283,248 +423,504 @@ export default function ConnectWithFashion() {
       futureSuggestions,
       date: new Date().toLocaleDateString()
     };
-
     if (typeof window !== 'undefined') {
       localStorage.setItem('aurastyle_customer_feedback', JSON.stringify(entry));
     }
-    setPastFeedback(entry);
     setFeedbackSubmitted(true);
     rewards.earnPoints('complete_analysis');
   };
 
-  const toggleFeatureCheckbox = (feat: string) => {
-    setSelectedFeatures(prev => 
-      prev.includes(feat) ? prev.filter(f => f !== feat) : [...prev, feat]
-    );
-  };
-
   return (
-    <div className="w-full space-y-8 animate-in fade-in duration-500">
-      {/* Top Banner: Connect with Fashion */}
-      <div className="bg-gradient-to-r from-[#050d1a] via-[#0a192f] to-[#050d1a] border border-[#FAF8F5]/15 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl backdrop-blur-xl">
-        <div className="space-y-2 text-center md:text-left">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1e3a8a]/40 border border-[#38BDF8]/30 text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">
+    <div className="w-full space-y-6 animate-in fade-in duration-500">
+      {/* Top Banner: Benchmark & Mode Controls */}
+      <div className="bg-gradient-to-r from-[#050d1a] via-[#0a192f] to-[#050d1a] border border-[#FAF8F5]/15 rounded-3xl p-6 shadow-2xl backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="space-y-1.5 text-center md:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e3a8a]/40 border border-[#38BDF8]/30 text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
-            ✦ Connect with Fashion AI Studio ✦
+            ✦ Connect with Fashion &bull; Aiuta &amp; Acloset Architecture ✦
           </div>
           <h2 className="text-2xl sm:text-4xl font-serif font-black tracking-tight text-[#FAF8F5]">
-            Talk with AI & 3D Interactive Model
+            3D Mannequin &amp; Intelligent Wardrobe Studio
           </h2>
-          <p className="text-xs sm:text-sm text-[#FAF8F5]/75 max-w-xl">
-            Communicate directly with your AI Stylist through live spoken voice or interactive chat while viewing the working 3D Catwalk Mannequin with real fabrics and garment fit.
+          <p className="text-xs sm:text-sm text-[#FAF8F5]/70 max-w-xl">
+            Live 3D catwalk model with diverse body archetypes, Acloset wardrobe slots, and Gemini AI multi-model opinions.
           </p>
         </div>
 
-        {/* Sub-tab switcher: Talk with AI vs Customer Satisfaction */}
-        <div className="bg-[#050d1a] p-1.5 rounded-2xl border border-[#FAF8F5]/15 flex items-center gap-2 shrink-0">
+        {/* Gender & Occasion Quick Bar */}
+        <div className="flex items-center gap-2 flex-wrap justify-center">
           <button
-            onClick={() => setActiveSubTab('talk')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeSubTab === 'talk'
-                ? 'bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white shadow-md'
-                : 'text-[#FAF8F5]/70 hover:text-white'
-            }`}
+            onClick={() => updateGender(currentGender === 'female' ? 'male' : 'female')}
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#FAF8F5]/20 bg-[#1e3a8a]/40 text-[#FAF8F5] hover:bg-[#1e3a8a] text-xs font-semibold shadow-md transition-all"
           >
-            <Radio className="w-3.5 h-3.5 animate-pulse text-amber-300" />
-            <span>AI Talking & 3D Model</span>
-          </button>
-
-          <button
-            onClick={() => setActiveSubTab('feedback')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeSubTab === 'feedback'
-                ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md'
-                : 'text-[#FAF8F5]/70 hover:text-white'
-            }`}
-          >
-            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-            <span>Customer Satisfaction</span>
+            <span className="text-sm">{currentGender === 'female' ? '👗' : '👔'}</span>
+            <span className="capitalize font-bold">{currentGender} Model</span>
           </button>
         </div>
       </div>
 
-      {/* ===== TAB 1: AI TALKING + 3D WORKING MODEL ===== */}
-      {activeSubTab === 'talk' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left: 3D Working Model (6 cols) */}
-          <div className="lg:col-span-6 space-y-4">
-            <div className="flex items-center justify-between px-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                <h3 className="font-serif font-bold text-lg text-white">3D Working Mannequin</h3>
-              </div>
-              <span className="text-[11px] font-mono text-[#38BDF8]">
-                {currentOutfit.occasion || 'Active Runway Mode'}
-              </span>
-            </div>
+      {/* Occasion Switcher Strip (Fits Benchmark: 6 Distinct Occasions) */}
+      <div className="bg-[#050d1a]/80 p-2.5 rounded-2xl border border-[#FAF8F5]/15 flex items-center gap-2 overflow-x-auto scrollbar-hide">
+        <span className="text-[11px] font-mono uppercase font-bold text-[#FAF8F5]/60 pl-2 shrink-0">
+          Occasion:
+        </span>
+        {OCCASIONS.map((occ) => {
+          const Icon = occ.icon;
+          const isSelected = activeOccasion === occ.id;
+          return (
+            <button
+              key={occ.id}
+              onClick={() => setActiveOccasion(occ.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
+                isSelected
+                  ? 'bg-[#FAF8F5] text-[#0a192f] border-white shadow-lg scale-102'
+                  : 'bg-[#0a192f] border-[#FAF8F5]/10 text-[#FAF8F5]/70 hover:text-white hover:bg-[#16366f]/40'
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" style={{ color: isSelected ? '#0a192f' : occ.color }} />
+              <span>{occ.label}</span>
+            </button>
+          );
+        })}
+      </div>
 
+      {/* Model Archetype Selector (Aiuta Benchmark: 5 Unique Body Silhouettes) */}
+      <div className="bg-[#050d1a]/80 p-2.5 rounded-2xl border border-[#FAF8F5]/15 flex items-center gap-2 overflow-x-auto scrollbar-hide">
+        <span className="text-[11px] font-mono uppercase font-bold text-[#93c5fd] pl-2 shrink-0">
+          Model Silhouette:
+        </span>
+        {MODEL_ARCHETYPES.map((arch) => {
+          const isSelected = activeArchetype.id === arch.id;
+          return (
+            <button
+              key={arch.id}
+              onClick={() => setActiveArchetype(arch)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-all border ${
+                isSelected
+                  ? 'bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white font-bold border-white/40 shadow-md'
+                  : 'bg-[#0a192f] border-[#FAF8F5]/10 text-[#FAF8F5]/70 hover:text-white'
+              }`}
+              title={arch.desc}
+            >
+              <User className="w-3 h-3" />
+              <span>{arch.name}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ===== SPLIT SCREEN: CONCEPT B (Aiuta + Acloset + Fits Hybrid) ===== */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* LEFT COLUMN: 3D RUNWAY MANNEQUIN & VOICE (5 cols) */}
+        <div className="lg:col-span-5 space-y-4">
+          <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <h3 className="font-serif font-bold text-base text-white">Interactive 3D Mannequin</h3>
+            </div>
+            <span className="text-[11px] font-mono text-[#38BDF8] bg-[#1e3a8a]/30 px-2.5 py-0.5 rounded-full border border-[#38BDF8]/20">
+              {activeArchetype.name}
+            </span>
+          </div>
+
+          <div className="relative">
             <MannequinVisualizer
               gender={currentGender}
               onGenderChange={updateGender}
               outfit={currentOutfit}
               onGarmentChange={(newOutfit) => setCurrentOutfit(newOutfit)}
               showControls={true}
-              className="h-[750px] shadow-2xl"
+              className="h-[760px] shadow-2xl rounded-3xl overflow-hidden border border-[#FAF8F5]/15"
             />
+
+            {/* In-Canvas Floating Microphone for Voice Talk */}
+            <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+              <button
+                onClick={toggleMic}
+                className={`p-2.5 rounded-full shadow-xl transition-all flex items-center gap-2 border ${
+                  isListening
+                    ? 'bg-rose-500 text-white border-rose-300 animate-pulse'
+                    : 'bg-[#050d1a]/80 backdrop-blur-xl border-white/20 text-white hover:border-[#38BDF8]'
+                }`}
+                title="Tap to speak to AI Stylist"
+              >
+                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-[#38BDF8]" />}
+                <span className="text-[11px] font-bold pr-1">
+                  {isListening ? "Listening..." : "Talk to AI"}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: 4-TAB INTELLIGENCE & WARDROBE DESK (7 cols) */}
+        <div className="lg:col-span-7 bg-[#050d1a]/95 border border-[#FAF8F5]/15 rounded-3xl shadow-2xl backdrop-blur-xl flex flex-col h-[800px] overflow-hidden">
+          {/* Right Panel Tabs Header */}
+          <div className="bg-[#0a192f] border-b border-[#FAF8F5]/15 px-4 py-3 flex items-center justify-between gap-2 overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => setActiveDeskTab('wardrobe')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                  activeDeskTab === 'wardrobe'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md'
+                    : 'text-[#FAF8F5]/70 hover:text-white'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-[#1e3a8a]" />
+                <span>Acloset Wardrobe Rack</span>
+              </button>
+
+              <button
+                onClick={() => setActiveDeskTab('gemini')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                  activeDeskTab === 'gemini'
+                    ? 'bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white shadow-md'
+                    : 'text-[#FAF8F5]/70 hover:text-white'
+                }`}
+              >
+                <Bot className="w-3.5 h-3.5 text-amber-300" />
+                <span>Gemini 3-Model Opinions</span>
+              </button>
+
+              <button
+                onClick={() => setActiveDeskTab('referrals')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                  activeDeskTab === 'referrals'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md'
+                    : 'text-[#FAF8F5]/70 hover:text-white'
+                }`}
+              >
+                <Eye className="w-3.5 h-3.5 text-[#1e3a8a]" />
+                <span>Fits Lookbooks</span>
+              </button>
+
+              <button
+                onClick={() => setActiveDeskTab('feedback')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                  activeDeskTab === 'feedback'
+                    ? 'bg-amber-500 text-black shadow-md'
+                    : 'text-[#FAF8F5]/70 hover:text-white'
+                }`}
+              >
+                <Star className="w-3.5 h-3.5 fill-current" />
+                <span>Satisfaction</span>
+              </button>
+            </div>
           </div>
 
-          {/* Right: Personal Connect & AI Talking Dialogue (6 cols) */}
-          <div className="lg:col-span-6 bg-[#050d1a]/95 border border-[#FAF8F5]/15 rounded-3xl p-6 shadow-2xl backdrop-blur-xl flex flex-col h-[750px] justify-between">
-            {/* AI Talking Header */}
-            <div className="border-b border-[#FAF8F5]/10 pb-4 flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#1e3a8a] to-[#38BDF8] flex items-center justify-center text-white shadow-md">
-                  <Bot className="w-5 h-5" />
-                </div>
+          {/* TAB 1: ACLOSET WARDROBE RACK & 5-PIECE ACCESSORIES */}
+          {activeDeskTab === 'wardrobe' && (
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-[#1e3a8a]/50">
+              {/* Active Look Summary */}
+              <div className="p-4 bg-[#0a192f] rounded-2xl border border-[#FAF8F5]/15 flex items-center justify-between">
                 <div>
-                  <h4 className="font-serif font-bold text-base text-white flex items-center gap-2">
-                    AuraStylist Voice & Chat
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                      Live Voice
-                    </span>
-                  </h4>
-                  <p className="text-[11px] text-[#FAF8F5]/60">
-                    Direct personal connect &bull; Ask anything about fit, fabrics, jewelry & suiting
-                  </p>
+                  <h4 className="font-serif font-bold text-base text-white">{currentOutfit.title}</h4>
+                  <p className="text-xs text-[#38BDF8]">{currentOutfit.occasion} &bull; {currentOutfit.fabricType?.toUpperCase()} Drape</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full border border-white/40 shadow-sm" style={{ backgroundColor: currentOutfit.topColor }} title="Top Color" />
+                  <div className="w-5 h-5 rounded-full border border-white/40 shadow-sm" style={{ backgroundColor: currentOutfit.bottomColor }} title="Bottom Color" />
+                  <div className="w-5 h-5 rounded-full border border-white/40 shadow-sm" style={{ backgroundColor: currentOutfit.accentColor }} title="Accent Metal" />
                 </div>
               </div>
 
-              {/* Voice playback controls */}
-              <div className="flex items-center gap-2">
-                {isSpeaking && (
-                  <button
-                    onClick={stopSpeaking}
-                    className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-bold flex items-center gap-1 animate-pulse"
-                  >
-                    <VolumeX className="w-3 h-3" />
-                    <span>Stop Voice</span>
-                  </button>
-                )}
+              {/* Upper Body (Tops / Dresses Slot) */}
+              <div className="space-y-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#93c5fd] flex items-center gap-2">
+                  <Shirt className="w-3.5 h-3.5" />
+                  Upper Body &amp; Dress Garments (Click to Drape)
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  {SILHOUETTES.filter(s => s.gender === currentGender || s.gender === 'both').map((sil) => {
+                    const isSelected = currentOutfit.title === sil.title;
+                    return (
+                      <button
+                        key={sil.id}
+                        onClick={() => {
+                          const updated: OutfitConfig = {
+                            title: sil.title,
+                            topType: sil.key,
+                            topColor: sil.defaultTopColor,
+                            bottomType: sil.suggestedBottom,
+                            bottomColor: sil.defaultBottomColor,
+                            accentColor: sil.defaultAccentColor,
+                            description: sil.description,
+                            fabricType: sil.fabricType,
+                            occasion: sil.category,
+                          };
+                          setCurrentOutfit(updated);
+                        }}
+                        className={`p-3 rounded-2xl border text-left flex flex-col justify-between h-24 transition-all ${
+                          isSelected
+                            ? 'bg-[#FAF8F5] text-[#0a192f] border-white shadow-lg font-bold scale-[1.02]'
+                            : 'bg-[#0a192f] border-[#FAF8F5]/15 text-[#FAF8F5]/80 hover:border-[#38BDF8]/40 hover:bg-[#16366f]/40'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono uppercase text-[#38BDF8]">{sil.category}</span>
+                          <div className="w-3 h-3 rounded-full border border-black/20" style={{ backgroundColor: sil.defaultTopColor }} />
+                        </div>
+                        <p className="text-xs leading-tight line-clamp-2">{sil.title}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 5-Piece Coordinated Accessories Slot */}
+              <div className="space-y-3 pt-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#93c5fd] flex items-center gap-2">
+                  <Gem className="w-3.5 h-3.5 text-amber-400" />
+                  Coordinated 5-Piece Accessories Suite
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-3.5 bg-[#0a192f] rounded-2xl border border-[#FAF8F5]/15 space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-amber-400 font-bold">1. Footwear (Shoe)</span>
+                    <p className="text-xs font-bold text-white">Italian Nappa Pumps / Oxford Brogues</p>
+                    <p className="text-[11px] text-[#FAF8F5]/60">Conditioned mirror polish; solid non-slip grip.</p>
+                  </div>
+                  <div className="p-3.5 bg-[#0a192f] rounded-2xl border border-[#FAF8F5]/15 space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-amber-400 font-bold">2. Timepiece (Watch)</span>
+                    <p className="text-xs font-bold text-white">28mm Rose Gold Mesh / Chronometer</p>
+                    <p className="text-[11px] text-[#FAF8F5]/60">Ultra-thin 8mm profile slips beneath shirt cuff.</p>
+                  </div>
+                  <div className="p-3.5 bg-[#0a192f] rounded-2xl border border-[#FAF8F5]/15 space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-amber-400 font-bold">3. Hand Accent (Ring)</span>
+                    <p className="text-xs font-bold text-white">Solitaire Pavé / Platinum Signet Band</p>
+                    <p className="text-[11px] text-[#FAF8F5]/60">Subtle elegance on left pinky or ring finger.</p>
+                  </div>
+                  <div className="p-3.5 bg-[#0a192f] rounded-2xl border border-[#FAF8F5]/15 space-y-1">
+                    <span className="text-[10px] font-mono uppercase text-amber-400 font-bold">4. Neckline (Chain)</span>
+                    <p className="text-xs font-bold text-white">Freshwater Pearl / 18k Herringbone Link</p>
+                    <p className="text-[11px] text-[#FAF8F5]/60">Frames collar spread without distracting.</p>
+                  </div>
+                  <div className="p-3.5 bg-[#0a192f] rounded-2xl border border-[#FAF8F5]/15 space-y-1 sm:col-span-2">
+                    <span className="text-[10px] font-mono uppercase text-amber-400 font-bold">5. Wrist Harmony (Bracelet)</span>
+                    <p className="text-xs font-bold text-white">Diamond Tennis Line / 18k Architectural Gold Cuff</p>
+                    <p className="text-[11px] text-[#FAF8F5]/60">Worn on wrist opposite watch to maintain aesthetic visual balance.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: GEMINI 3-MODEL OPINIONS (Aiuta Benchmark) */}
+          {activeDeskTab === 'gemini' && (
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-[#1e3a8a]/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-serif font-bold text-lg text-white">Gemini Multi-Model Opinion Engine</h4>
+                  <p className="text-xs text-[#FAF8F5]/60">3 distinct styled model dress options generated by Gemini 3.6 Flash.</p>
+                </div>
                 <button
-                  onClick={() => setIsVoiceActive(!isVoiceActive)}
-                  className={`p-2 rounded-full border text-xs transition-all ${
-                    isVoiceActive 
-                      ? 'bg-[#38BDF8]/20 border-[#38BDF8] text-[#38BDF8]' 
-                      : 'border-[#FAF8F5]/10 text-[#FAF8F5]/40 hover:text-white'
-                  }`}
-                  title={isVoiceActive ? "Voice response enabled" : "Voice muted"}
+                  onClick={fetchGeminiModelOptions}
+                  disabled={isGeneratingGemini}
+                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1e3a8a]/40 border border-[#38BDF8]/30 text-xs font-semibold text-[#38BDF8] hover:bg-[#1e3a8a] transition-all"
                 >
-                  <Volume2 className="w-4 h-4" />
+                  <RefreshCw className={`w-3.5 h-3.5 ${isGeneratingGemini ? 'animate-spin' : ''}`} />
+                  <span>Refresh Options</span>
                 </button>
               </div>
-            </div>
 
-            {/* Spoken Mic Status Banner */}
-            {isListening && (
-              <div className="bg-rose-950/60 border border-rose-500/40 rounded-2xl p-3 my-2 flex items-center gap-3 animate-pulse">
-                <Mic className="w-5 h-5 text-rose-400 animate-bounce" />
-                <div className="text-xs">
-                  <p className="font-bold text-rose-200">Listening to your voice...</p>
-                  <p className="text-rose-300/80">{speechTranscript || "Speak your styling query now..."}</p>
+              {isGeneratingGemini ? (
+                <div className="py-20 text-center space-y-4">
+                  <Bot className="w-10 h-10 text-[#38BDF8] animate-bounce mx-auto" />
+                  <p className="text-xs text-[#FAF8F5]/70">Gemini is evaluating fabric weave, accessories harmony, and silhouette proportions...</p>
                 </div>
-              </div>
-            )}
-
-            {/* Conversation Log */}
-            <div className="flex-1 overflow-y-auto py-4 space-y-4 scrollbar-thin scrollbar-thumb-[#1e3a8a]/50 scrollbar-track-transparent pr-1">
-              {messages.map((m) => {
-                const isUser = m.role === 'user';
-                return (
-                  <div key={m.id} className={`flex gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs shadow-md ${
-                      isUser ? 'bg-[#FAF8F5] text-[#0a192f]' : 'bg-gradient-to-tr from-[#1e3a8a] to-[#38BDF8] text-white'
-                    }`}>
-                      {isUser ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
-                    </div>
-
-                    <div className={`max-w-[85%] rounded-2xl p-4 text-xs leading-relaxed ${
-                      isUser
-                        ? 'bg-[#1e3a8a] text-white rounded-tr-none'
-                        : 'bg-[#0a192f] text-[#FAF8F5] border border-[#FAF8F5]/15 rounded-tl-none'
-                    }`}>
-                      {!isUser && (
-                        <div className="flex items-center justify-between border-b border-[#FAF8F5]/10 pb-1.5 mb-2">
-                          <span className="font-serif font-bold text-[#38BDF8]">AuraStylist</span>
-                          <button
-                            onClick={() => speakVoice(m.voiceText || m.content)}
-                            className="text-[#FAF8F5]/50 hover:text-white"
-                            title="Hear voice response"
-                          >
-                            <Volume2 className="w-3 h-3" />
-                          </button>
+              ) : (
+                <div className="space-y-4">
+                  {geminiOptions.map((opt, idx) => (
+                    <div
+                      key={opt.id || idx}
+                      className="bg-[#0a192f] border border-[#FAF8F5]/15 rounded-2xl p-5 space-y-4 hover:border-[#38BDF8]/40 transition-all shadow-lg"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#1e3a8a]/40 text-[#38BDF8] text-[10px] font-mono font-bold uppercase mb-1">
+                            Option {idx + 1}: {opt.silhouetteType}
+                          </div>
+                          <h5 className="font-serif font-bold text-base text-white">{opt.modelStyleName}</h5>
                         </div>
-                      )}
-                      <p className="whitespace-pre-line">{m.content}</p>
-
-                      {/* Suggested quick answers */}
-                      {!isUser && m.suggestedQuestions && m.suggestedQuestions.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-3 pt-2 border-t border-[#FAF8F5]/10">
-                          {m.suggestedQuestions.map((q, idx) => (
-                            <button
-                              key={idx}
-                              onClick={() => handleSendMessage(q)}
-                              className="text-[10px] bg-[#1e3a8a]/30 hover:bg-[#1e3a8a]/60 text-[#FAF8F5]/80 hover:text-white px-2 py-0.5 rounded-full border border-[#FAF8F5]/10 transition-all text-left flex items-center gap-1"
-                            >
-                              <ArrowRight className="w-2.5 h-2.5 text-[#38BDF8]" />
-                              <span>{q}</span>
-                            </button>
-                          ))}
+                        <div className="flex items-center gap-1 bg-amber-500/20 border border-amber-500/30 text-amber-300 px-3 py-1 rounded-full text-xs font-mono font-bold">
+                          <Star className="w-3.5 h-3.5 fill-amber-400" />
+                          <span>{opt.geminiOpinion.score}/100</span>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+                      </div>
 
-              {isLoading && (
-                <div className="flex gap-2 items-center text-xs text-[#FAF8F5]/60">
-                  <Bot className="w-4 h-4 animate-spin text-[#38BDF8]" />
-                  <span>AuraStylist is analyzing harmony and suiting rules...</span>
+                      <div className="text-xs space-y-2 text-[#FAF8F5]/80 leading-relaxed bg-[#050d1a] p-3.5 rounded-xl border border-[#FAF8F5]/10">
+                        <p><strong className="text-[#38BDF8]">Verdict:</strong> {opt.geminiOpinion.verdict}</p>
+                        <p><strong className="text-[#38BDF8]">Why It Works:</strong> {opt.geminiOpinion.whyItWorks}</p>
+                        <p><strong className="text-[#38BDF8]">Walking Impact:</strong> {opt.geminiOpinion.walkingImpression}</p>
+                        <p><strong className="text-[#38BDF8]">Fabric GSM:</strong> {opt.outfit.fabricGsm}</p>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[11px] font-mono text-[#FAF8F5]/60">Source: {opt.editorialReferral.source}</span>
+                        <button
+                          onClick={() => handleApplyGeminiOption(opt)}
+                          className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#1e3a8a] to-[#38BDF8] text-white font-bold text-xs hover:scale-105 transition-all shadow-md flex items-center gap-1.5"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                          <span>Drape on 3D Model</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
-              <div ref={messagesEndRef} />
             </div>
+          )}
 
-            {/* Quick Inspiration Chips */}
-            <div className="py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-hide border-t border-[#FAF8F5]/10">
-              <button
-                onClick={() => handleSendMessage("What should I wear for an executive job interview?")}
-                className="px-2.5 py-1 rounded-full bg-[#0a192f] border border-[#FAF8F5]/15 hover:border-[#38BDF8] text-[11px] text-[#FAF8F5]/80 hover:text-white whitespace-nowrap"
-              >
-                💼 Job Interview Suiting
-              </button>
-              <button
-                onClick={() => handleSendMessage("Style an outfit for a luxury wedding reception with jewelry")}
-                className="px-2.5 py-1 rounded-full bg-[#0a192f] border border-[#FAF8F5]/15 hover:border-[#38BDF8] text-[11px] text-[#FAF8F5]/80 hover:text-white whitespace-nowrap"
-              >
-                💍 Wedding & Jewelry
-              </button>
-              <button
-                onClick={() => handleSendMessage("Explain Slim vs Regular fit and fabric GSM weight")}
-                className="px-2.5 py-1 rounded-full bg-[#0a192f] border border-[#FAF8F5]/15 hover:border-[#38BDF8] text-[11px] text-[#FAF8F5]/80 hover:text-white whitespace-nowrap"
-              >
-                🧵 Fabric & Fit
-              </button>
+          {/* TAB 3: FITS-STYLE LOOKBOOK REFERRALS (Fits Benchmark) */}
+          {activeDeskTab === 'referrals' && (
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-[#1e3a8a]/50">
+              <div className="space-y-1">
+                <h4 className="font-serif font-bold text-lg text-white">Editorial Lookbook Referrals</h4>
+                <p className="text-xs text-[#FAF8F5]/60">High-fashion moodboards and runway photography curated for your occasion.</p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {EDITORIAL_REFERRALS.map((refItem) => (
+                  <div
+                    key={refItem.id}
+                    className="bg-[#0a192f] border border-[#FAF8F5]/15 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-[#38BDF8]/40 transition-all group"
+                  >
+                    <div className="relative h-44 w-full overflow-hidden">
+                      <img
+                        src={refItem.image}
+                        alt={refItem.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f] via-transparent to-transparent" />
+                      <span className="absolute bottom-2 left-3 text-[10px] font-mono font-bold text-[#38BDF8] bg-[#050d1a]/80 px-2.5 py-0.5 rounded-full">
+                        {refItem.source}
+                      </span>
+                    </div>
+
+                    <div className="p-4 space-y-3">
+                      <h5 className="font-serif font-bold text-sm text-white">{refItem.title}</h5>
+                      <p className="text-[11px] text-[#FAF8F5]/70 leading-relaxed">{refItem.whyItWorks}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {refItem.tags.map((t, idx) => (
+                          <span key={idx} className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-[#1e3a8a]/30 text-[#93c5fd]">
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => handleApplyReferral(refItem)}
+                        className="w-full mt-2 py-2 rounded-xl bg-[#FAF8F5] text-[#0a192f] font-bold text-xs hover:bg-white transition-all shadow-md flex items-center justify-center gap-1.5"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-[#1e3a8a]" />
+                        <span>Apply Look to 3D Model</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+          )}
 
-            {/* Voice & Text Input Bar */}
+          {/* TAB 4: CUSTOMER SATISFACTION & FUTURE ROADMAP */}
+          {activeDeskTab === 'feedback' && (
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-[#1e3a8a]/50">
+              <div className="text-center space-y-1">
+                <h4 className="font-serif font-bold text-xl text-white">Customer Satisfaction &amp; Roadmap</h4>
+                <p className="text-xs text-[#FAF8F5]/60">Shape the future of AuraStyle AI with your review.</p>
+              </div>
+
+              {!feedbackSubmitted ? (
+                <form onSubmit={handleFeedbackSubmit} className="space-y-5 bg-[#0a192f] p-5 rounded-2xl border border-[#FAF8F5]/15">
+                  <div className="text-center space-y-2">
+                    <label className="block text-xs font-semibold uppercase text-[#FAF8F5]/80">Rate Your Experience</label>
+                    <div className="flex justify-center gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          type="button"
+                          key={star}
+                          onMouseEnter={() => setHoverRating(star)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          onClick={() => setRating(star)}
+                          className="p-1 transition-transform hover:scale-125"
+                        >
+                          <Star className={`w-7 h-7 ${(hoverRating || rating) >= star ? 'text-amber-400 fill-amber-400' : 'text-white/20'}`} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-semibold uppercase text-[#FAF8F5]/80">Features You Appreciate</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      {['3D Catwalk Walk Model', 'AI Spoken Voice & Talking', 'Gemini AI Multi-Model Opinions', 'Acloset 5-Piece Accessories', 'Fits Style Referrals'].map((f) => (
+                        <button
+                          type="button"
+                          key={f}
+                          onClick={() => setSelectedFeatures(prev => prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f])}
+                          className={`p-2.5 rounded-xl border text-left flex items-center justify-between ${
+                            selectedFeatures.includes(f) ? 'bg-[#1e3a8a]/50 border-[#38BDF8] text-white font-bold' : 'bg-[#050d1a] border-white/10 text-white/70'
+                          }`}
+                        >
+                          <span>{f}</span>
+                          {selectedFeatures.includes(f) && <Check className="w-3.5 h-3.5 text-[#38BDF8]" />}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-semibold uppercase text-[#FAF8F5]/80">What updates should we add next?</label>
+                    <textarea
+                      rows={3}
+                      value={futureSuggestions}
+                      onChange={(e) => setFutureSuggestions(e.target.value)}
+                      placeholder="E.g., Virtual try-on with webcam, more bridal jewelry sets, custom trouser inseam breaks..."
+                      className="w-full bg-[#050d1a] border border-[#FAF8F5]/15 focus:border-[#38BDF8] rounded-xl p-3 text-xs text-white outline-none resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3 rounded-xl bg-[#FAF8F5] text-[#0a192f] font-bold text-xs hover:bg-white shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <Trophy className="w-4 h-4 text-[#1e3a8a]" />
+                    <span>Submit &amp; Claim +50 Reward Points</span>
+                  </button>
+                </form>
+              ) : (
+                <div className="text-center py-10 space-y-4 bg-[#0a192f] p-6 rounded-2xl border border-emerald-500/30">
+                  <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+                  <h5 className="font-serif font-bold text-lg text-white">Feedback Confirmed!</h5>
+                  <p className="text-xs text-[#FAF8F5]/70 max-w-sm mx-auto">
+                    Thank you! Your feedback has been saved and +50 points added to your Atelier rewards profile.
+                  </p>
+                  <button
+                    onClick={() => setFeedbackSubmitted(false)}
+                    className="px-4 py-2 rounded-xl bg-[#1e3a8a]/40 text-white text-xs border border-white/20"
+                  >
+                    Submit Another Review
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Bottom Conversation Bar for Voice & Chat */}
+          <div className="p-3 bg-[#0a192f] border-t border-[#FAF8F5]/15">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSendMessage();
               }}
-              className="flex items-center gap-2 pt-2 border-t border-[#FAF8F5]/15"
+              className="flex items-center gap-2"
             >
-              {/* Mic button */}
               <button
                 type="button"
                 onClick={toggleMic}
-                className={`p-3 rounded-2xl transition-all border ${
-                  isListening
-                    ? 'bg-rose-500 text-white border-rose-400 animate-pulse'
-                    : 'bg-[#0a192f] border-[#FAF8F5]/15 text-[#FAF8F5]/70 hover:text-[#38BDF8]'
+                className={`p-2.5 rounded-xl border transition-all ${
+                  isListening ? 'bg-rose-500 text-white border-rose-400 animate-pulse' : 'bg-[#050d1a] border-white/10 text-[#38BDF8]'
                 }`}
-                title="Tap to speak to AI"
+                title="Speak to AI"
               >
                 {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
               </button>
@@ -533,182 +929,21 @@ export default function ConnectWithFashion() {
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Ask about interview dress, wedding looks, jewelry..."
-                className="flex-1 bg-[#0a192f] border border-[#FAF8F5]/15 focus:border-[#38BDF8] rounded-2xl px-4 py-3 text-xs text-[#FAF8F5] placeholder-[#FAF8F5]/40 outline-none"
+                placeholder="Ask AuraStylist about interview suiting, wedding sarees, jewelry..."
+                className="flex-1 bg-[#050d1a] border border-[#FAF8F5]/15 focus:border-[#38BDF8] rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/40 outline-none"
               />
 
               <button
                 type="submit"
-                disabled={!inputMessage.trim() || isLoading}
-                className="p-3 rounded-2xl bg-[#FAF8F5] text-[#0a192f] font-bold hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                disabled={!inputMessage.trim() || isLoadingChat}
+                className="p-2.5 rounded-xl bg-[#FAF8F5] text-[#0a192f] font-bold disabled:opacity-30"
               >
                 <Send className="w-4 h-4" />
               </button>
             </form>
           </div>
         </div>
-      )}
-
-      {/* ===== TAB 2: CUSTOMER SATISFACTION & FUTURE UPDATES FEEDBACK ===== */}
-      {activeSubTab === 'feedback' && (
-        <div className="max-w-3xl mx-auto bg-[#050d1a]/95 border border-[#FAF8F5]/15 rounded-3xl p-8 shadow-2xl backdrop-blur-xl space-y-8">
-          <div className="border-b border-[#FAF8F5]/10 pb-4 text-center space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold">
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
-              Customer Satisfaction & Future Roadmap
-            </div>
-            <h3 className="font-serif font-bold text-2xl md:text-3xl text-white">
-              Shape the Future of AuraStyle
-            </h3>
-            <p className="text-xs md:text-sm text-[#FAF8F5]/70 max-w-lg mx-auto">
-              Your opinion directly guides our next release! Tell us how well the 3D working model and AI talking served your styling needs.
-            </p>
-          </div>
-
-          {!feedbackSubmitted ? (
-            <form onSubmit={handleFeedbackSubmit} className="space-y-6">
-              {/* Star Rating */}
-              <div className="text-center space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#FAF8F5]/80">
-                  Overall Satisfaction Rating
-                </label>
-                <div className="flex items-center justify-center gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      type="button"
-                      key={star}
-                      onMouseEnter={() => setHoverRating(star)}
-                      onMouseLeave={() => setHoverRating(0)}
-                      onClick={() => setRating(star)}
-                      className="p-1 transition-transform hover:scale-125 focus:outline-none"
-                    >
-                      <Star
-                        className={`w-8 h-8 transition-colors ${
-                          (hoverRating || rating) >= star
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-[#FAF8F5]/20'
-                        }`}
-                      />
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-[#38BDF8] font-mono">
-                  {rating === 5 && "⭐ Exceptional! Master atelier quality"}
-                  {rating === 4 && "⭐ Great experience & style opinions"}
-                  {rating === 3 && "⭐ Good, with room for improvement"}
-                  {rating === 2 && "⭐ Needs refinement"}
-                  {rating === 1 && "⭐ Did not meet expectations"}
-                </p>
-              </div>
-
-              {/* What Features Did You Like? */}
-              <div className="space-y-3">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#FAF8F5]/80">
-                  What did you like most? (Select all that apply)
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {[
-                    '3D Catwalk Walk Model',
-                    'AI Spoken Voice & Talking',
-                    'Garment Fit (Slim, Regular, Oversized)',
-                    '5-Piece Accessories Suite',
-                    'Job Interview Suiting Advice',
-                    'Wedding & Reception Outfits',
-                    'Real Human Model Studio Photos',
-                    'Fabric GSM & Drape Science'
-                  ].map((feat) => {
-                    const isSelected = selectedFeatures.includes(feat);
-                    return (
-                      <button
-                        type="button"
-                        key={feat}
-                        onClick={() => toggleFeatureCheckbox(feat)}
-                        className={`px-3.5 py-2.5 rounded-xl border text-xs text-left flex items-center justify-between transition-all ${
-                          isSelected
-                            ? 'bg-[#1e3a8a]/50 border-[#38BDF8] text-white font-semibold'
-                            : 'bg-[#0a192f] border-[#FAF8F5]/10 text-[#FAF8F5]/70 hover:border-[#FAF8F5]/30'
-                        }`}
-                      >
-                        <span>{feat}</span>
-                        {isSelected && <CheckCircle2 className="w-4 h-4 text-[#38BDF8]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Future Updates Suggestion */}
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#FAF8F5]/80">
-                  What features or updates should we add in the future?
-                </label>
-                <textarea
-                  rows={4}
-                  value={futureSuggestions}
-                  onChange={(e) => setFutureSuggestions(e.target.value)}
-                  placeholder="E.g., Add personalized virtual try-on with custom body measurements, more ethnic wedding fabrics like Benarasi silk, and AR camera mirror mode..."
-                  className="w-full bg-[#0a192f] border border-[#FAF8F5]/15 focus:border-[#38BDF8] rounded-2xl p-4 text-xs text-[#FAF8F5] outline-none resize-none"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full bg-[#FAF8F5] hover:bg-white text-[#0a192f] font-bold py-3.5 px-6 rounded-2xl transition-all duration-300 shadow-xl shadow-[#1e3a8a]/30 flex items-center justify-center gap-2 hover:scale-[1.01]"
-              >
-                <Trophy className="w-4 h-4 text-[#1e3a8a]" />
-                <span>Submit Feedback & Earn +50 Reward Points</span>
-              </button>
-            </form>
-          ) : (
-            <div className="text-center py-8 space-y-6 animate-in fade-in duration-500">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-serif font-bold text-2xl text-white">
-                  Thank You for Your Feedback!
-                </h4>
-                <p className="text-xs text-[#FAF8F5]/70 max-w-md mx-auto">
-                  Your suggestions have been recorded to prioritize our upcoming features. You have been awarded <strong className="text-amber-300">+50 Atelier Reward Points</strong>!
-                </p>
-              </div>
-
-              <div className="p-4 bg-[#0a192f] rounded-2xl border border-[#FAF8F5]/15 max-w-md mx-auto text-left space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-[#FAF8F5]/60">Your Rating:</span>
-                  <span className="text-amber-300 font-bold">{'★'.repeat(rating)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#FAF8F5]/60">Liked Features:</span>
-                  <span className="text-white font-mono">{selectedFeatures.length} items selected</span>
-                </div>
-                {futureSuggestions && (
-                  <div className="pt-2 border-t border-[#FAF8F5]/10">
-                    <span className="text-[#FAF8F5]/60 block mb-1">Your Future Request:</span>
-                    <p className="italic text-[#38BDF8]">&ldquo;{futureSuggestions}&rdquo;</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex justify-center gap-3 pt-4">
-                <button
-                  onClick={() => setActiveSubTab('talk')}
-                  className="px-6 py-2.5 rounded-full bg-[#FAF8F5] text-[#0a192f] font-bold text-xs hover:bg-white transition-all shadow-md"
-                >
-                  Return to 3D Model & AI Talking
-                </button>
-                <button
-                  onClick={() => setFeedbackSubmitted(false)}
-                  className="px-6 py-2.5 rounded-full bg-[#1e3a8a]/40 text-white text-xs hover:bg-[#1e3a8a] transition-all border border-[#FAF8F5]/20"
-                >
-                  Edit Feedback
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      </div>
     </div>
   );
 }
