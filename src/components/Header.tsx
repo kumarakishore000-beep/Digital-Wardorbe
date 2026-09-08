@@ -11,9 +11,10 @@ interface HeaderProps {
   rewardPoints?: number;
   rewardLevel?: number;
   onConnectClick?: () => void;
+  onMixMatchClick?: () => void;
 }
 
-export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLevel = 1, onConnectClick }: HeaderProps) {
+export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLevel = 1, onConnectClick, onMixMatchClick }: HeaderProps) {
   const { user, updateGender } = useAuth();
   const currentGender = user?.gender || 'female';
 
@@ -49,6 +50,18 @@ export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLe
           <span className="text-sm">{currentGender === 'female' ? '👗' : '👔'}</span>
           <span>Category: <strong className="capitalize text-[#FAF8F5]">{currentGender}</strong></span>
         </button>
+
+        {/* Fashion Diffusion Mix & Match Button */}
+        {onMixMatchClick && (
+          <button
+            onClick={onMixMatchClick}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#38BDF8]/50 bg-gradient-to-r from-[#1e3a8a]/70 to-[#0284c7]/50 hover:bg-[#38BDF8] hover:text-[#0a192f] text-xs font-bold text-[#FAF8F5] transition-all duration-300 shadow-sm"
+            title="Fashion Diffusion AI Mix & Match Studio"
+          >
+            <span className="text-sm">🪞</span>
+            <span>Mix &amp; Match</span>
+          </button>
+        )}
 
         {/* Collection Badge */}
         {collectionCount > 0 && (

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Palette, Package, Trophy, LogOut, Bot, MessageSquare, Radio } from 'lucide-react';
+import { Sparkles, Palette, Package, Trophy, LogOut, Bot, MessageSquare, Radio, Layers } from 'lucide-react';
 import Header from '@/components/Header';
 import Uploader from '@/components/Uploader';
 import ResultsDashboard from '@/components/ResultsDashboard';
@@ -11,16 +11,18 @@ import MyCollection from '@/components/MyCollection';
 import RewardsPanel from '@/components/RewardsPanel';
 import OutfitAssistant from '@/components/OutfitAssistant';
 import ConnectWithFashion from '@/components/ConnectWithFashion';
+import MixAndMatchStudio from '@/components/MixAndMatchStudio';
 import { useCollection } from '@/hooks/useCollection';
 import { useRewards } from '@/hooks/useRewards';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
-type Tab = 'analyzer' | 'connect' | 'assistant' | 'colors' | 'collection' | 'rewards';
+type Tab = 'mixmatch' | 'analyzer' | 'connect' | 'assistant' | 'colors' | 'collection' | 'rewards';
 
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
+  { id: 'mixmatch', label: '🪞 Mix & Match Studio (Fashion Diffusion)', icon: <Layers className="w-4 h-4 text-[#38BDF8] animate-pulse" /> },
   { id: 'analyzer', label: 'Curated Lookbook & Style AI', icon: <Sparkles className="w-4 h-4" /> },
-  { id: 'connect', label: '✨ Connect with Fashion', icon: <Radio className="w-4 h-4 text-[#38BDF8] animate-pulse" /> },
+  { id: 'connect', label: '✨ Connect with Fashion', icon: <Radio className="w-4 h-4 text-[#38BDF8]" /> },
   { id: 'assistant', label: 'AI Outfit Assistant', icon: <Bot className="w-4 h-4" /> },
   { id: 'colors', label: 'Harmonic Color Lab', icon: <Palette className="w-4 h-4" /> },
   { id: 'collection', label: 'My Wardrobe Collection', icon: <Package className="w-4 h-4" /> },
@@ -28,7 +30,7 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
 ];
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('analyzer');
+  const [activeTab, setActiveTab] = useState<Tab>('mixmatch');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<Record<string, unknown> | null>(null);
 
@@ -84,6 +86,7 @@ export default function DashboardPage() {
         rewardPoints={rewards.points}
         rewardLevel={rewards.level}
         onConnectClick={() => setActiveTab('connect')}
+        onMixMatchClick={() => setActiveTab('mixmatch')}
       />
       
       {/* Tab Navigation */}
@@ -141,6 +144,20 @@ export default function DashboardPage() {
 
       <main className="container mx-auto px-4 py-8 flex flex-col items-center max-w-6xl">
         <AnimatePresence mode="wait">
+          {/* ===== FASHION DIFFUSION MIX & MATCH STUDIO TAB ===== */}
+          {activeTab === 'mixmatch' && (
+            <motion.div
+              key="mixmatch"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="w-full"
+            >
+              <MixAndMatchStudio />
+            </motion.div>
+          )}
+
           {/* ===== STYLE ANALYZER & LOOKBOOK TAB ===== */}
           {activeTab === 'analyzer' && (
             <motion.div
