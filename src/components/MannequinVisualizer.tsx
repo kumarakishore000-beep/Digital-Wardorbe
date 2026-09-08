@@ -16,12 +16,19 @@ import {
   Shirt,
   Play,
   Pause,
-  RotateCcw,
-  Footprints,
   Compass,
   Palette,
-  Crown,
-  Eye,
+  Briefcase,
+  Heart,
+  GlassWater,
+  PartyPopper,
+  Camera,
+  Ruler,
+  Watch,
+  Gem,
+  CircleDot,
+  Info,
+  Footprints,
 } from 'lucide-react';
 import { Gender, useAuth } from '@/hooks/useAuth';
 import { useCollection } from '@/hooks/useCollection';
@@ -70,6 +77,7 @@ export interface OutfitConfig {
   accentColor?: string;
   description?: string;
   fabricType?: 'silk' | 'wool' | 'linen' | 'denim' | 'leather';
+  occasion?: string;
 }
 
 interface MannequinVisualizerProps {
@@ -156,6 +164,13 @@ export const SKIN_TONES: Record<SkinTone, SkinToneDetails> = {
   },
 };
 
+export interface AccessoryItemDetail {
+  name: string;
+  style: string;
+  finish: string;
+  tip: string;
+}
+
 export interface GarmentSilhouette {
   id: string;
   key: OutfitConfig['topType'];
@@ -168,144 +183,257 @@ export interface GarmentSilhouette {
   defaultAccentColor: string;
   description: string;
   fabricType: 'silk' | 'wool' | 'linen' | 'denim' | 'leather';
+  occasion: 'interview' | 'wedding' | 'cocktail' | 'casual';
+  realModelImage: string;
+  modelSource: string;
+  fabricInfo: {
+    name: string;
+    texture: string;
+    gsm: string;
+    breathability: 'High' | 'Medium' | 'Low';
+    care: string;
+  };
+  sizeAdvice: {
+    slim: string;
+    regular: string;
+    oversized: string;
+    tailoringBreak: string;
+  };
+  accessories: {
+    shoe: AccessoryItemDetail;
+    watch: AccessoryItemDetail;
+    ring: AccessoryItemDetail;
+    chain: AccessoryItemDetail;
+    bracelet: AccessoryItemDetail;
+  };
 }
 
 export const SILHOUETTES: GarmentSilhouette[] = [
-  // WOMEN
+  // WOMEN - INTERVIEW / POWER SUIT
   {
-    id: 'w-gown',
-    key: 'gown',
-    title: 'Mulberry Silk Gala Gown',
-    category: 'Haute Couture',
-    gender: 'female',
-    suggestedBottom: 'gown_skirt',
-    defaultTopColor: '#0F172A',
-    defaultBottomColor: '#0F172A',
-    defaultAccentColor: '#D4AF37',
-    description: 'Floor-sweeping silk gala gown with sweetheart bodice, liquid drape, and gold waist accents.',
-    fabricType: 'silk',
-  },
-  {
-    id: 'w-saree',
-    key: 'saree',
-    title: 'Heritage Banarasi Silk Saree',
-    category: 'Ethnic Festive',
-    gender: 'female',
-    suggestedBottom: 'skirt',
-    defaultTopColor: '#881337',
-    defaultBottomColor: '#881337',
-    defaultAccentColor: '#F59E0B',
-    description: 'Bespoke handwoven silk saree with zari gold border and cascading diagonal shoulder pallu.',
-    fabricType: 'silk',
-  },
-  {
-    id: 'w-kurti',
-    key: 'kurti',
-    title: 'Chanderi Silk Kurti & Palazzos',
-    category: 'Ethnic Fusion',
-    gender: 'female',
-    suggestedBottom: 'salwar_bottom',
-    defaultTopColor: '#064E3B',
-    defaultBottomColor: '#FAF8F5',
-    defaultAccentColor: '#F59E0B',
-    description: 'Emerald silk tunic with intricate neckline embroidery and flowing cream palazzo trousers.',
-    fabricType: 'silk',
-  },
-  {
-    id: 'w-blazer',
+    id: 'w-blazer-interview',
     key: 'blazer',
-    title: 'Savile Row Power Suiting',
-    category: 'Executive Suiting',
+    title: 'Savile Row Power Suiting (Executive Interview)',
+    category: 'Job Interview & Executive',
     gender: 'female',
     suggestedBottom: 'trousers',
-    defaultTopColor: '#1E293B',
+    defaultTopColor: '#0F172A',
     defaultBottomColor: '#0F172A',
-    defaultAccentColor: '#E2E8F0',
-    description: 'Tailored wool-crepe blazer with structured peak lapels and fluid high-waist trousers.',
+    defaultAccentColor: '#FAF8F5',
+    description: 'Sculpted wool-crepe blazer over an ivory silk blouse with fluid pressed trousers. Projects competence and boardroom authority.',
     fabricType: 'wool',
+    occasion: 'interview',
+    realModelImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop',
+    modelSource: 'Vogue Business / Pinterest Executive Board',
+    fabricInfo: {
+      name: 'Super 140s Tasmanian Wool-Crepe & Mulberry Silk',
+      texture: 'Refined diagonal twill weave with natural wrinkle resistance and matte luxury luster',
+      gsm: '260 GSM Four-Season Drape',
+      breathability: 'High',
+      care: 'Steam press between wears; store on contoured cedar wooden hangers',
+    },
+    sizeAdvice: {
+      slim: 'Tapered waist suppression creates an athletic, sharp profile. Hem breaks neatly above shoe vamp.',
+      regular: 'Balanced ease across bust and shoulders; allows 2 inches of movement for comfortable seated interviews.',
+      oversized: 'Drop-shoulder architectural cut. Wear with high-waist belt for contemporary creative interviews.',
+      tailoringBreak: 'Slight trouser break resting gently on the shoe vamp; sleeve exposes 0.5" shirt cuff.',
+    },
+    accessories: {
+      shoe: { name: 'Pointed-Toe 75mm Italian Nappa Pumps', style: 'Executive Pump', finish: 'Midnight Calf Leather', tip: 'Grounds professional posture with steady arch support.' },
+      watch: { name: 'Rose Gold Slim Mesh Dial Timepiece', style: 'Minimalist Dress Watch', finish: 'Rose Gold / White Enamel', tip: 'Clean 28mm face slides under blazer cuffs effortlessly.' },
+      ring: { name: 'Brushed Platinum Signet Ring', style: 'Understated Band', finish: 'Satin Platinum', tip: 'Subtle hand accent during handshake and interview gestures.' },
+      chain: { name: 'Freshwater Pearl Droplet Pendant', style: 'Collarbone Length Chain', finish: '18k Yellow Gold', tip: 'Rests neatly in the blouse V-neck without distracting.' },
+      bracelet: { name: 'Solid Minimalist Gold Bar Cuff', style: 'Architectural Cuff', finish: '18k Polished Gold', tip: 'Placed on opposite wrist of the watch for visual balance.' },
+    },
   },
+  // WOMEN - WEDDING GALA GOWN
   {
-    id: 'w-skirt',
-    key: 'top',
-    title: 'Silk Blouse & Accordion Skirt',
-    category: 'Cocktail Chic',
+    id: 'w-gown-wedding',
+    key: 'gown',
+    title: 'Mulberry Silk Gala Gown (Luxury Wedding)',
+    category: 'Wedding & Red Carpet Gala',
+    gender: 'female',
+    suggestedBottom: 'gown_skirt',
+    defaultTopColor: '#881337',
+    defaultBottomColor: '#881337',
+    defaultAccentColor: '#D4AF37',
+    description: 'Floor-sweeping mulberry silk gown with sweetheart bodice, liquid drape folds, and antique gold waist cinnabar.',
+    fabricType: 'silk',
+    occasion: 'wedding',
+    realModelImage: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&auto=format&fit=crop',
+    modelSource: 'Haute Couture Runway Archive / Pinterest Bridal & Gala',
+    fabricInfo: {
+      name: 'Pure 19-Momme Mulberry Silk Charmeuse',
+      texture: 'Liquid, luminous silk surface with fluid cascading drapery and high light reflectance',
+      gsm: '110 GSM Liquid Silk',
+      breathability: 'High',
+      care: 'Specialist dry clean only; protect from direct perfume sprays',
+    },
+    sizeAdvice: {
+      slim: 'Sculpted sweetheart contour hugging torso down to hip flute; provides red-carpet hourglass silhouette.',
+      regular: 'Classic couture drape with comfortable interior corset boning for evening-long festivities.',
+      oversized: 'Flowing Grecian cape overlay for dramatic cathedral and ballroom entrances.',
+      tailoringBreak: 'Floor-skimming hem calculated precisely for 85mm stiletto heels.',
+    },
+    accessories: {
+      shoe: { name: 'Metallic Champagne Ankle-Strap Stilettos', style: 'Evening Heel', finish: 'Mirrored Champagne Gold', tip: 'Elongates legs beneath flowing silk slit.' },
+      watch: { name: 'Cartier-Inspired Diamond Bezel Bracelet Watch', style: 'Cocktail Timepiece', finish: '18k Yellow Gold', tip: 'Blends seamlessly as high jewelry on the wrist.' },
+      ring: { name: 'Solitaire Emerald-Cut Diamond Pave Band', style: 'Cocktail Gemstone', finish: '18k Yellow Gold / Diamond', tip: 'Catches candlelight and ballroom chandeliers.' },
+      chain: { name: 'Layered Gold Choker with Crystal Pendant', style: 'Décolletage Necklace', finish: '18k Solid Gold', tip: 'Accents the sweetheart neckline with luminous sparkle.' },
+      bracelet: { name: 'Diamond Tennis Line Bracelet', style: 'Classic Tennis Line', finish: 'Platinum / Crystal', tip: 'Rings delicate light with each graceful arm movement.' },
+    },
+  },
+  // WOMEN - HERITAGE BANARASI SILK SAREE
+  {
+    id: 'w-saree-festive',
+    key: 'saree',
+    title: 'Heritage Banarasi Zari Saree (Festive Wedding)',
+    category: 'Royal Festive & Wedding',
     gender: 'female',
     suggestedBottom: 'skirt',
-    defaultTopColor: '#FAF8F5',
-    defaultBottomColor: '#1E3A8A',
-    defaultAccentColor: '#D4AF37',
-    description: 'Woven silk blouse tucked into accordion pleats that sway dynamically on the runway.',
-    fabricType: 'silk',
-  },
-  {
-    id: 'w-jacket',
-    key: 'jacket',
-    title: 'Cropped Denim & Utility Cargo',
-    category: 'Urban Streetwear',
-    gender: 'female',
-    suggestedBottom: 'jeans',
-    defaultTopColor: '#2563EB',
-    defaultBottomColor: '#1E293B',
+    defaultTopColor: '#064E3B',
+    defaultBottomColor: '#064E3B',
     defaultAccentColor: '#F59E0B',
-    description: 'Washed indigo denim trucker jacket paired with dark selvedge trousers.',
-    fabricType: 'denim',
+    description: 'Handwoven pure silk saree with antique gold zari brocade border and diagonal shoulder pallu drape.',
+    fabricType: 'silk',
+    occasion: 'wedding',
+    realModelImage: '/images/branding/womens-ethnic-fusion.jpg',
+    modelSource: 'Pantaloons Flagship Lookbook / Grazia India',
+    fabricInfo: {
+      name: 'Katan Mulberry Silk with Hand-Spun Zari Brocade',
+      texture: 'Substantial, regal silk weave with intricate metallic gold motifs across border and pallu',
+      gsm: '320 GSM Heavy Silk',
+      breathability: 'Medium',
+      care: 'Wrap in pure muslin cloth; avoid moisture; dry clean only',
+    },
+    sizeAdvice: {
+      slim: 'Fitted tailored choli blouse with narrow pleated pallu for a statuesque, tall look.',
+      regular: 'Traditional 6-yard saree with 7 pleats tucked at the navel for comfortable movement.',
+      oversized: 'Flowing floating pallu drape over forearm for regal reception presence.',
+      tailoringBreak: 'Skirt pleats hover exactly 0.5 inches above floor over traditional footwear.',
+    },
+    accessories: {
+      shoe: { name: 'Embroidered Zardozi Silk Mojri Heels', style: 'Traditional Heel', finish: 'Antique Gold Threadwork', tip: 'Matches brocade border while providing all-day ballroom comfort.' },
+      watch: { name: 'Heritage Gold Bangle Dress Watch', style: 'Filigree Watch', finish: 'Antique Yellow Gold', tip: 'Pairs harmoniously with bridal chooda or gold bangles.' },
+      ring: { name: 'Kundan Cocktail Statement Ring', style: 'Royal Ring', finish: 'Gold Foil / Uncut Stones', tip: 'Commands attention during greeting and tea ceremonies.' },
+      chain: { name: 'Heritage Royal Blue Choker & Haar', style: 'Bridal Choker', finish: 'Gold & Emerald Beads', tip: 'Frames the neck with royal Indo-Western grandeur.' },
+      bracelet: { name: 'Gold Filigree Temple Kadas', style: 'Heirloom Bangles', finish: '22k Gold Finish', tip: 'Adds rhythmic chiming and traditional elegance.' },
+    },
   },
-  // MEN
+  // MEN - BESPOKE SAVILE ROW SUIT (INTERVIEW / EXECUTIVE)
   {
-    id: 'm-suit',
+    id: 'm-suit-interview',
     key: 'blazer',
-    title: 'Bespoke Tailored Tuxedo Suit',
-    category: 'Executive Suiting',
+    title: 'Savile Row Tailored Suiting (Executive Interview)',
+    category: 'Job Interview & Executive',
     gender: 'male',
     suggestedBottom: 'trousers',
     defaultTopColor: '#0F172A',
     defaultBottomColor: '#0F172A',
-    defaultAccentColor: '#D4AF37',
-    description: 'Structured wool tuxedo jacket with satin lapels, silk pocket square, and pressed dress trousers.',
+    defaultAccentColor: '#FAF8F5',
+    description: 'Two-piece navy bespoke wool suit with peak lapels, sea-island cotton shirt, and pressed dress trousers. The gold standard for interviews.',
     fabricType: 'wool',
+    occasion: 'interview',
+    realModelImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop',
+    modelSource: 'GQ Gentleman / Pinterest Executive Suiting',
+    fabricInfo: {
+      name: 'Super 150s Merino Wool & Cashmere Blend',
+      texture: 'Fine worsted twill with high natural elasticity, flawless drape, and subtle matte sheen',
+      gsm: '270 GSM Four-Season Suiting',
+      breathability: 'High',
+      care: 'Brush with boar-bristle garment brush after wear; steam press periodically',
+    },
+    sizeAdvice: {
+      slim: 'Tailored chest suppression with high armholes and tapered 14.5" trouser leg opening.',
+      regular: 'Timeless British cut with natural shoulders and 16" trouser opening for comfortable stride.',
+      oversized: 'Relaxed Milanese drape with wider lapels and pleat-front trousers.',
+      tailoringBreak: 'Slight trouser break resting softly on shoe vamp; jacket exposes exactly 0.5" shirt cuff.',
+    },
+    accessories: {
+      shoe: { name: 'Hand-Burnished Cap-Toe Oxford Shoes', style: 'Formal Oxford', finish: 'Dark Cognac Calf Leather', tip: 'Pristine mirror-shine toe cap signals attention to detail.' },
+      watch: { name: 'Swiss Chronograph on Alligator Strap', style: 'Executive Timepiece', finish: 'Brushed Steel / White Dial', tip: 'Understated 39mm profile slips effortlessly under French cuffs.' },
+      ring: { name: 'Brushed Titanium Signet Band', style: 'Minimalist Signet', finish: 'Satin Titanium', tip: 'Subtle elegance on left pinky or ring finger.' },
+      chain: { name: 'Sterling Silver 20-Inch Box Chain', style: 'Hidden Collar Chain', finish: 'Rhodium Plated Silver', tip: 'Worn concealed beneath collar for personal style.' },
+      bracelet: { name: 'Braided Italian Leather & Steel Clasp', style: 'Subtle Wrist Wrap', finish: 'Dark Navy Leather', tip: 'Worn on right wrist to balance the watch on the left.' },
+    },
   },
+  // MEN - WEDDING TUXEDO & BANDHGALA
   {
-    id: 'm-kurta',
+    id: 'm-kurta-wedding',
     key: 'kurta',
-    title: 'Bandhgala Royal Silk Kurta',
-    category: 'Royal Ethnic',
+    title: 'Bandhgala Raw Silk Kurta (Luxury Wedding)',
+    category: 'Wedding & Royal Celebration',
     gender: 'male',
     suggestedBottom: 'salwar_bottom',
     defaultTopColor: '#1E3A8A',
     defaultBottomColor: '#FAF8F5',
     defaultAccentColor: '#D4AF37',
-    description: 'Mandarin collar silk bandhgala kurta with gold buttons and tapered churidar trousers.',
+    description: 'Structured raw silk bandhgala with mandarin stand collar, engraved gold buttons, and ivory churidar bottoms.',
     fabricType: 'silk',
+    occasion: 'wedding',
+    realModelImage: '/images/branding/hero-banner.jpg',
+    modelSource: 'Atelier Royal Lookbook / Grazia Men',
+    fabricInfo: {
+      name: 'Matka Raw Silk with Gold Zari Threading',
+      texture: 'Substantial textured weave with rich slub character and regal architectural structure',
+      gsm: '310 GSM Structured Silk',
+      breathability: 'High',
+      care: 'Dry clean only with specialist silk care; store with cedar moth blocks',
+    },
+    sizeAdvice: {
+      slim: 'Fitted military waist suppression creating an imposing, tall silhouette.',
+      regular: 'Classic royal court fit allowing full mobility for dancing, dining, and ceremonies.',
+      oversized: 'Open front achkan style layered over kurta for dramatic banquet entrance.',
+      tailoringBreak: 'Churidar gathers neatly at ankle with 4-5 natural folds above mojris.',
+    },
+    accessories: {
+      shoe: { name: 'Embroidered Velvet Formal Mojris', style: 'Royal Footwear', finish: 'Black Velvet & Gold Thread', tip: 'Provides regal comfort during hours of traditional ceremonies.' },
+      watch: { name: 'Yellow Gold Vintage Dress Chronograph', style: 'Heirloom Watch', finish: '18k Yellow Gold', tip: 'Echoes the gold placket buttons with harmonious metal warmth.' },
+      ring: { name: 'Solid Gold Lion Crest Signet Ring', style: 'Signet Crest', finish: '22k Yellow Gold', tip: 'Timeless royal statement on the right hand.' },
+      chain: { name: 'Layered Basra Pearl & Emerald Mala', style: 'Royal Wedding Mala', finish: 'Natural Pearls & Emerald Beads', tip: 'Drapes across bandhgala chest with Maharaja elegance.' },
+      bracelet: { name: 'Heavy Gold Kada with Engraved Finials', style: 'Traditional Kada', finish: 'Pure Brass / Gold Polish', tip: 'Commands respect and masculine presence.' },
+    },
   },
+  // MEN - CRISP OXFORD SHIRT & CHINOS (SMART CASUAL / INTERVIEW)
   {
-    id: 'm-shirt',
+    id: 'm-shirt-casual',
     key: 'shirt',
-    title: 'Crisp Oxford Shirt & Chinos',
-    category: 'Smart Casual',
+    title: 'Crisp Oxford Shirt & Chinos (Smart Casual)',
+    category: 'Smart Casual & Commute',
     gender: 'male',
     suggestedBottom: 'chinos',
     defaultTopColor: '#FAF8F5',
     defaultBottomColor: '#1E3A8A',
     defaultAccentColor: '#B45309',
-    description: 'Crisp woven cotton shirt with point collar, tailored chinos, and burnished leather belt.',
+    description: 'Crisp woven cotton oxford shirt with point collar, tailored flat-front chinos, and full-grain leather belt.',
     fabricType: 'linen',
-  },
-  {
-    id: 'm-shrug',
-    key: 'shrug',
-    title: 'Cashmere Cardigan & Selvedge Denim',
-    category: 'Urban Layered',
-    gender: 'male',
-    suggestedBottom: 'jeans',
-    defaultTopColor: '#334155',
-    defaultBottomColor: '#0F172A',
-    defaultAccentColor: '#94A3B8',
-    description: 'Fine-gauge knit cashmere layered cardigan with dark tapered denim.',
-    fabricType: 'wool',
+    occasion: 'casual',
+    realModelImage: '/images/branding/mens-smart-casual.jpg',
+    modelSource: 'Atelier Commuter Capsule / GQ Urban',
+    fabricInfo: {
+      name: '100% Egyptian Giza 45 Long-Staple Cotton',
+      texture: 'Breathable royal oxford basketweave with soft brushed finish and natural stretch',
+      gsm: '160 GSM All-Day Comfort',
+      breathability: 'High',
+      care: 'Warm machine wash, line dry, medium steam iron for crisp collar points',
+    },
+    sizeAdvice: {
+      slim: 'Tapered sleeves and curved hem designed to stay neatly tucked all day.',
+      regular: 'Versatile fit that can be worn tucked for meetings or untucked for after-work social hours.',
+      oversized: 'Relaxed camp-collar aesthetic for weekend gallery and coffee runs.',
+      tailoringBreak: 'No-break cropped hem exposing ankles slightly over white court sneakers or loafers.',
+    },
+    accessories: {
+      shoe: { name: 'Pristine White Calf-Leather Court Sneakers', style: 'Minimalist Sneaker', finish: 'Italian White Leather', tip: 'Elevates casual denim or chinos with immaculate clean lines.' },
+      watch: { name: 'Field Watch on Tan Horween Leather Strap', style: 'Casual Sports Watch', finish: 'Brushed Steel / Tan Leather', tip: 'Develops rich patina over time with everyday wear.' },
+      ring: { name: 'Hammered Silver Band Ring', style: 'Artisan Band', finish: 'Sterling Silver', tip: 'Relaxed tactile touch for modern casual styling.' },
+      chain: { name: 'Slim 22-Inch Silver Figaro Chain', style: 'Everyday Chain', finish: 'Sterling Silver', tip: 'Rests cleanly at the chest when the top 2 buttons are undone.' },
+      bracelet: { name: 'Woven Nautical Cord with Brass Shackle', style: 'Casual Cord', finish: 'Navy Cord & Brass', tip: 'Pairs with watches for effortless weekend texture.' },
+    },
   },
 ];
 
-// Curated Harmonic Fashion Palettes
+// Harmonic Fashion Presets
 const HARMONIC_PRESETS = [
   { name: 'Midnight Navy & Gold', top: '#0F172A', bottom: '#1E293B', accent: '#D4AF37' },
   { name: 'Emerald & Warm Sand', top: '#064E3B', bottom: '#FAF8F5', accent: '#F59E0B' },
@@ -332,12 +460,19 @@ export default function MannequinVisualizer({
   const [activeGender, setActiveGender] = useState<Gender>(gender);
   const [isZoomed, setIsZoomed] = useState(false);
   
+  // Display Mode: 3D Runway Walk vs Real Human Model Studio
+  const [displayMode, setDisplayMode] = useState<'catwalk' | 'real_model'>('catwalk');
+  
   // Real runway walk state
   const [isWalkActive, setIsWalkActive] = useState(true);
   const [walkSpeed, setWalkSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
   const [turntableAngle, setTurntableAngle] = useState<0 | 30 | -30 | 180>(0);
   
+  // Garment Fit: slim, regular, oversized
   const [fitStyle, setFitStyle] = useState<'slim' | 'regular' | 'oversized'>('regular');
+  const [selectedSize, setSelectedSize] = useState<'XS' | 'S' | 'M' | 'L' | 'XL'>('M');
+  const [activeTab, setActiveTab] = useState<'accessories' | 'fabric' | 'size' | 'occasion'>('accessories');
+
   const [mannequinForm, setMannequinForm] = useState<'human' | 'dress_form'>('human');
   
   // Local outfit override
@@ -354,7 +489,7 @@ export default function MannequinVisualizer({
     setLocalOutfit(null);
   }, [gender]);
 
-  // Sync parent outfit (only when incoming title or colors differ)
+  // Sync parent outfit
   useEffect(() => {
     if (outfit && (!localOutfit || localOutfit.title !== outfit.title || localOutfit.topColor !== outfit.topColor)) {
       setLocalOutfit(null);
@@ -376,31 +511,42 @@ export default function MannequinVisualizer({
     if (outfit) return outfit;
     return activeGender === 'male'
       ? {
-        title: 'Bespoke Tailored Tuxedo Suit',
+        title: 'Savile Row Tailored Suiting (Executive Interview)',
         topType: 'blazer',
         topColor: '#0F172A',
         bottomType: 'trousers',
         bottomColor: '#0F172A',
         outerwearColor: '#FAF8F5',
-        accentColor: '#D4AF37',
-        description: 'Structured two-piece tailored wool jacket with sharp lapels and trousers.',
+        accentColor: '#FAF8F5',
+        description: 'Two-piece navy bespoke wool suit with peak lapels, sea-island cotton shirt, and pressed dress trousers. The gold standard for interviews.',
         fabricType: 'wool',
+        occasion: 'interview',
       }
       : {
-        title: 'Mulberry Silk Gala Gown',
-        topType: 'gown',
+        title: 'Savile Row Power Suiting (Executive Interview)',
+        topType: 'blazer',
         topColor: '#0F172A',
-        bottomType: 'gown_skirt',
+        bottomType: 'trousers',
         bottomColor: '#0F172A',
-        accentColor: '#D4AF37',
-        description: 'Floor-sweeping silk gala gown with sweetheart bodice and gold accents.',
-        fabricType: 'silk',
+        accentColor: '#FAF8F5',
+        description: 'Sculpted wool-crepe blazer over an ivory silk blouse with fluid pressed trousers. Projects competence and boardroom authority.',
+        fabricType: 'wool',
+        occasion: 'interview',
       };
   }, [localOutfit, outfit, activeGender]);
 
   const availableSilhouettes = SILHOUETTES.filter(
     (g) => g.gender === activeGender || g.gender === 'both'
   );
+
+  // Find matching silhouette metadata for rich accessories & fabrics
+  const currentSilhouette = useMemo(() => {
+    return (
+      availableSilhouettes.find((s) => s.title === activeOutfit.title) ||
+      availableSilhouettes.find((s) => s.key === activeOutfit.topType) ||
+      availableSilhouettes[0]
+    );
+  }, [availableSilhouettes, activeOutfit]);
 
   const handleSelectSilhouette = (sil: GarmentSilhouette) => {
     const updatedOutfit: OutfitConfig = {
@@ -412,6 +558,7 @@ export default function MannequinVisualizer({
       accentColor: sil.defaultAccentColor,
       description: sil.description,
       fabricType: sil.fabricType,
+      occasion: sil.occasion,
     };
     setLocalOutfit(updatedOutfit);
     onGarmentChange?.(updatedOutfit);
@@ -428,6 +575,13 @@ export default function MannequinVisualizer({
     onGarmentChange?.(updated);
   };
 
+  const handleQuickOccasion = (occ: 'interview' | 'wedding' | 'cocktail' | 'casual') => {
+    const match = availableSilhouettes.find((s) => s.occasion === occ) || availableSilhouettes[0];
+    if (match) {
+      handleSelectSilhouette(match);
+    }
+  };
+
   const handleFetchAiSuggestion = async () => {
     setIsAiSuggesting(true);
     setAiSuggestion(null);
@@ -438,7 +592,7 @@ export default function MannequinVisualizer({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           gender: activeGender,
-          occasion: 'Formal Gala & Evening Event',
+          occasion: activeOutfit.occasion || 'Formal Gala & Interview',
           weather: 'Mild Breezy',
           colorPreference: activeOutfit.topColor,
           skinTone: skin.label,
@@ -471,13 +625,12 @@ export default function MannequinVisualizer({
   };
 
   const handleSaveOutfitClick = () => {
-    // Save directly to collection (works for both guests and authenticated users!)
     const outfitItem = {
       id: Date.now().toString(),
       name: activeOutfit.title || 'Curated Fashion Ensemble',
       category: 'Other' as const,
       color: activeOutfit.topColor,
-      tags: [activeGender, activeOutfit.topType, activeOutfit.bottomType, 'Mannequin Curated'],
+      tags: [activeGender, activeOutfit.topType, activeOutfit.bottomType, `${fitStyle.toUpperCase()} FIT`, 'Mannequin Curated'],
       notes: `${activeOutfit.description || 'Draped on interactive studio mannequin'} (Accent: ${activeOutfit.accentColor || 'Gold'})`,
       createdAt: new Date().toISOString(),
     };
@@ -495,6 +648,10 @@ export default function MannequinVisualizer({
   // Walk animation timing
   const walkCycleDuration = walkSpeed === 'fast' ? 1.0 : walkSpeed === 'slow' ? 2.2 : 1.5;
 
+  // Garment Fit Multiplier (Fixes the Garment Fit bug where scale was ignored)
+  const fitScale = fitStyle === 'slim' ? 0.92 : fitStyle === 'oversized' ? 1.08 : 1.0;
+  const waistSuppress = fitStyle === 'slim' ? 6 : fitStyle === 'oversized' ? -8 : 0;
+
   return (
     <div className={`w-full flex flex-col items-center select-none text-[#FAF8F5] ${className}`}>
       <LoginModal
@@ -504,124 +661,124 @@ export default function MannequinVisualizer({
         message="Your look is saved locally! Sign in to sync your wardrobe across all devices."
       />
 
-      {/* TOP CONTROLS & SKIN TONE BAR */}
+      {/* TOP OCCASION SELECTOR & GENDER BAR */}
       {showControls && (
-        <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 z-10 relative">
-          {/* Gender Tabs */}
-          <div className="flex items-center gap-1.5 p-1 bg-[#050d1a] rounded-2xl border border-[#FAF8F5]/15">
-            <button
-              onClick={() => handleGenderToggle('female')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
-                activeGender === 'female'
-                  ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md font-bold'
-                  : 'text-[#FAF8F5]/60 hover:text-white'
-              }`}
-            >
-              <span>👗</span>
-              <span>Women</span>
-            </button>
-            <button
-              onClick={() => handleGenderToggle('male')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
-                activeGender === 'male'
-                  ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md font-bold'
-                  : 'text-[#FAF8F5]/60 hover:text-white'
-              }`}
-            >
-              <span>👔</span>
-              <span>Men</span>
-            </button>
-          </div>
-
-          {/* Model Form Selector: Human vs Dress Form */}
-          <div className="flex items-center bg-[#050d1a] p-1 rounded-2xl border border-[#FAF8F5]/15 text-xs">
-            <button
-              onClick={() => setMannequinForm('human')}
-              className={`px-3 py-1 rounded-xl font-semibold transition-all ${
-                mannequinForm === 'human'
-                  ? 'bg-[#1e3a8a] text-white shadow-sm font-bold'
-                  : 'text-[#FAF8F5]/60 hover:text-white'
-              }`}
-            >
-              Catwalk Model
-            </button>
-            <button
-              onClick={() => setMannequinForm('dress_form')}
-              className={`px-3 py-1 rounded-xl font-semibold transition-all ${
-                mannequinForm === 'dress_form'
-                  ? 'bg-[#1e3a8a] text-white shadow-sm font-bold'
-                  : 'text-[#FAF8F5]/60 hover:text-white'
-              }`}
-            >
-              Atelier Form
-            </button>
-          </div>
-
-          {/* Skin Tone Selector (only for Human Model) */}
-          {mannequinForm === 'human' && (
-            <div className="flex items-center gap-1.5 bg-[#050d1a] p-1 rounded-2xl border border-[#FAF8F5]/15">
-              {(['soft_ivory', 'warm_almond', 'golden_olive', 'bronze_tan', 'rich_espresso', 'deep_ebony'] as SkinTone[]).map((toneKey) => (
-                <button
-                  key={toneKey}
-                  onClick={() => setSkinTone(toneKey)}
-                  title={SKIN_TONES[toneKey].label}
-                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
-                    skinTone === toneKey
-                      ? 'ring-2 ring-[#FAF8F5] scale-110 shadow-md'
-                      : 'opacity-70 hover:opacity-100'
-                  }`}
-                  style={{ backgroundColor: SKIN_TONES[toneKey].base }}
-                >
-                  {skinTone === toneKey && <Check className="w-3 h-3 text-[#0a192f] stroke-[3]" />}
-                </button>
-              ))}
+        <div className="w-full flex flex-col gap-3 mb-4 z-10 relative">
+          <div className="w-full flex flex-wrap items-center justify-between gap-3">
+            {/* Gender Tabs */}
+            <div className="flex items-center gap-1.5 p-1 bg-[#050d1a] rounded-2xl border border-[#FAF8F5]/15">
+              <button
+                onClick={() => handleGenderToggle('female')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  activeGender === 'female'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md font-bold'
+                    : 'text-[#FAF8F5]/60 hover:text-white'
+                }`}
+              >
+                <span>👗</span>
+                <span>Women</span>
+              </button>
+              <button
+                onClick={() => handleGenderToggle('male')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  activeGender === 'male'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md font-bold'
+                    : 'text-[#FAF8F5]/60 hover:text-white'
+                }`}
+              >
+                <span>👔</span>
+                <span>Men</span>
+              </button>
             </div>
-          )}
 
-          {/* Runway View Actions */}
-          <div className="flex items-center gap-2">
-            {/* Walk toggle */}
+            {/* Display Mode: Runway Catwalk vs Real Human Model Studio */}
+            <div className="flex items-center bg-[#050d1a] p-1 rounded-2xl border border-[#FAF8F5]/15 text-xs">
+              <button
+                onClick={() => setDisplayMode('catwalk')}
+                className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all ${
+                  displayMode === 'catwalk'
+                    ? 'bg-[#1e3a8a] text-white shadow-md'
+                    : 'text-[#FAF8F5]/60 hover:text-white'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5" />
+                <span>3D Catwalk Walk</span>
+              </button>
+              <button
+                onClick={() => setDisplayMode('real_model')}
+                className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all ${
+                  displayMode === 'real_model'
+                    ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md'
+                    : 'text-[#FAF8F5]/60 hover:text-white'
+                }`}
+              >
+                <Camera className="w-3.5 h-3.5" />
+                <span>Real Human Model</span>
+              </button>
+            </div>
+
+            {/* Skin Tone Selector (for Catwalk) */}
+            {displayMode === 'catwalk' && (
+              <div className="flex items-center gap-1.5 bg-[#050d1a] p-1 rounded-2xl border border-[#FAF8F5]/15">
+                {(['soft_ivory', 'warm_almond', 'golden_olive', 'bronze_tan', 'rich_espresso', 'deep_ebony'] as SkinTone[]).map((toneKey) => (
+                  <button
+                    key={toneKey}
+                    onClick={() => setSkinTone(toneKey)}
+                    title={SKIN_TONES[toneKey].label}
+                    className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                      skinTone === toneKey
+                        ? 'ring-2 ring-[#FAF8F5] scale-110 shadow-md'
+                        : 'opacity-70 hover:opacity-100'
+                    }`}
+                    style={{ backgroundColor: SKIN_TONES[toneKey].base }}
+                  >
+                    {skinTone === toneKey && <Check className="w-3 h-3 text-[#0a192f] stroke-[3]" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Quick 1-Click Occasions: Job Interview, Wedding, Cocktail, Casual */}
+          <div className="w-full flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+            <span className="text-[10px] font-mono uppercase text-[#93c5fd] font-bold shrink-0">
+              Occasion Fit:
+            </span>
             <button
-              onClick={() => setIsWalkActive(!isWalkActive)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition-all ${
-                isWalkActive
-                  ? 'bg-[#FAF8F5] text-[#0a192f] border-white shadow-lg'
-                  : 'bg-[#0a192f] text-[#FAF8F5]/70 border-[#FAF8F5]/15 hover:bg-[#16366f]/40'
+              onClick={() => handleQuickOccasion('interview')}
+              className={`px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 shrink-0 transition-all border ${
+                activeOutfit.title?.toLowerCase().includes('interview')
+                  ? 'bg-[#FAF8F5] text-[#0a192f] border-white font-bold shadow-md'
+                  : 'bg-[#0a192f] text-[#FAF8F5]/80 border-[#FAF8F5]/15 hover:bg-[#16366f]/50'
               }`}
-              title={isWalkActive ? 'Pause Runway Catwalk' : 'Start Runway Catwalk'}
             >
-              {isWalkActive ? (
-                <>
-                  <Pause className="w-3.5 h-3.5 fill-[#0a192f]" />
-                  <span>Walking</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 fill-[#FAF8F5]" />
-                  <span>Runway Walk</span>
-                </>
-              )}
+              <Briefcase className="w-3.5 h-3.5 text-[#38BDF8]" />
+              <span>Job Interview</span>
             </button>
-
-            {/* Turntable Rotation */}
             <button
-              onClick={() => {
-                const nextAngles: Record<number, 0 | 30 | -30 | 180> = { 0: 30, 30: -30, '-30': 0 };
-                setTurntableAngle(nextAngles[turntableAngle] ?? 0);
-              }}
-              className="p-2 rounded-xl bg-[#0a192f] text-[#FAF8F5]/80 hover:text-white transition-colors border border-[#FAF8F5]/15"
-              title={`Turntable Angle: ${turntableAngle}°`}
+              onClick={() => handleQuickOccasion('wedding')}
+              className={`px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 shrink-0 transition-all border ${
+                activeOutfit.title?.toLowerCase().includes('wedding') || activeOutfit.title?.toLowerCase().includes('gown')
+                  ? 'bg-[#FAF8F5] text-[#0a192f] border-white font-bold shadow-md'
+                  : 'bg-[#0a192f] text-[#FAF8F5]/80 border-[#FAF8F5]/15 hover:bg-[#16366f]/50'
+              }`}
             >
-              <Compass className="w-4 h-4" />
+              <Heart className="w-3.5 h-3.5 text-rose-400" />
+              <span>Wedding &amp; Reception</span>
             </button>
-
-            {/* Zoom Toggle */}
             <button
-              onClick={() => setIsZoomed(!isZoomed)}
-              className="p-2 rounded-xl bg-[#0a192f] text-[#FAF8F5]/80 hover:text-white transition-colors border border-[#FAF8F5]/15"
-              title={isZoomed ? 'Zoom Out' : 'Zoom In'}
+              onClick={() => handleQuickOccasion('cocktail')}
+              className="px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 shrink-0 transition-all border bg-[#0a192f] text-[#FAF8F5]/80 border-[#FAF8F5]/15 hover:bg-[#16366f]/50"
             >
-              {isZoomed ? <ZoomOut className="w-4 h-4" /> : <ZoomIn className="w-4 h-4" />}
+              <GlassWater className="w-3.5 h-3.5 text-amber-400" />
+              <span>Cocktail Gala</span>
+            </button>
+            <button
+              onClick={() => handleQuickOccasion('casual')}
+              className="px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 shrink-0 transition-all border bg-[#0a192f] text-[#FAF8F5]/80 border-[#FAF8F5]/15 hover:bg-[#16366f]/50"
+            >
+              <PartyPopper className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Smart Casual</span>
             </button>
           </div>
         </div>
@@ -779,645 +936,499 @@ export default function MannequinVisualizer({
       </AnimatePresence>
 
       {/* ========================================================= */}
-      {/* CORE REAL RUNWAY CATWALK CANVAS & MANNEQUIN VISUALIZER   */}
+      {/* CANVAS: 3D RUNWAY CATWALK OR REAL HUMAN MODEL STUDIO       */}
       {/* ========================================================= */}
       <div className="relative w-full flex flex-col items-center justify-center py-2">
         <div
-          className="relative w-full max-w-md h-[540px] rounded-3xl overflow-hidden border border-[#FAF8F5]/20 shadow-2xl bg-gradient-to-b from-[#071329] via-[#0a192f] to-[#030812] flex flex-col items-center justify-center p-4 group"
+          className="relative w-full max-w-lg min-h-[520px] rounded-3xl overflow-hidden border border-[#FAF8F5]/20 shadow-2xl bg-gradient-to-b from-[#071329] via-[#0a192f] to-[#030812] flex flex-col items-center justify-center p-4 group"
         >
-          {/* Runway Catwalk Overhead Spotlights */}
-          <div className="absolute top-0 left-0 right-0 h-40 bg-[radial-gradient(ellipse_at_top,_rgba(147,197,253,0.35)_0%,_rgba(30,58,138,0.15)_50%,_transparent_100%)] pointer-events-none" />
-          
-          {/* Perspective Runway Floor */}
-          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#02060f] via-[#0b172a] to-transparent pointer-events-none overflow-hidden">
-            {/* Mirror Runway Floor Reflection Grid */}
-            <div className="absolute inset-x-8 bottom-0 h-36 bg-gradient-to-t from-[#1e3a8a]/30 to-transparent rounded-t-[80px] border-t border-[#FAF8F5]/20 backdrop-blur-xs">
-              <div className="w-full h-full flex justify-between px-6 opacity-30">
-                <div className="w-px h-full bg-gradient-to-t from-white/40 to-transparent transform -skew-x-12" />
-                <div className="w-px h-full bg-gradient-to-t from-white/60 to-transparent" />
-                <div className="w-px h-full bg-gradient-to-t from-white/40 to-transparent transform skew-x-12" />
+          {/* MODE A: REAL HUMAN MODEL STUDIO */}
+          {displayMode === 'real_model' ? (
+            <div className="relative w-full h-[480px] rounded-2xl overflow-hidden flex flex-col items-center justify-between">
+              <img
+                src={currentSilhouette.realModelImage}
+                alt={currentSilhouette.title}
+                className="w-full h-full object-cover object-top filter brightness-95 contrast-105 transition-all duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f] via-transparent to-black/30 pointer-events-none" />
+
+              {/* Source Badge */}
+              <div className="absolute top-3 left-3 bg-[#0a192f]/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#FAF8F5]/20 text-[10px] font-mono text-[#FAF8F5] flex items-center gap-1.5 shadow-lg">
+                <Camera className="w-3 h-3 text-[#38BDF8]" />
+                <span>{currentSilhouette.modelSource}</span>
+              </div>
+
+              {/* Garment Fit Tag */}
+              <div className="absolute top-3 right-3 bg-emerald-950/80 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-400/30 text-[10px] font-mono text-emerald-300 font-bold uppercase">
+                {fitStyle} Fit Mode &bull; Size {selectedSize}
+              </div>
+
+              {/* Bottom Real Clothes Specs Overlay */}
+              <div className="absolute bottom-3 left-3 right-3 bg-[#0a192f]/95 backdrop-blur-md p-3.5 rounded-2xl border border-[#FAF8F5]/20 space-y-2 text-xs shadow-2xl">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-mono font-bold text-[#93c5fd]">
+                    Real Clothes Editorial Reference
+                  </span>
+                  <span className="text-[10px] font-mono text-[#FAF8F5]/70">
+                    Model Height: 5&apos;11&quot; &bull; Size M
+                  </span>
+                </div>
+                <h4 className="font-serif font-bold text-sm text-white">{currentSilhouette.title}</h4>
+                <p className="text-[11px] text-[#FAF8F5]/80 font-light">{currentSilhouette.description}</p>
+                <div className="pt-1 flex items-center gap-2 text-[10px] font-mono text-[#D4AF37]">
+                  <span>Fabric: {currentSilhouette.fabricInfo.name}</span>
+                </div>
               </div>
             </div>
+          ) : (
+            /* MODE B: 3D RUNWAY CATWALK ANIMATED MANNEQUIN */
+            <>
+              {/* Runway Catwalk Overhead Spotlights */}
+              <div className="absolute top-0 left-0 right-0 h-40 bg-[radial-gradient(ellipse_at_top,_rgba(147,197,253,0.35)_0%,_rgba(30,58,138,0.15)_50%,_transparent_100%)] pointer-events-none" />
+              
+              {/* Perspective Runway Floor */}
+              <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#02060f] via-[#0b172a] to-transparent pointer-events-none overflow-hidden">
+                <div className="absolute inset-x-8 bottom-0 h-36 bg-gradient-to-t from-[#1e3a8a]/30 to-transparent rounded-t-[80px] border-t border-[#FAF8F5]/20 backdrop-blur-xs">
+                  <div className="w-full h-full flex justify-between px-6 opacity-30">
+                    <div className="w-px h-full bg-gradient-to-t from-white/40 to-transparent transform -skew-x-12" />
+                    <div className="w-px h-full bg-gradient-to-t from-white/60 to-transparent" />
+                    <div className="w-px h-full bg-gradient-to-t from-white/40 to-transparent transform skew-x-12" />
+                  </div>
+                </div>
 
-            {/* Dynamic Moving Runway Lights (When Walking) */}
-            {isWalkActive && (
-              <motion.div
-                animate={{ y: [0, 60] }}
-                transition={{ repeat: Infinity, duration: walkCycleDuration, ease: 'linear' }}
-                className="absolute inset-0 flex justify-center opacity-40 pointer-events-none"
-              >
-                <div className="w-32 h-1 bg-gradient-to-r from-transparent via-[#FAF8F5] to-transparent" />
-              </motion.div>
-            )}
-          </div>
-
-          {/* Dynamic Walking & Posing Model Container */}
-          <motion.div
-            animate={{
-              rotateY: turntableAngle,
-              scale: isZoomed ? 1.25 : 1,
-              y: isWalkActive ? [0, -8, 0] : 0,
-            }}
-            transition={{
-              y: isWalkActive
-                ? { repeat: Infinity, duration: walkCycleDuration / 2, ease: 'easeInOut' }
-                : { type: 'spring', stiffness: 200, damping: 20 },
-              rotateY: { duration: 0.5, ease: 'easeOut' },
-            }}
-            className="relative w-72 h-[460px] flex items-center justify-center z-10"
-            style={{
-              transform: `scale(${fitStyle === 'slim' ? 0.94 : fitStyle === 'oversized' ? 1.06 : 1})`,
-            }}
-          >
-            {/* Dynamic Shadow Beneath Footsteps */}
-            <motion.div
-              animate={isWalkActive ? { scaleX: [0.85, 1.1, 0.85], opacity: [0.4, 0.7, 0.4] } : {}}
-              transition={{ repeat: Infinity, duration: walkCycleDuration / 2, ease: 'easeInOut' }}
-              className="absolute bottom-6 w-44 h-5 bg-black/60 blur-md rounded-full pointer-events-none"
-            />
-
-            {/* HIGH-FIDELITY VECTOR & FABRIC SHADER SVG */}
-            <svg
-              className="w-full h-full drop-shadow-2xl overflow-visible"
-              viewBox="0 0 240 440"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                {/* 1. REAL FABRIC TEXTURE FILTERS */}
-                {/* Silk Sheen Shader */}
-                <filter id="silkSheen" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.03 0.08" numOctaves="2" result="noise" />
-                  <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.15 0" in="noise" result="softNoise" />
-                  <feBlend mode="overlay" in2="SourceGraphic" in="softNoise" />
-                </filter>
-
-                {/* Wool Crepe Suiting Texture */}
-                <filter id="woolTwill" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.08 0.4" numOctaves="2" result="twillNoise" />
-                  <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.22 0" in="twillNoise" result="subtleTwill" />
-                  <feBlend mode="multiply" in2="SourceGraphic" in="subtleTwill" />
-                </filter>
-
-                {/* Natural Skin Gradient */}
-                <linearGradient id={`mannequinSkin-${skinTone}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor={skin.highlight} />
-                  <stop offset="45%" stopColor={skin.base} />
-                  <stop offset="100%" stopColor={skin.shadow} />
-                </linearGradient>
-
-                {/* Hair Gradient with Gloss Sheen */}
-                <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#2D2118" />
-                  <stop offset="50%" stopColor="#1A120B" />
-                  <stop offset="100%" stopColor="#080503" />
-                </linearGradient>
-
-                {/* Metallic Gold Hardware Accent */}
-                <linearGradient id="goldHardware" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FDE68A" />
-                  <stop offset="50%" stopColor="#D4AF37" />
-                  <stop offset="100%" stopColor="#92400E" />
-                </linearGradient>
-
-                {/* Chrome Stand */}
-                <linearGradient id="chromeStand" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#475569" />
-                  <stop offset="50%" stopColor="#CBD5E1" />
-                  <stop offset="100%" stopColor="#334155" />
-                </linearGradient>
-
-                {/* Walnut Finial */}
-                <linearGradient id="walnutWood" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#8B4513" />
-                  <stop offset="50%" stopColor="#5C2E0B" />
-                  <stop offset="100%" stopColor="#2E1705" />
-                </linearGradient>
-
-                {/* Fabric Depth Gradient (Top) */}
-                <linearGradient id="topFabricGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.22" />
-                  <stop offset="40%" stopColor="#000000" stopOpacity="0.0" />
-                  <stop offset="100%" stopColor="#000000" stopOpacity="0.38" />
-                </linearGradient>
-
-                {/* Fabric Depth Gradient (Bottom) */}
-                <linearGradient id="bottomFabricGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.16" />
-                  <stop offset="50%" stopColor="#000000" stopOpacity="0.0" />
-                  <stop offset="100%" stopColor="#000000" stopOpacity="0.45" />
-                </linearGradient>
-              </defs>
-
-              {/* ================================================= */}
-              {/* 1. MODEL BODY / DRESS FORM                        */}
-              {/* ================================================= */}
-              {mannequinForm === 'dress_form' ? (
-                <g id="dress-form-base">
-                  <rect x="117" y="160" width="6" height="240" rx="2" fill="url(#chromeStand)" />
-                  <path d="M120 400 L80 430 L90 432 L120 406 Z" fill="url(#chromeStand)" />
-                  <path d="M120 400 L160 430 L150 432 L120 406 Z" fill="url(#chromeStand)" />
-                  <circle cx="120" cy="400" r="7" fill="url(#chromeStand)" />
-                  <ellipse cx="120" cy="62" rx="14" ry="8" fill="url(#walnutWood)" />
-                  <rect x="116" y="52" width="8" height="12" rx="2" fill="url(#walnutWood)" />
-                  <circle cx="120" cy="50" r="6" fill="url(#walnutWood)" />
-                  <path
-                    d="M80 84 Q120 92 160 84 L152 185 Q120 195 88 185 Z"
-                    fill="#FAF8F5"
-                  />
-                  <line x1="120" y1="84" x2="120" y2="190" stroke="#8B7E66" strokeDasharray="3 3" strokeWidth="1.2" />
-                  <path d="M88 135 Q120 145 152 135" stroke="#8B7E66" strokeDasharray="3 3" strokeWidth="1.2" fill="none" />
-                </g>
-              ) : activeGender === 'female' ? (
-                <g id="female-model">
-                  {/* Chic Chignon Hair */}
-                  <path
-                    d="M96 38 C96 18, 144 18, 144 38 C158 52, 156 86, 146 112 C134 116, 106 116, 94 112 C84 86, 82 52, 96 38 Z"
-                    fill="url(#hairGrad)"
-                  />
-                  <ellipse cx="120" cy="28" rx="14" ry="12" fill="url(#hairGrad)" />
-                  
-                  {/* Head & Elegant Jawline */}
-                  <ellipse cx="120" cy="48" rx="16" ry="20" fill={`url(#mannequinSkin-${skinTone})`} />
-                  <rect x="114" y="66" width="12" height="18" rx="3" fill={`url(#mannequinSkin-${skinTone})`} />
-                  
-                  {/* Collarbone Definition */}
-                  <path d="M106 82 Q114 85 120 84 Q126 85 134 82" stroke={skin.shadow} strokeWidth="1.5" strokeLinecap="round" fill="none" />
-
-                  {/* Shoulders & Torso */}
-                  <path d="M82 84 Q120 90 158 84 L150 165 Q120 174 90 165 Z" fill={`url(#mannequinSkin-${skinTone})`} />
-
-                  {/* ARTICULATED LEGS WITH REAL WALKING ANIMATION */}
-                  {/* Left Leg */}
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [-14, 14, -14], originX: '107px', originY: '170px' }
-                        : { rotate: -2 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <rect x="98" y="165" width="18" height="215" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
-                    {/* Left Stiletto Shoe */}
-                    <path d="M96 380 L112 380 L116 398 L94 398 Z" fill="#0A192F" />
-                    <line x1="112" y1="385" x2="114" y2="402" stroke="#FAF8F5" strokeWidth="2" />
-                  </motion.g>
-
-                  {/* Right Leg */}
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [14, -14, 14], originX: '133px', originY: '170px' }
-                        : { rotate: 3 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <rect x="124" y="165" width="18" height="215" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
-                    {/* Right Stiletto Shoe */}
-                    <path d="M126 380 L142 380 L146 398 L124 398 Z" fill="#0A192F" />
-                    <line x1="142" y1="385" x2="144" y2="402" stroke="#FAF8F5" strokeWidth="2" />
-                  </motion.g>
-
-                  {/* ARTICULATED ARMS (Swinging with Runway Walk) */}
-                  {/* Left Arm */}
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [12, -12, 12], originX: '82px', originY: '86px' }
-                        : { rotate: 2 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <path d="M82 86 L66 182 L76 185 L88 92 Z" fill={`url(#mannequinSkin-${skinTone})`} />
-                    {/* Gold Bracelet Accent */}
-                    <rect x="67" y="174" width="10" height="3" rx="1" fill="url(#goldHardware)" />
-                  </motion.g>
-
-                  {/* Right Arm */}
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [-12, 12, -12], originX: '158px', originY: '86px' }
-                        : { rotate: -3 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <path d="M158 86 L174 182 L164 185 L152 92 Z" fill={`url(#mannequinSkin-${skinTone})`} />
-                    {/* Gold Watch / Bracelet Accent */}
-                    <rect x="163" y="174" width="10" height="3" rx="1" fill="url(#goldHardware)" />
-                  </motion.g>
-                </g>
-              ) : (
-                <g id="male-model">
-                  {/* Tailored Male Haircut */}
-                  <path
-                    d="M96 34 C96 18, 144 18, 144 34 C150 46, 144 54, 120 54 C96 54, 90 46, 96 34 Z"
-                    fill="url(#hairGrad)"
-                  />
-                  {/* Head & Broad Neck */}
-                  <ellipse cx="120" cy="46" rx="18" ry="22" fill={`url(#mannequinSkin-${skinTone})`} />
-                  <rect x="111" y="66" width="18" height="20" rx="4" fill={`url(#mannequinSkin-${skinTone})`} />
-                  {/* Broad Shoulder Frame */}
-                  <path d="M72 86 Q120 94 168 86 L156 175 Q120 182 84 175 Z" fill={`url(#mannequinSkin-${skinTone})`} />
-
-                  {/* Male Legs (Articulated Walking) */}
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [-15, 15, -15], originX: '105px', originY: '175px' }
-                        : { rotate: -2 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <rect x="94" y="175" width="22" height="210" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
-                    {/* Italian Oxford Shoe */}
-                    <path d="M88 385 L112 385 L116 404 L86 404 Z" fill="#0A192F" />
-                    <line x1="86" y1="400" x2="116" y2="400" stroke="#FAF8F5" strokeWidth="1.5" />
-                  </motion.g>
-
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [15, -15, 15], originX: '135px', originY: '175px' }
-                        : { rotate: 2 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <rect x="124" y="175" width="22" height="210" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
-                    <path d="M128 385 L152 385 L156 404 L126 404 Z" fill="#0A192F" />
-                    <line x1="126" y1="400" x2="156" y2="400" stroke="#FAF8F5" strokeWidth="1.5" />
-                  </motion.g>
-
-                  {/* Male Arms */}
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [14, -14, 14], originX: '72px', originY: '88px' }
-                        : { rotate: 2 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <path d="M72 88 L54 192 L66 195 L80 96 Z" fill={`url(#mannequinSkin-${skinTone})`} />
-                    <rect x="56" y="185" width="10" height="4" rx="1" fill="#1E293B" />
-                  </motion.g>
-
-                  <motion.g
-                    animate={
-                      isWalkActive
-                        ? { rotate: [-14, 14, -14], originX: '168px', originY: '88px' }
-                        : { rotate: -2 }
-                    }
-                    transition={
-                      isWalkActive
-                        ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
-                        : {}
-                    }
-                  >
-                    <path d="M168 88 L186 192 L174 195 L160 96 Z" fill={`url(#mannequinSkin-${skinTone})`} />
-                  </motion.g>
-                </g>
-              )}
-
-              {/* ================================================= */}
-              {/* 2. REAL BOTTOM GARMENTS LAYER (Tailored Fabrics)   */}
-              {/* ================================================= */}
-              {activeOutfit.bottomType === 'skirt' || activeOutfit.topType === 'saree' ? (
-                <motion.g
-                  id="real-skirt"
-                  animate={isWalkActive ? { rotate: [-3, 3, -3], originX: '120px', originY: '150px' } : {}}
-                  transition={isWalkActive ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' } : {}}
-                  filter="url(#silkSheen)"
-                >
-                  {/* Accordion Pleated Silk Skirt */}
-                  <path
-                    d="M86 150 L154 150 L176 332 Q120 348 64 332 Z"
-                    fill={bottomColor}
-                  />
-                  <path
-                    d="M86 150 L154 150 L176 332 Q120 348 64 332 Z"
-                    fill="url(#bottomFabricGrad)"
-                  />
-                  {/* Tailored Pleat Creases */}
-                  <line x1="98" y1="152" x2="88" y2="334" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
-                  <line x1="110" y1="152" x2="105" y2="338" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
-                  <line x1="120" y1="152" x2="120" y2="340" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
-                  <line x1="130" y1="152" x2="135" y2="338" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
-                  <line x1="142" y1="152" x2="152" y2="334" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
-                  {/* Metallic Waistband */}
-                  <rect x="86" y="148" width="68" height="6" rx="2" fill="url(#goldHardware)" />
-                </motion.g>
-              ) : activeOutfit.bottomType === 'gown_skirt' || activeOutfit.topType === 'gown' ? (
-                <motion.g
-                  id="real-gown-skirt"
-                  animate={isWalkActive ? { rotate: [-2, 2, -2], originX: '120px', originY: '140px' } : {}}
-                  transition={isWalkActive ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' } : {}}
-                  filter="url(#silkSheen)"
-                >
-                  {/* Floor-Length Flute Gown Skirt */}
-                  <path
-                    d="M88 140 L152 140 L184 395 Q120 412 56 395 Z"
-                    fill={bottomColor}
-                  />
-                  <path
-                    d="M88 140 L152 140 L184 395 Q120 412 56 395 Z"
-                    fill="url(#bottomFabricGrad)"
-                  />
-                  {/* Flowing Gown Drapery Folds */}
-                  <path d="M106 142 Q100 270 82 398" stroke="#000" strokeOpacity="0.22" strokeWidth="2.5" fill="none" />
-                  <path d="M134 142 Q140 270 158 398" stroke="#000" strokeOpacity="0.22" strokeWidth="2.5" fill="none" />
-                  <path d="M120 142 Q120 280 120 402" stroke="#FFFFFF" strokeOpacity="0.25" strokeWidth="1.5" fill="none" />
-                </motion.g>
-              ) : activeOutfit.bottomType === 'salwar_bottom' ? (
-                <g id="real-salwar">
-                  <path
-                    d="M86 160 L154 160 L146 385 L124 385 L120 220 L116 385 L94 385 Z"
-                    fill={bottomColor}
-                    filter="url(#silkSheen)"
-                  />
-                  <path
-                    d="M86 160 L154 160 L146 385 L124 385 L120 220 L116 385 L94 385 Z"
-                    fill="url(#bottomFabricGrad)"
-                  />
-                  {/* Ankle Gathers & Zari Trims */}
-                  <line x1="94" y1="375" x2="116" y2="375" stroke={accentColor} strokeWidth="2" />
-                  <line x1="124" y1="375" x2="146" y2="375" stroke={accentColor} strokeWidth="2" />
-                </g>
-              ) : (
-                /* Tailored Wool Trousers / Chinos / Selvedge Denim */
-                <g id="real-tailored-trousers">
-                  <path
-                    d="M86 164 L154 164 L150 388 L126 388 L120 218 L114 388 L90 388 Z"
-                    fill={bottomColor}
-                    filter="url(#woolTwill)"
-                  />
-                  <path
-                    d="M86 164 L154 164 L150 388 L126 388 L120 218 L114 388 L90 388 Z"
-                    fill="url(#bottomFabricGrad)"
-                  />
-                  {/* Razor Sharp Center Creases */}
-                  <line x1="102" y1="170" x2="102" y2="385" stroke="#FFFFFF" strokeOpacity="0.15" strokeWidth="1.2" />
-                  <line x1="103" y1="170" x2="103" y2="385" stroke="#000000" strokeOpacity="0.3" strokeWidth="1.2" />
-                  <line x1="137" y1="170" x2="137" y2="385" stroke="#FFFFFF" strokeOpacity="0.15" strokeWidth="1.2" />
-                  <line x1="138" y1="170" x2="138" y2="385" stroke="#000000" strokeOpacity="0.3" strokeWidth="1.2" />
-                  {/* Leather Belt & Metallic Buckle */}
-                  <rect x="86" y="164" width="68" height="7" rx="1.5" fill="#3D2314" />
-                  <rect x="114" y="163" width="12" height="9" rx="1.5" fill="url(#goldHardware)" />
-                </g>
-              )}
-
-              {/* ================================================= */}
-              {/* 3. REAL TOP GARMENTS LAYER (High-Couture Draping) */}
-              {/* ================================================= */}
-              {activeOutfit.topType === 'kurti' ? (
-                <g id="real-kurti" filter="url(#silkSheen)">
-                  {/* Chanderi Silk Kurti with Embroidered Zardozi Neckline */}
-                  <path
-                    d="M80 86 L160 86 L154 260 L140 260 L140 180 L100 180 L100 260 L86 260 Z"
-                    fill={topColor}
-                  />
-                  <path
-                    d="M80 86 L160 86 L154 260 L140 260 L140 180 L100 180 L100 260 L86 260 Z"
-                    fill="url(#topFabricGrad)"
-                  />
-                  {/* Sleeves with Metallic Border */}
-                  {mannequinForm === 'human' && (
-                    <>
-                      <path d="M80 86 L62 165 L76 167 L88 94 Z" fill={topColor} />
-                      <line x1="62" y1="162" x2="76" y2="164" stroke="url(#goldHardware)" strokeWidth="3" />
-                      <path d="M160 86 L178 165 L164 167 L152 94 Z" fill={topColor} />
-                      <line x1="164" y1="164" x2="178" y2="162" stroke="url(#goldHardware)" strokeWidth="3" />
-                    </>
-                  )}
-                  {/* Zardozi Gold Placket & Neckline */}
-                  <path d="M106 86 C108 115, 132 115, 134 86" stroke="url(#goldHardware)" strokeWidth="3.5" fill="none" />
-                  <line x1="120" y1="115" x2="120" y2="165" stroke="url(#goldHardware)" strokeWidth="2.5" />
-                  <circle cx="120" cy="125" r="2" fill="#FAF8F5" />
-                  <circle cx="120" cy="140" r="2" fill="#FAF8F5" />
-                  <circle cx="120" cy="155" r="2" fill="#FAF8F5" />
-                </g>
-              ) : activeOutfit.topType === 'saree' ? (
-                <g id="real-saree" filter="url(#silkSheen)">
-                  {/* Fitted Silk Blouse */}
-                  <path d="M82 86 L158 86 L150 145 L90 145 Z" fill={topColor} />
-                  {/* Diagonal Draped Pallu Across Chest */}
-                  <path
-                    d="M82 86 L105 86 L154 172 L138 178 Z"
-                    fill={topColor}
-                  />
-                  <path d="M82 86 L105 86 L154 172 L138 178 Z" fill="#000" fillOpacity="0.2" />
-                  {/* Antique Gold Zari Border on Pallu */}
-                  <line x1="82" y1="86" x2="154" y2="172" stroke="url(#goldHardware)" strokeWidth="4" />
-                  {/* Blouse Sleeve with Gold Trim */}
-                  {mannequinForm === 'human' && (
-                    <>
-                      <path d="M160 86 L174 135 L162 137 L152 94 Z" fill={topColor} />
-                      <line x1="162" y1="137" x2="174" y2="135" stroke="url(#goldHardware)" strokeWidth="3" />
-                    </>
-                  )}
-                </g>
-              ) : activeOutfit.topType === 'gown' ? (
-                <g id="real-gown-top" filter="url(#silkSheen)">
-                  {/* Sculpted Sweetheart Bodice */}
-                  <path
-                    d="M84 94 Q120 108 156 94 L152 148 Q120 158 88 148 Z"
-                    fill={topColor}
-                  />
-                  <path
-                    d="M84 94 Q120 108 156 94 L152 148 Q120 158 88 148 Z"
-                    fill="url(#topFabricGrad)"
-                  />
-                  {/* Princess Seams */}
-                  <path d="M102 96 Q106 120 108 148" stroke="#000" strokeOpacity="0.2" strokeWidth="1.2" fill="none" />
-                  <path d="M138 96 Q134 120 132 148" stroke="#000" strokeOpacity="0.2" strokeWidth="1.2" fill="none" />
-                  {/* Gold Waist Cinnabar Belt */}
-                  <rect x="88" y="142" width="64" height="6" rx="2" fill="url(#goldHardware)" />
-                </g>
-              ) : activeOutfit.topType === 'blazer' ? (
-                <g id="real-blazer" filter="url(#woolTwill)">
-                  {/* Crisp Silk Camisole / Dress Shirt Underneath */}
-                  <path d="M104 86 L136 86 L130 170 L110 170 Z" fill="#FAF8F5" />
-                  <path d="M112 86 L120 106 L128 86" stroke="#0A192F" strokeWidth="1.5" fill="none" />
-                  
-                  {/* Tailored Wool Tuxedo Bodice */}
-                  <path
-                    d="M74 88 L166 88 L158 190 L130 190 L120 135 L110 190 L82 190 Z"
-                    fill={topColor}
-                  />
-                  <path
-                    d="M74 88 L166 88 L158 190 L130 190 L120 135 L110 190 L82 190 Z"
-                    fill="url(#topFabricGrad)"
-                  />
-                  
-                  {/* Tailored Sleeves */}
-                  {mannequinForm === 'human' && (
-                    <>
-                      <path d="M74 88 L56 185 L70 188 L84 96 Z" fill={topColor} />
-                      <path d="M166 88 L184 185 L170 188 L156 96 Z" fill={topColor} />
-                    </>
-                  )}
-                  {/* Peak Lapels */}
-                  <path d="M92 88 L114 135 L96 135 Z" fill="#000" fillOpacity="0.3" />
-                  <path d="M148 88 L126 135 L144 135 Z" fill="#000" fillOpacity="0.3" />
-                  {/* Horn Buttons */}
-                  <circle cx="120" cy="148" r="2.2" fill="url(#goldHardware)" />
-                  <circle cx="120" cy="162" r="2.2" fill="url(#goldHardware)" />
-                  {/* Silk Pocket Square */}
-                  <path d="M140 118 L150 118 L148 122 L142 122 Z" fill="#FAF8F5" />
-                </g>
-              ) : activeOutfit.topType === 'kurta' ? (
-                <g id="real-kurta" filter="url(#silkSheen)">
-                  {/* Bandhgala Mandarin Kurta */}
-                  <path
-                    d="M74 88 L166 88 L158 240 L136 240 L136 175 L104 175 L104 240 L82 240 Z"
-                    fill={topColor}
-                  />
-                  <path
-                    d="M74 88 L166 88 L158 240 L136 240 L136 175 L104 175 L104 240 L82 240 Z"
-                    fill="url(#topFabricGrad)"
-                  />
-                  {mannequinForm === 'human' && (
-                    <>
-                      <path d="M74 88 L58 185 L70 188 L84 96 Z" fill={topColor} />
-                      <path d="M166 88 L182 185 L170 188 L156 96 Z" fill={topColor} />
-                    </>
-                  )}
-                  {/* Mandarin Collar & Gold Placket Buttons */}
-                  <rect x="110" y="80" width="20" height="8" rx="2" fill={topColor} />
-                  <line x1="120" y1="88" x2="120" y2="155" stroke="url(#goldHardware)" strokeWidth="2.5" />
-                  <circle cx="120" cy="100" r="2" fill="url(#goldHardware)" />
-                  <circle cx="120" cy="114" r="2" fill="url(#goldHardware)" />
-                  <circle cx="120" cy="128" r="2" fill="url(#goldHardware)" />
-                  <circle cx="120" cy="142" r="2" fill="url(#goldHardware)" />
-                </g>
-              ) : (
-                /* Classic Oxford Shirt / Fine Blouse */
-                <g id="real-shirt" filter="url(#silkSheen)">
-                  <path
-                    d="M76 88 L164 88 L154 180 L86 180 Z"
-                    fill={topColor}
-                  />
-                  <path
-                    d="M76 88 L164 88 L154 180 L86 180 Z"
-                    fill="url(#topFabricGrad)"
-                  />
-                  {mannequinForm === 'human' && (
-                    <>
-                      <path d="M76 88 L60 175 L72 178 L86 96 Z" fill={topColor} />
-                      <path d="M164 88 L180 175 L168 178 L154 96 Z" fill={topColor} />
-                    </>
-                  )}
-                  {/* Spread Collar & Mother of Pearl Buttons */}
-                  <path d="M108 86 L120 104 L132 86" stroke="#000" strokeOpacity="0.3" strokeWidth="2" fill="none" />
-                  <line x1="120" y1="104" x2="120" y2="175" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
-                  <circle cx="120" cy="118" r="1.8" fill="url(#goldHardware)" />
-                  <circle cx="120" cy="136" r="1.8" fill="url(#goldHardware)" />
-                  <circle cx="120" cy="154" r="1.8" fill="url(#goldHardware)" />
-                </g>
-              )}
-            </svg>
-          </motion.div>
-
-          {/* Bottom Draped Info Strip */}
-          <div className="absolute bottom-3 left-3 right-3 bg-[#0a192f]/95 backdrop-blur-md p-3 rounded-2xl border border-[#FAF8F5]/15 z-20 flex items-center justify-between shadow-xl">
-            <div>
-              <span className="text-[9px] uppercase font-mono font-bold text-[#93c5fd] flex items-center gap-1.5">
-                <Footprints className="w-3 h-3 text-[#38BDF8]" />
-                <span>
-                  {mannequinForm === 'dress_form'
-                    ? 'Atelier Form'
-                    : `${activeGender === 'female' ? "Women's" : "Men's"} Runway Catwalk`}
-                </span>
                 {isWalkActive && (
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  <motion.div
+                    animate={{ y: [0, 60] }}
+                    transition={{ repeat: Infinity, duration: walkCycleDuration, ease: 'linear' }}
+                    className="absolute inset-0 flex justify-center opacity-40 pointer-events-none"
+                  >
+                    <div className="w-32 h-1 bg-gradient-to-r from-transparent via-[#FAF8F5] to-transparent" />
+                  </motion.div>
                 )}
-              </span>
-              <h5 className="text-xs font-serif font-bold text-white truncate max-w-[180px]">
-                {activeOutfit.title}
-              </h5>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <span
-                className="w-4 h-4 rounded-full border border-white/40 shadow-sm"
-                style={{ backgroundColor: topColor }}
-                title={`Top: ${topColor}`}
-              />
-              <span
-                className="w-4 h-4 rounded-full border border-white/40 shadow-sm"
-                style={{ backgroundColor: bottomColor }}
-                title={`Bottom: ${bottomColor}`}
-              />
-              <span
-                className="w-4 h-4 rounded-full border border-white/40 shadow-sm"
-                style={{ backgroundColor: accentColor }}
-                title={`Accent: ${accentColor}`}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+              </div>
 
-      {/* FIT & HARMONY CONTROLS */}
-      {showControls && (
-        <div className="w-full mt-3 pt-3 border-t border-[#FAF8F5]/10 z-10 relative flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-[#FAF8F5]/70">
-          <div className="flex items-center gap-2">
-            <Sliders className="w-3.5 h-3.5 text-[#93c5fd]" />
-            <span>Garment Fit:</span>
-            <div className="flex bg-[#050d1a] p-0.5 rounded-xl border border-[#FAF8F5]/15">
-              {(['slim', 'regular', 'oversized'] as const).map((fit) => (
-                <button
-                  key={fit}
-                  onClick={() => setFitStyle(fit)}
-                  className={`px-2.5 py-1 rounded-lg font-medium capitalize transition-all ${
-                    fitStyle === fit
-                      ? 'bg-[#1e3a8a] text-white shadow-sm font-bold'
-                      : 'text-[#FAF8F5]/60 hover:text-white'
-                  }`}
+              {/* Dynamic Model with Scaled Garment Fit */}
+              <motion.div
+                animate={{
+                  rotateY: turntableAngle,
+                  scale: (isZoomed ? 1.25 : 1) * fitScale,
+                  y: isWalkActive ? [0, -8, 0] : 0,
+                }}
+                transition={{
+                  y: isWalkActive
+                    ? { repeat: Infinity, duration: walkCycleDuration / 2, ease: 'easeInOut' }
+                    : { type: 'spring', stiffness: 200, damping: 20 },
+                  scale: { duration: 0.35, ease: 'easeOut' },
+                  rotateY: { duration: 0.5, ease: 'easeOut' },
+                }}
+                className="relative w-72 h-[460px] flex items-center justify-center z-10"
+              >
+                {/* Footstep Shadow */}
+                <motion.div
+                  animate={isWalkActive ? { scaleX: [0.85, 1.1, 0.85], opacity: [0.4, 0.7, 0.4] } : {}}
+                  transition={{ repeat: Infinity, duration: walkCycleDuration / 2, ease: 'easeInOut' }}
+                  className="absolute bottom-6 w-44 h-5 bg-black/60 blur-md rounded-full pointer-events-none"
+                />
+
+                <svg
+                  className="w-full h-full drop-shadow-2xl overflow-visible"
+                  viewBox="0 0 240 440"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  {fit}
-                </button>
-              ))}
-            </div>
-          </div>
+                  <defs>
+                    <filter id="silkSheen" x="-20%" y="-20%" width="140%" height="140%">
+                      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.08" numOctaves="2" result="noise" />
+                      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.15 0" in="noise" result="softNoise" />
+                      <feBlend mode="overlay" in2="SourceGraphic" in="softNoise" />
+                    </filter>
 
-          <div className="flex items-center gap-3">
+                    <filter id="woolTwill" x="-20%" y="-20%" width="140%" height="140%">
+                      <feTurbulence type="fractalNoise" baseFrequency="0.08 0.4" numOctaves="2" result="twillNoise" />
+                      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.22 0" in="twillNoise" result="subtleTwill" />
+                      <feBlend mode="multiply" in2="SourceGraphic" in="subtleTwill" />
+                    </filter>
+
+                    <linearGradient id={`mannequinSkin-${skinTone}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor={skin.highlight} />
+                      <stop offset="45%" stopColor={skin.base} />
+                      <stop offset="100%" stopColor={skin.shadow} />
+                    </linearGradient>
+
+                    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#2D2118" />
+                      <stop offset="50%" stopColor="#1A120B" />
+                      <stop offset="100%" stopColor="#080503" />
+                    </linearGradient>
+
+                    <linearGradient id="goldHardware" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FDE68A" />
+                      <stop offset="50%" stopColor="#D4AF37" />
+                      <stop offset="100%" stopColor="#92400E" />
+                    </linearGradient>
+
+                    <linearGradient id="topFabricGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.22" />
+                      <stop offset="40%" stopColor="#000000" stopOpacity="0.0" />
+                      <stop offset="100%" stopColor="#000000" stopOpacity="0.38" />
+                    </linearGradient>
+
+                    <linearGradient id="bottomFabricGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.16" />
+                      <stop offset="50%" stopColor="#000000" stopOpacity="0.0" />
+                      <stop offset="100%" stopColor="#000000" stopOpacity="0.45" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* MODEL BODY & ARTICULATED WALKING STRIDE */}
+                  {activeGender === 'female' ? (
+                    <g id="female-model">
+                      <path
+                        d="M96 38 C96 18, 144 18, 144 38 C158 52, 156 86, 146 112 C134 116, 106 116, 94 112 C84 86, 82 52, 96 38 Z"
+                        fill="url(#hairGrad)"
+                      />
+                      <ellipse cx="120" cy="28" rx="14" ry="12" fill="url(#hairGrad)" />
+                      <ellipse cx="120" cy="48" rx="16" ry="20" fill={`url(#mannequinSkin-${skinTone})`} />
+                      <rect x="114" y="66" width="12" height="18" rx="3" fill={`url(#mannequinSkin-${skinTone})`} />
+                      <path d="M106 82 Q114 85 120 84 Q126 85 134 82" stroke={skin.shadow} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                      <path d="M82 84 Q120 90 158 84 L150 165 Q120 174 90 165 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+
+                      {/* Left Leg */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [-14, 14, -14], originX: '107px', originY: '170px' }
+                            : { rotate: -2 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <rect x="98" y="165" width="18" height="215" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                        <path d="M96 380 L112 380 L116 398 L94 398 Z" fill="#0A192F" />
+                        <line x1="112" y1="385" x2="114" y2="402" stroke="#FAF8F5" strokeWidth="2" />
+                      </motion.g>
+
+                      {/* Right Leg */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [14, -14, 14], originX: '133px', originY: '170px' }
+                            : { rotate: 3 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <rect x="124" y="165" width="18" height="215" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                        <path d="M126 380 L142 380 L146 398 L124 398 Z" fill="#0A192F" />
+                        <line x1="142" y1="385" x2="144" y2="402" stroke="#FAF8F5" strokeWidth="2" />
+                      </motion.g>
+
+                      {/* Left Arm */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [12, -12, 12], originX: '82px', originY: '86px' }
+                            : { rotate: 2 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <path d="M82 86 L66 182 L76 185 L88 92 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                        <rect x="67" y="174" width="10" height="3" rx="1" fill="url(#goldHardware)" />
+                      </motion.g>
+
+                      {/* Right Arm */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [-12, 12, -12], originX: '158px', originY: '86px' }
+                            : { rotate: -3 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <path d="M158 86 L174 182 L164 185 L152 92 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                        <rect x="163" y="174" width="10" height="3" rx="1" fill="url(#goldHardware)" />
+                      </motion.g>
+                    </g>
+                  ) : (
+                    <g id="male-model">
+                      <path
+                        d="M96 34 C96 18, 144 18, 144 34 C150 46, 144 54, 120 54 C96 54, 90 46, 96 34 Z"
+                        fill="url(#hairGrad)"
+                      />
+                      <ellipse cx="120" cy="46" rx="18" ry="22" fill={`url(#mannequinSkin-${skinTone})`} />
+                      <rect x="111" y="66" width="18" height="20" rx="4" fill={`url(#mannequinSkin-${skinTone})`} />
+                      <path d="M72 86 Q120 94 168 86 L156 175 Q120 182 84 175 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+
+                      {/* Male Left Leg */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [-15, 15, -15], originX: '105px', originY: '175px' }
+                            : { rotate: -2 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <rect x="94" y="175" width="22" height="210" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                        <path d="M88 385 L112 385 L116 404 L86 404 Z" fill="#0A192F" />
+                        <line x1="86" y1="400" x2="116" y2="400" stroke="#FAF8F5" strokeWidth="1.5" />
+                      </motion.g>
+
+                      {/* Male Right Leg */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [15, -15, 15], originX: '135px', originY: '175px' }
+                            : { rotate: 2 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <rect x="124" y="175" width="22" height="210" rx="5" fill={`url(#mannequinSkin-${skinTone})`} />
+                        <path d="M128 385 L152 385 L156 404 L126 404 Z" fill="#0A192F" />
+                        <line x1="126" y1="400" x2="156" y2="400" stroke="#FAF8F5" strokeWidth="1.5" />
+                      </motion.g>
+
+                      {/* Male Left Arm */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [14, -14, 14], originX: '72px', originY: '88px' }
+                            : { rotate: 2 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <path d="M72 88 L54 192 L66 195 L80 96 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                        <rect x="56" y="185" width="10" height="4" rx="1" fill="#1E293B" />
+                      </motion.g>
+
+                      {/* Male Right Arm */}
+                      <motion.g
+                        animate={
+                          isWalkActive
+                            ? { rotate: [-14, 14, -14], originX: '168px', originY: '88px' }
+                            : { rotate: -2 }
+                        }
+                        transition={
+                          isWalkActive
+                            ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' }
+                            : {}
+                        }
+                      >
+                        <path d="M168 88 L186 192 L174 195 L160 96 Z" fill={`url(#mannequinSkin-${skinTone})`} />
+                      </motion.g>
+                    </g>
+                  )}
+
+                  {/* BOTTOM GARMENTS WITH GARMENT FIT VARIATION */}
+                  {activeOutfit.bottomType === 'skirt' || activeOutfit.topType === 'saree' ? (
+                    <motion.g
+                      id="real-skirt"
+                      animate={isWalkActive ? { rotate: [-3, 3, -3], originX: '120px', originY: '150px' } : {}}
+                      transition={isWalkActive ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' } : {}}
+                      filter="url(#silkSheen)"
+                    >
+                      <path
+                        d={`M${86 + waistSuppress} 150 L${154 - waistSuppress} 150 L${176 - waistSuppress * 1.5} 332 Q120 348 L${64 + waistSuppress * 1.5} 332 Z`}
+                        fill={bottomColor}
+                      />
+                      <path
+                        d={`M${86 + waistSuppress} 150 L${154 - waistSuppress} 150 L${176 - waistSuppress * 1.5} 332 Q120 348 L${64 + waistSuppress * 1.5} 332 Z`}
+                        fill="url(#bottomFabricGrad)"
+                      />
+                      <line x1="98" y1="152" x2="88" y2="334" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
+                      <line x1="120" y1="152" x2="120" y2="340" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
+                      <line x1="142" y1="152" x2="152" y2="334" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
+                      <rect x="86" y="148" width="68" height="6" rx="2" fill="url(#goldHardware)" />
+                    </motion.g>
+                  ) : activeOutfit.bottomType === 'gown_skirt' || activeOutfit.topType === 'gown' ? (
+                    <motion.g
+                      id="real-gown-skirt"
+                      animate={isWalkActive ? { rotate: [-2, 2, -2], originX: '120px', originY: '140px' } : {}}
+                      transition={isWalkActive ? { repeat: Infinity, duration: walkCycleDuration, ease: 'easeInOut' } : {}}
+                      filter="url(#silkSheen)"
+                    >
+                      <path
+                        d={`M${88 + waistSuppress} 140 L${152 - waistSuppress} 140 L${184 - waistSuppress * 1.5} 395 Q120 412 L${56 + waistSuppress * 1.5} 395 Z`}
+                        fill={bottomColor}
+                      />
+                      <path
+                        d={`M${88 + waistSuppress} 140 L${152 - waistSuppress} 140 L${184 - waistSuppress * 1.5} 395 Q120 412 L${56 + waistSuppress * 1.5} 395 Z`}
+                        fill="url(#bottomFabricGrad)"
+                      />
+                      <path d="M106 142 Q100 270 82 398" stroke="#000" strokeOpacity="0.22" strokeWidth="2.5" fill="none" />
+                      <path d="M134 142 Q140 270 158 398" stroke="#000" strokeOpacity="0.22" strokeWidth="2.5" fill="none" />
+                    </motion.g>
+                  ) : (
+                    /* Tailored Trousers with Fit Adjustments */
+                    <g id="real-tailored-trousers" filter="url(#woolTwill)">
+                      <path
+                        d={`M${86 + waistSuppress} 164 L${154 - waistSuppress} 164 L${150 - waistSuppress} 388 L${126 - waistSuppress / 2} 388 L120 218 L${114 + waistSuppress / 2} 388 L${90 + waistSuppress} 388 Z`}
+                        fill={bottomColor}
+                      />
+                      <path
+                        d={`M${86 + waistSuppress} 164 L${154 - waistSuppress} 164 L${150 - waistSuppress} 388 L${126 - waistSuppress / 2} 388 L120 218 L${114 + waistSuppress / 2} 388 L${90 + waistSuppress} 388 Z`}
+                        fill="url(#bottomFabricGrad)"
+                      />
+                      <line x1="102" y1="170" x2="102" y2="385" stroke="#FFFFFF" strokeOpacity="0.15" strokeWidth="1.2" />
+                      <line x1="137" y1="170" x2="137" y2="385" stroke="#FFFFFF" strokeOpacity="0.15" strokeWidth="1.2" />
+                      <rect x="86" y="164" width="68" height="7" rx="1.5" fill="#3D2314" />
+                      <rect x="114" y="163" width="12" height="9" rx="1.5" fill="url(#goldHardware)" />
+                    </g>
+                  )}
+
+                  {/* TOP GARMENTS WITH TAILORING DETAILS */}
+                  {activeOutfit.topType === 'blazer' ? (
+                    <g id="real-blazer" filter="url(#woolTwill)">
+                      <path d="M104 86 L136 86 L130 170 L110 170 Z" fill="#FAF8F5" />
+                      <path d="M112 86 L120 106 L128 86" stroke="#0A192F" strokeWidth="1.5" fill="none" />
+                      <path
+                        d={`M${74 - waistSuppress / 2} 88 L${166 + waistSuppress / 2} 88 L${158 - waistSuppress} 190 L130 190 L120 135 L110 190 L${82 + waistSuppress} 190 Z`}
+                        fill={topColor}
+                      />
+                      <path
+                        d={`M${74 - waistSuppress / 2} 88 L${166 + waistSuppress / 2} 88 L${158 - waistSuppress} 190 L130 190 L120 135 L110 190 L${82 + waistSuppress} 190 Z`}
+                        fill="url(#topFabricGrad)"
+                      />
+                      <path d="M92 88 L114 135 L96 135 Z" fill="#000" fillOpacity="0.3" />
+                      <path d="M148 88 L126 135 L144 135 Z" fill="#000" fillOpacity="0.3" />
+                      <circle cx="120" cy="148" r="2.2" fill="url(#goldHardware)" />
+                      <circle cx="120" cy="162" r="2.2" fill="url(#goldHardware)" />
+                      <path d="M140 118 L150 118 L148 122 L142 122 Z" fill="#FAF8F5" />
+                    </g>
+                  ) : activeOutfit.topType === 'gown' ? (
+                    <g id="real-gown-top" filter="url(#silkSheen)">
+                      <path
+                        d={`M84 94 Q120 108 156 94 L${152 - waistSuppress} 148 Q120 158 L${88 + waistSuppress} 148 Z`}
+                        fill={topColor}
+                      />
+                      <path
+                        d={`M84 94 Q120 108 156 94 L${152 - waistSuppress} 148 Q120 158 L${88 + waistSuppress} 148 Z`}
+                        fill="url(#topFabricGrad)"
+                      />
+                      <rect x="88" y="142" width="64" height="6" rx="2" fill="url(#goldHardware)" />
+                    </g>
+                  ) : (
+                    /* Classic Oxford Shirt / Kurta */
+                    <g id="real-shirt" filter="url(#silkSheen)">
+                      <path
+                        d={`M76 88 L164 88 L${154 - waistSuppress} 180 L${86 + waistSuppress} 180 Z`}
+                        fill={topColor}
+                      />
+                      <path
+                        d={`M76 88 L164 88 L${154 - waistSuppress} 180 L${86 + waistSuppress} 180 Z`}
+                        fill="url(#topFabricGrad)"
+                      />
+                      <path d="M108 86 L120 104 L132 86" stroke="#000" strokeOpacity="0.3" strokeWidth="2" fill="none" />
+                      <circle cx="120" cy="118" r="1.8" fill="url(#goldHardware)" />
+                      <circle cx="120" cy="136" r="1.8" fill="url(#goldHardware)" />
+                      <circle cx="120" cy="154" r="1.8" fill="url(#goldHardware)" />
+                    </g>
+                  )}
+                </svg>
+              </motion.div>
+
+              {/* Bottom Draped Info Strip */}
+              <div className="absolute bottom-3 left-3 right-3 bg-[#0a192f]/95 backdrop-blur-md p-3 rounded-2xl border border-[#FAF8F5]/15 z-20 flex items-center justify-between shadow-xl">
+                <div>
+                  <span className="text-[9px] uppercase font-mono font-bold text-[#93c5fd] flex items-center gap-1.5">
+                    <Footprints className="w-3 h-3 text-[#38BDF8]" />
+                    <span>
+                      {activeGender === 'female' ? "Women's" : "Men's"} Runway Catwalk &bull; {fitStyle.toUpperCase()} FIT
+                    </span>
+                    {isWalkActive && (
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    )}
+                  </span>
+                  <h5 className="text-xs font-serif font-bold text-white truncate max-w-[180px]">
+                    {activeOutfit.title}
+                  </h5>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <span
+                    className="w-4 h-4 rounded-full border border-white/40 shadow-sm"
+                    style={{ backgroundColor: topColor }}
+                    title={`Top: ${topColor}`}
+                  />
+                  <span
+                    className="w-4 h-4 rounded-full border border-white/40 shadow-sm"
+                    style={{ backgroundColor: bottomColor }}
+                    title={`Bottom: ${bottomColor}`}
+                  />
+                  <span
+                    className="w-4 h-4 rounded-full border border-white/40 shadow-sm"
+                    style={{ backgroundColor: accentColor }}
+                    title={`Accent: ${accentColor}`}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* CATWALK CONTROLS (Pause, Turntable, Speed) */}
+        {displayMode === 'catwalk' && (
+          <div className="w-full max-w-lg flex items-center justify-between mt-3 px-2 text-xs font-mono">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsWalkActive(!isWalkActive)}
+                className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all ${
+                  isWalkActive
+                    ? 'bg-[#FAF8F5] text-[#0a192f] shadow-md'
+                    : 'bg-[#0a192f] text-white border border-[#FAF8F5]/20'
+                }`}
+              >
+                {isWalkActive ? <Pause className="w-3.5 h-3.5 fill-[#0a192f]" /> : <Play className="w-3.5 h-3.5 fill-white" />}
+                <span>{isWalkActive ? 'Pause Walk' : 'Runway Catwalk'}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const nextAngles: Record<number, 0 | 30 | -30 | 180> = { 0: 30, 30: -30, '-30': 0 };
+                  setTurntableAngle(nextAngles[turntableAngle] ?? 0);
+                }}
+                className="px-2.5 py-1.5 rounded-xl bg-[#0a192f] text-[#FAF8F5]/80 hover:text-white transition-colors border border-[#FAF8F5]/15 flex items-center gap-1"
+                title="Rotate Model 360°"
+              >
+                <Compass className="w-3.5 h-3.5" />
+                <span>{turntableAngle}&deg; Turn</span>
+              </button>
+            </div>
+
             <div className="flex items-center gap-1.5">
-              <span>Runway Pace:</span>
+              <span className="text-[10px] text-[#FAF8F5]/60 uppercase">Pace:</span>
               {(['slow', 'medium', 'fast'] as const).map((spd) => (
                 <button
                   key={spd}
                   onClick={() => setWalkSpeed(spd)}
-                  className={`px-2 py-0.5 rounded-md text-[10px] capitalize transition-all ${
+                  className={`px-2 py-1 rounded-lg text-[10px] capitalize transition-all ${
                     walkSpeed === spd
-                      ? 'bg-[#FAF8F5] text-[#0a192f] font-bold'
+                      ? 'bg-[#1e3a8a] text-white font-bold'
                       : 'bg-[#0a192f] text-[#FAF8F5]/60 hover:text-white'
                   }`}
                 >
@@ -1426,8 +1437,220 @@ export default function MannequinVisualizer({
               ))}
             </div>
           </div>
+        )}
+      </div>
+
+      {/* ========================================================= */}
+      {/* GARMENT FIT & SIZE CONTROLLER (FIXED: FULLY FUNCTIONAL)   */}
+      {/* ========================================================= */}
+      {showControls && (
+        <div className="w-full max-w-lg mt-4 p-4 rounded-3xl bg-[#0f254e]/50 border border-[#FAF8F5]/15 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-[#93c5fd]" />
+              <h4 className="text-xs font-serif font-bold uppercase tracking-wider text-white">
+                Garment Fit &amp; Tailoring Engine
+              </h4>
+            </div>
+            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
+              Active: {fitStyle.toUpperCase()}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            {(['slim', 'regular', 'oversized'] as const).map((fit) => {
+              const isCurrent = fitStyle === fit;
+              return (
+                <button
+                  key={fit}
+                  type="button"
+                  onClick={() => setFitStyle(fit)}
+                  className={`p-2.5 rounded-2xl border text-left transition-all ${
+                    isCurrent
+                      ? 'bg-[#FAF8F5] text-[#0a192f] border-white shadow-lg font-bold scale-102'
+                      : 'bg-[#0a192f]/70 border-[#FAF8F5]/15 text-[#FAF8F5]/80 hover:bg-[#16366f]/40'
+                  }`}
+                >
+                  <p className="text-xs capitalize font-bold">{fit} Fit</p>
+                  <p className={`text-[9px] ${isCurrent ? 'text-[#1e3a8a]' : 'text-[#FAF8F5]/60'}`}>
+                    {fit === 'slim' ? '-2" Chest Taper' : fit === 'regular' ? 'Savile Row Ease' : '+5" Boxy Drape'}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Size Guide Chips */}
+          <div className="flex items-center justify-between pt-1 text-xs">
+            <span className="text-[10px] font-mono uppercase text-[#FAF8F5]/60 flex items-center gap-1">
+              <Ruler className="w-3 h-3 text-[#93c5fd]" /> Size:
+            </span>
+            <div className="flex items-center gap-1.5">
+              {(['XS', 'S', 'M', 'L', 'XL'] as const).map((sz) => (
+                <button
+                  key={sz}
+                  onClick={() => setSelectedSize(sz)}
+                  className={`w-7 h-7 rounded-lg text-[10px] font-mono font-bold flex items-center justify-center transition-all ${
+                    selectedSize === sz
+                      ? 'bg-[#1e3a8a] text-white shadow-md'
+                      : 'bg-[#0a192f] text-[#FAF8F5]/60 hover:text-white border border-[#FAF8F5]/15'
+                  }`}
+                >
+                  {sz}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
+
+      {/* ========================================================= */}
+      {/* DEEP FASHION INTELLIGENCE: FABRICS, SIZES & ACCESSORIES   */}
+      {/* ========================================================= */}
+      <div className="w-full max-w-lg mt-4 rounded-3xl bg-[#0a192f]/90 border border-[#FAF8F5]/15 p-4 space-y-4 shadow-xl">
+        {/* Navigation Tabs */}
+        <div className="flex items-center justify-between border-b border-[#FAF8F5]/10 pb-3 text-xs font-mono">
+          <button
+            onClick={() => setActiveTab('accessories')}
+            className={`pb-1 font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'accessories'
+                ? 'text-[#93c5fd] border-b-2 border-[#93c5fd]'
+                : 'text-[#FAF8F5]/60 hover:text-white'
+            }`}
+          >
+            <Watch className="w-3.5 h-3.5" />
+            <span>5-Piece Accessories</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('fabric')}
+            className={`pb-1 font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'fabric'
+                ? 'text-[#93c5fd] border-b-2 border-[#93c5fd]'
+                : 'text-[#FAF8F5]/60 hover:text-white'
+            }`}
+          >
+            <Shirt className="w-3.5 h-3.5" />
+            <span>Fabrics &amp; Weave</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('size')}
+            className={`pb-1 font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'size'
+                ? 'text-[#93c5fd] border-b-2 border-[#93c5fd]'
+                : 'text-[#FAF8F5]/60 hover:text-white'
+            }`}
+          >
+            <Ruler className="w-3.5 h-3.5" />
+            <span>Size &amp; Fit Advice</span>
+          </button>
+        </div>
+
+        {/* TAB 1: FULL 5-PIECE ACCESSORIES (Shoes, Watch, Ring, Chain, Bracelet) */}
+        {activeTab === 'accessories' && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase text-[#FAF8F5]/60">
+                Curated Luxury Hardware Matching
+              </span>
+              <span className="text-[10px] font-mono text-[#D4AF37] font-bold">
+                Gold &amp; Platinum Harmonized
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              {/* Shoes */}
+              <div className="p-2.5 rounded-2xl bg-[#050d1a] border border-[#FAF8F5]/10 space-y-1">
+                <div className="flex items-center gap-1.5 font-bold text-white">
+                  <Footprints className="w-3.5 h-3.5 text-[#38BDF8]" />
+                  <span>Footwear: {currentSilhouette.accessories.shoe.name}</span>
+                </div>
+                <p className="text-[11px] text-[#FAF8F5]/70">{currentSilhouette.accessories.shoe.tip}</p>
+              </div>
+
+              {/* Watch */}
+              <div className="p-2.5 rounded-2xl bg-[#050d1a] border border-[#FAF8F5]/10 space-y-1">
+                <div className="flex items-center gap-1.5 font-bold text-white">
+                  <Watch className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Timepiece: {currentSilhouette.accessories.watch.name}</span>
+                </div>
+                <p className="text-[11px] text-[#FAF8F5]/70">{currentSilhouette.accessories.watch.tip}</p>
+              </div>
+
+              {/* Ring */}
+              <div className="p-2.5 rounded-2xl bg-[#050d1a] border border-[#FAF8F5]/10 space-y-1">
+                <div className="flex items-center gap-1.5 font-bold text-white">
+                  <Gem className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Ring: {currentSilhouette.accessories.ring.name}</span>
+                </div>
+                <p className="text-[11px] text-[#FAF8F5]/70">{currentSilhouette.accessories.ring.tip}</p>
+              </div>
+
+              {/* Chain / Necklace */}
+              <div className="p-2.5 rounded-2xl bg-[#050d1a] border border-[#FAF8F5]/10 space-y-1">
+                <div className="flex items-center gap-1.5 font-bold text-white">
+                  <CircleDot className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Chain: {currentSilhouette.accessories.chain.name}</span>
+                </div>
+                <p className="text-[11px] text-[#FAF8F5]/70">{currentSilhouette.accessories.chain.tip}</p>
+              </div>
+
+              {/* Bracelet */}
+              <div className="p-2.5 rounded-2xl bg-[#050d1a] border border-[#FAF8F5]/10 space-y-1 sm:col-span-2">
+                <div className="flex items-center gap-1.5 font-bold text-white">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Bracelet: {currentSilhouette.accessories.bracelet.name}</span>
+                </div>
+                <p className="text-[11px] text-[#FAF8F5]/70">{currentSilhouette.accessories.bracelet.tip}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: FABRICS & WEAVE */}
+        {activeTab === 'fabric' && (
+          <div className="space-y-3 text-xs">
+            <div className="p-3 rounded-2xl bg-[#050d1a] border border-[#FAF8F5]/10 space-y-2">
+              <div className="flex items-center justify-between">
+                <h5 className="font-bold text-white font-serif">{currentSilhouette.fabricInfo.name}</h5>
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full">
+                  Breathability: {currentSilhouette.fabricInfo.breathability}
+                </span>
+              </div>
+              <p className="text-[11px] text-[#FAF8F5]/80 leading-relaxed font-light">
+                {currentSilhouette.fabricInfo.texture}
+              </p>
+              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-[#FAF8F5]/60">
+                <span>Weight: {currentSilhouette.fabricInfo.gsm}</span>
+                <span>Care: {currentSilhouette.fabricInfo.care}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: SIZE & FIT ADVICE */}
+        {activeTab === 'size' && (
+          <div className="space-y-3 text-xs">
+            <div className="p-3 rounded-2xl bg-[#050d1a] border border-[#FAF8F5]/10 space-y-2">
+              <h5 className="font-bold text-white flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-[#38BDF8]" />
+                <span>Tailoring &amp; Fit Analysis ({fitStyle.toUpperCase()} FIT)</span>
+              </h5>
+              <p className="text-[11px] text-[#FAF8F5]/80 leading-relaxed">
+                {fitStyle === 'slim'
+                  ? currentSilhouette.sizeAdvice.slim
+                  : fitStyle === 'oversized'
+                  ? currentSilhouette.sizeAdvice.oversized
+                  : currentSilhouette.sizeAdvice.regular}
+              </p>
+              <p className="text-[10px] font-mono text-[#D4AF37] pt-1">
+                Hem Break: {currentSilhouette.sizeAdvice.tailoringBreak}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
