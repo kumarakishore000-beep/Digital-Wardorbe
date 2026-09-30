@@ -1,6 +1,7 @@
+// agent-notes: { ctx: "gender-segregated mix and match studio without split mismatch", deps: ["framer-motion", "lucide-react"], state: active, last: "tara@2026-09-30" }
 'use client';
 
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
@@ -21,7 +22,8 @@ import {
   ChevronLeft,
   X
 } from 'lucide-react';
-import MannequinVisualizer, { OutfitConfig } from '@/components/MannequinVisualizer';
+import RealModelDressViewer from '@/components/RealModelDressViewer';
+import { OutfitConfig } from '@/components/MannequinVisualizer';
 import { Gender, useAuth } from '@/hooks/useAuth';
 import { useCollection } from '@/hooks/useCollection';
 import { useRewards } from '@/hooks/useRewards';
@@ -53,8 +55,10 @@ export interface ModelProfile {
   gender: Gender;
   ethnicity: string;
   baseImage: string; // The base unstyled model for "Before"
+  styledImage: string; // The styled model outfit for "After"
   description: string;
   height: string;
+  styledOccasions?: Record<string, string>;
 }
 
 // Model roster with diverse ethnicities (Ava, Maya, Amara, Elena, Lucas, Dev)
@@ -65,8 +69,16 @@ export const STUDIO_MODELS: ModelProfile[] = [
     gender: 'female',
     ethnicity: 'Nordic / European Editorial',
     baseImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop',
+    styledImage: '/images/branding/urban-western-casual.jpg',
     description: 'High-fashion editorial cheekbones, tall balanced proportions.',
-    height: '5\'11"'
+    height: '5\'11"',
+    styledOccasions: {
+      interview: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop',
+      casual: '/images/branding/urban-western-casual.jpg',
+      wedding: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop',
+      cocktail: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop',
+      resort: '/images/branding/urban-western-casual.jpg',
+    }
   },
   {
     id: 'model-maya',
@@ -74,8 +86,16 @@ export const STUDIO_MODELS: ModelProfile[] = [
     gender: 'female',
     ethnicity: 'South Asian Heritage',
     baseImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop',
+    styledImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop',
     description: 'Warm olive complexion, poised corporate and gala presence.',
-    height: '5\'9"'
+    height: '5\'9"',
+    styledOccasions: {
+      interview: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop',
+      wedding: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop',
+      cocktail: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop',
+      casual: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop',
+      resort: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop',
+    }
   },
   {
     id: 'model-amara',
@@ -83,8 +103,16 @@ export const STUDIO_MODELS: ModelProfile[] = [
     gender: 'female',
     ethnicity: 'Afro Statuesque Chic',
     baseImage: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&auto=format&fit=crop',
+    styledImage: '/images/branding/womens-ethnic-fusion.jpg',
     description: 'Deep radiant skin tone, bold sculptural runway silhouette.',
-    height: '6\'0"'
+    height: '6\'0"',
+    styledOccasions: {
+      interview: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop',
+      wedding: '/images/branding/womens-ethnic-fusion.jpg',
+      cocktail: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop',
+      casual: '/images/branding/womens-ethnic-fusion.jpg',
+      resort: '/images/branding/womens-ethnic-fusion.jpg',
+    }
   },
   {
     id: 'model-elena',
@@ -92,8 +120,16 @@ export const STUDIO_MODELS: ModelProfile[] = [
     gender: 'female',
     ethnicity: 'Latina / Mediterranean Glow',
     baseImage: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&auto=format&fit=crop',
+    styledImage: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&auto=format&fit=crop',
     description: 'Sun-kissed bronze undertones, fluid luxury drape.',
-    height: '5\'10"'
+    height: '5\'10"',
+    styledOccasions: {
+      interview: 'https://images.unsplash.com/photo-1544923246-77307dd654cb?w=800&auto=format&fit=crop',
+      wedding: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&auto=format&fit=crop',
+      cocktail: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&auto=format&fit=crop',
+      resort: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop',
+      casual: 'https://images.unsplash.com/photo-1544923246-77307dd654cb?w=800&auto=format&fit=crop',
+    }
   },
   {
     id: 'model-lucas',
@@ -101,8 +137,16 @@ export const STUDIO_MODELS: ModelProfile[] = [
     gender: 'male',
     ethnicity: 'Savile Row European',
     baseImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop',
+    styledImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop',
     description: 'Crisp sartorial jawline, classic British athletic frame.',
-    height: '6\'1"'
+    height: '6\'1"',
+    styledOccasions: {
+      interview: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop',
+      wedding: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&auto=format&fit=crop',
+      cocktail: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&auto=format&fit=crop',
+      resort: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&auto=format&fit=crop',
+      casual: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&auto=format&fit=crop',
+    }
   },
   {
     id: 'model-dev',
@@ -110,8 +154,16 @@ export const STUDIO_MODELS: ModelProfile[] = [
     gender: 'male',
     ethnicity: 'South Asian Contemporary',
     baseImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop',
+    styledImage: '/images/branding/mens-smart-casual.jpg',
     description: 'Sharp tailored contours, royal heritage and modern edge.',
-    height: '6\'2"'
+    height: '6\'2"',
+    styledOccasions: {
+      interview: '/images/branding/mens-smart-casual.jpg',
+      wedding: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=800&auto=format&fit=crop',
+      cocktail: '/images/branding/hero-banner.jpg',
+      resort: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop',
+      casual: '/images/branding/mens-smart-casual.jpg',
+    }
   }
 ];
 
@@ -193,6 +245,66 @@ export const WARDROBE_CATALOG: MixGarment[] = [
     mannequinTopType: 'kurti',
     fabricType: 'silk'
   },
+  {
+    id: 'top-6',
+    name: 'Mandarin Collar Raw Silk Festive Kurta',
+    slot: 'tops',
+    gender: 'male',
+    categoryName: 'Ethnic Kurta',
+    image: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&auto=format&fit=crop',
+    color: '#1E3A8A',
+    colorName: 'Royal Indigo',
+    fabric: 'Matka Raw Silk',
+    brandOrSource: 'Heritage Court Tailors',
+    tags: ['Mandarin Collar', 'Concealed Placket', 'Side Slits'],
+    mannequinTopType: 'kurta',
+    fabricType: 'silk'
+  },
+  {
+    id: 'top-7',
+    name: 'Handcrafted Mirror-Work Crop Choli',
+    slot: 'tops',
+    gender: 'female',
+    categoryName: 'Crop Top / Choli',
+    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&auto=format&fit=crop',
+    color: '#991B1B',
+    colorName: 'Crimson Ruby',
+    fabric: 'Raw Silk & Glass Mirrors',
+    brandOrSource: 'Kutch Artisans Collective',
+    tags: ['Sweetheart Neck', 'Abhla Mirror Work', 'Elbow Sleeves'],
+    mannequinTopType: 'croptop',
+    fabricType: 'silk'
+  },
+  {
+    id: 'top-8',
+    name: 'Cuban Camp-Collar Printed Silk Resort Shirt',
+    slot: 'tops',
+    gender: 'male',
+    categoryName: 'Resort Shirt',
+    image: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&auto=format&fit=crop',
+    color: '#C2410C',
+    colorName: 'Terracotta Print',
+    fabric: '100% Silk Twill',
+    brandOrSource: 'Riviera Resort Capsule',
+    tags: ['Camp Collar', 'Hand-Blocked Print', 'Relaxed Fit'],
+    mannequinTopType: 'shirt',
+    fabricType: 'silk'
+  },
+  {
+    id: 'top-9',
+    name: 'Sculpted Peplum Silk Organza Blouse',
+    slot: 'tops',
+    gender: 'female',
+    categoryName: 'Blouse',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop',
+    color: '#FAF8F5',
+    colorName: 'Pearl White',
+    fabric: 'Silk Organza & Mikado',
+    brandOrSource: 'Milan Couture Atelier',
+    tags: ['Sculpted Peplum', 'Sheer Sleeves', 'Pearl Buttons'],
+    mannequinTopType: 'top',
+    fabricType: 'silk'
+  },
 
   // BOTTOMS
   {
@@ -255,6 +367,51 @@ export const WARDROBE_CATALOG: MixGarment[] = [
     mannequinBottomType: 'jeans',
     fabricType: 'denim'
   },
+  {
+    id: 'bot-5',
+    name: '16-Kali Flared Zardozi Silk Lehenga Skirt',
+    slot: 'bottoms',
+    gender: 'female',
+    categoryName: 'Lehenga Skirt',
+    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&auto=format&fit=crop',
+    color: '#991B1B',
+    colorName: 'Royal Crimson Ruby',
+    fabric: 'Raw Silk with Antique Zari',
+    brandOrSource: 'Heritage Couture Guild',
+    tags: ['Wide Flare', 'Can-Can Underskirt', 'Zardozi Border'],
+    mannequinBottomType: 'skirt',
+    fabricType: 'silk'
+  },
+  {
+    id: 'bot-6',
+    name: 'Double-Pleated Gurkha Linen Trousers',
+    slot: 'bottoms',
+    gender: 'male',
+    categoryName: 'Gurkha Trousers',
+    image: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&auto=format&fit=crop',
+    color: '#3F6212',
+    colorName: 'Sage Olive',
+    fabric: 'Pure Normandy Slub Linen',
+    brandOrSource: 'Naples Tailoring House',
+    tags: ['Extended Double Buckle', 'High Rise', '1.75" Turn-Up Cuffs'],
+    mannequinBottomType: 'chinos',
+    fabricType: 'linen'
+  },
+  {
+    id: 'bot-7',
+    name: 'Pure Mulberry Silk Gathered Churidar',
+    slot: 'bottoms',
+    gender: 'unisex',
+    categoryName: 'Churidar',
+    image: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&auto=format&fit=crop',
+    color: '#FAF8F5',
+    colorName: 'Pearl Ivory Silk',
+    fabric: 'Mulberry Silk Crepe',
+    brandOrSource: 'Court Crafts Collective',
+    tags: ['Ankle Gathers', 'Drawstring Waist', 'Ceremonial Fit'],
+    mannequinBottomType: 'salwar_bottom',
+    fabricType: 'silk'
+  },
 
   // DRESSES & ONE-PIECE
   {
@@ -304,6 +461,184 @@ export const WARDROBE_CATALOG: MixGarment[] = [
     mannequinTopType: 'gown',
     mannequinBottomType: 'skirt',
     fabricType: 'silk'
+  },
+  {
+    id: 'dress-4',
+    name: 'Handcrafted Zardozi Bridal Lehenga Choli',
+    slot: 'dresses',
+    gender: 'female',
+    categoryName: 'Bridal & Festive',
+    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&auto=format&fit=crop',
+    color: '#991B1B',
+    colorName: 'Royal Crimson Ruby',
+    fabric: 'Raw Silk & Gold Zari',
+    brandOrSource: 'Heritage Couture Guild',
+    tags: ['16-Kali Flare', 'Zardozi Embroidery', 'Organza Dupatta'],
+    mannequinTopType: 'croptop',
+    mannequinBottomType: 'skirt',
+    fabricType: 'silk'
+  },
+  {
+    id: 'dress-5',
+    name: 'Sculpted Wide-Leg Halter Jumpsuit',
+    slot: 'dresses',
+    gender: 'female',
+    categoryName: 'Evening Jumpsuit',
+    image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop',
+    color: '#064E3B',
+    colorName: 'Imperial Emerald',
+    fabric: 'Heavy Japanese Silk Crepe',
+    brandOrSource: 'Parisian Haute Atelier',
+    tags: ['Halter Neckline', 'Fluid Palazzo Legs', 'Gold Buckle'],
+    mannequinTopType: 'top',
+    mannequinBottomType: 'trousers',
+    fabricType: 'silk'
+  },
+  {
+    id: 'dress-6',
+    name: 'Royal Kalidar Silk Anarkali Gown Suit',
+    slot: 'dresses',
+    gender: 'female',
+    categoryName: 'Royal Ethnic',
+    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop',
+    color: '#1E3A8A',
+    colorName: 'Royal Sapphire',
+    fabric: 'Pure Chanderi Silk',
+    brandOrSource: 'Jaipur Court Artisans',
+    tags: ['24 Kalis', 'Gota Patti Hem', 'Churidar Set'],
+    mannequinTopType: 'kurti',
+    mannequinBottomType: 'salwar_bottom',
+    fabricType: 'silk'
+  },
+  {
+    id: 'dress-7',
+    name: 'Amalfi Coast Floral Silk Maxi Sundress',
+    slot: 'dresses',
+    gender: 'female',
+    categoryName: 'Resort Dress',
+    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop',
+    color: '#C2410C',
+    colorName: 'Terracotta Coral',
+    fabric: 'Featherweight Silk Chiffon',
+    brandOrSource: 'Riviera Resort Capsule',
+    tags: ['Tiered Ruffles', 'Tie-Shoulder', 'Breezy Silhouette'],
+    mannequinTopType: 'gown',
+    mannequinBottomType: 'gown_skirt',
+    fabricType: 'silk'
+  },
+  {
+    id: 'dress-8',
+    name: 'Fine Ribbed Cashmere Midi Sweater Dress',
+    slot: 'dresses',
+    gender: 'female',
+    categoryName: 'Knit Dress',
+    image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&auto=format&fit=crop',
+    color: '#FAF8F5',
+    colorName: 'Oatmeal Heather',
+    fabric: 'Pure Mongolian Cashmere',
+    brandOrSource: 'Scandinavian Minimal Studio',
+    tags: ['Mock Neck', 'Contoured Ribs', 'Calf Length'],
+    mannequinTopType: 'top',
+    mannequinBottomType: 'skirt',
+    fabricType: 'wool'
+  },
+
+  // MEN'S DRESSES & ONE-PIECE ENSEMBLES
+  {
+    id: 'dress-m1',
+    name: 'Imperial Hand-Embroidered Zari Sherwani',
+    slot: 'dresses',
+    gender: 'male',
+    categoryName: 'Ceremonial Sherwani',
+    image: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&auto=format&fit=crop',
+    color: '#FAF8F5',
+    colorName: 'Imperial Pearl & Gold',
+    fabric: '360 GSM Matka Raw Silk',
+    brandOrSource: 'Royal Atelier Varanasi',
+    tags: ['Gilded Buttons', 'Stand Collar', 'Churidar Bottoms'],
+    mannequinTopType: 'kurta',
+    mannequinBottomType: 'salwar_bottom',
+    fabricType: 'silk'
+  },
+  {
+    id: 'dress-m2',
+    name: 'Savile Row Bespoke 3-Piece Peak Tuxedo Suit',
+    slot: 'dresses',
+    gender: 'male',
+    categoryName: 'Formal Tuxedo',
+    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop',
+    color: '#020617',
+    colorName: 'Obsidian Noir',
+    fabric: 'Super 160s Barathea Wool & Silk',
+    brandOrSource: 'Mayfair Bespoke Tailors',
+    tags: ['Grosgrain Lapel', 'Horseshoe Vest', 'Braided Trousers'],
+    mannequinTopType: 'blazer',
+    mannequinBottomType: 'trousers',
+    fabricType: 'wool'
+  },
+  {
+    id: 'dress-m3',
+    name: 'Indo-Western Draped Asymmetrical Kurta Ensemble',
+    slot: 'dresses',
+    gender: 'male',
+    categoryName: 'Indo-Western',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop',
+    color: '#881337',
+    colorName: 'Deep Wine Marsala',
+    fabric: 'Raw Silk & Georgette Blend',
+    brandOrSource: 'Contemporary Couturier',
+    tags: ['Asymmetric Cowl', 'Nehru Bandi Jacket', 'Slim Trousers'],
+    mannequinTopType: 'kurta',
+    mannequinBottomType: 'trousers',
+    fabricType: 'silk'
+  },
+  {
+    id: 'dress-m4',
+    name: 'Neapolitan Double-Breasted Slub Linen Suit',
+    slot: 'dresses',
+    gender: 'male',
+    categoryName: 'Linen Suiting',
+    image: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&auto=format&fit=crop',
+    color: '#3F6212',
+    colorName: 'Sage Olive',
+    fabric: '100% Normandy Slub Linen',
+    brandOrSource: 'Naples Tailoring House',
+    tags: ['Spalla Camicia', 'Double-Breasted', 'Gurkha Trousers'],
+    mannequinTopType: 'blazer',
+    mannequinBottomType: 'chinos',
+    fabricType: 'linen'
+  },
+  {
+    id: 'dress-m5',
+    name: 'Royal Heritage Matka Silk Pathani Suit',
+    slot: 'dresses',
+    gender: 'male',
+    categoryName: 'Festive Pathani',
+    image: '/images/branding/hero-banner.jpg',
+    color: '#1E293B',
+    colorName: 'Charcoal Slate',
+    fabric: 'Handloom Slub Matka Silk',
+    brandOrSource: 'Heritage Crafts Collective',
+    tags: ['Shoulder Epaulets', 'Pleated Salwar', 'Chest Pockets'],
+    mannequinTopType: 'kurta',
+    mannequinBottomType: 'salwar_bottom',
+    fabricType: 'silk'
+  },
+  {
+    id: 'dress-m6',
+    name: 'Luxury Urban French Terry Tracksuit Ensemble',
+    slot: 'dresses',
+    gender: 'male',
+    categoryName: 'Streetwear Athleisure',
+    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop',
+    color: '#FAF8F5',
+    colorName: 'Mineral Bone Ivory',
+    fabric: '480 GSM Heavyweight French Terry',
+    brandOrSource: 'Tokyo Atelier Street',
+    tags: ['Double-Layer Hood', 'Cargo Track Pants', 'Boxy Fit'],
+    mannequinTopType: 'top',
+    mannequinBottomType: 'tracks',
+    fabricType: 'wool'
   },
 
   // OUTERWEAR
@@ -479,6 +814,28 @@ const OCCASIONS = [
   { id: 'casual', label: 'Smart Casual Studio', icon: PartyPopper, color: '#6366F1', defaultScore: 95 },
 ];
 
+// Returns curated default active slots for the active gender
+export function getDefaultSlotsForGender(gender: Gender) {
+  if (gender === 'male') {
+    return {
+      tops: WARDROBE_CATALOG.find((g) => g.id === 'top-4') || null,
+      bottoms: WARDROBE_CATALOG.find((g) => g.id === 'bot-3') || null,
+      dresses: null,
+      outerwear: WARDROBE_CATALOG.find((g) => g.id === 'out-2') || null,
+      shoes: WARDROBE_CATALOG.find((g) => g.id === 'shoe-1') || null,
+      accessories: WARDROBE_CATALOG.find((g) => g.id === 'acc-1') || null,
+    };
+  }
+  return {
+    tops: WARDROBE_CATALOG.find((g) => g.id === 'top-1') || null,
+    bottoms: WARDROBE_CATALOG.find((g) => g.id === 'bot-1') || null,
+    dresses: null,
+    outerwear: WARDROBE_CATALOG.find((g) => g.id === 'out-1') || null,
+    shoes: WARDROBE_CATALOG.find((g) => g.id === 'shoe-2') || null,
+    accessories: WARDROBE_CATALOG.find((g) => g.id === 'acc-1') || null,
+  };
+}
+
 export default function MixAndMatchStudio() {
   const { user, updateGender } = useAuth();
   const collection = useCollection();
@@ -487,11 +844,11 @@ export default function MixAndMatchStudio() {
   const currentGender = (user?.gender || 'female') as Gender;
 
   // Active Model
-  const [selectedModel, setSelectedModel] = useState<ModelProfile>(
-    STUDIO_MODELS.find((m) => m.gender === currentGender) || STUDIO_MODELS[0]
-  );
+  const [selectedModel, setSelectedModel] = useState<ModelProfile>(() => {
+    return STUDIO_MODELS.find((m) => m.gender === currentGender) || STUDIO_MODELS[0];
+  });
 
-  // Active Garments in Each Slot
+  // Active Garments in Each Slot (strictly gender-segregated defaults)
   const [activeSlots, setActiveSlots] = useState<{
     tops: MixGarment | null;
     bottoms: MixGarment | null;
@@ -499,17 +856,34 @@ export default function MixAndMatchStudio() {
     outerwear: MixGarment | null;
     shoes: MixGarment | null;
     accessories: MixGarment | null;
-  }>({
-    tops: WARDROBE_CATALOG.find((g) => g.id === 'top-1') || null,
-    bottoms: WARDROBE_CATALOG.find((g) => g.id === 'bot-1') || null,
-    dresses: null,
-    outerwear: WARDROBE_CATALOG.find((g) => g.id === 'out-1') || null,
-    shoes: WARDROBE_CATALOG.find((g) => g.id === 'shoe-2') || null,
-    accessories: WARDROBE_CATALOG.find((g) => g.id === 'acc-1') || null,
-  });
+  }>(() => getDefaultSlotsForGender(currentGender));
 
   // Current category tab in left wardrobe rack
   const [activeSlotTab, setActiveSlotTab] = useState<GarmentSlot>('tops');
+
+  // Switch gender and update both the model and equipped garments
+  const handleSwitchGender = (newGender: Gender) => {
+    updateGender(newGender);
+    const matchingModel = STUDIO_MODELS.find((m) => m.gender === newGender) || STUDIO_MODELS[0];
+    setSelectedModel(matchingModel);
+    setActiveSlots(getDefaultSlotsForGender(newGender));
+    if (newGender === 'male' && activeSlotTab === 'dresses') {
+      setActiveSlotTab('tops');
+    }
+  };
+
+  // Synchronize model and slots whenever auth gender resolves or changes
+  useEffect(() => {
+    if (user?.gender && user.gender !== selectedModel.gender) {
+      const targetGender = user.gender as Gender;
+      const matchingModel = STUDIO_MODELS.find((m) => m.gender === targetGender) || STUDIO_MODELS[0];
+      setSelectedModel(matchingModel);
+      setActiveSlots(getDefaultSlotsForGender(targetGender));
+      if (targetGender === 'male' && activeSlotTab === 'dresses') {
+        setActiveSlotTab('tops');
+      }
+    }
+  }, [user?.gender, selectedModel.gender, activeSlotTab]);
 
   // Visualization View: 'photorealistic' (editorial try-on) | '3d-catwalk' (interactive turntable)
   const [visualMode, setVisualMode] = useState<'photorealistic' | '3d-catwalk'>('photorealistic');
@@ -580,18 +954,22 @@ export default function MixAndMatchStudio() {
 
   // Realistic photorealistic composite preview image (editorial quality based on pieces)
   const compositePhotorealisticImage = useMemo(() => {
-    // Return high-definition editorial shoot image depicting the composite style
-    if (activeSlots.dresses) {
-      return activeSlots.dresses.image;
+    // Custom uploaded garment preview override if equipped
+    const customGarment = Object.values(activeSlots).find((g) => g?.id.startsWith('custom-'));
+    if (customGarment?.image) {
+      return customGarment.image;
     }
-    if (activeSlots.outerwear) {
-      return activeSlots.outerwear.image;
+
+    // High-definition styled result for the active model and occasion (guaranteed same model identity)
+    const occasionKey = selectedOccasion.id as keyof NonNullable<typeof selectedModel.styledOccasions>;
+    if (selectedModel.styledOccasions && selectedModel.styledOccasions[occasionKey]) {
+      return selectedModel.styledOccasions[occasionKey];
     }
-    if (activeSlots.tops) {
-      return activeSlots.tops.image;
+    if (selectedModel.styledImage) {
+      return selectedModel.styledImage;
     }
     return selectedModel.baseImage;
-  }, [activeSlots, selectedModel.baseImage]);
+  }, [selectedModel, selectedOccasion.id, activeSlots]);
 
   // Handle Slot Selection
   const handleSelectGarment = (garment: MixGarment) => {
@@ -642,13 +1020,13 @@ export default function MixAndMatchStudio() {
     rewards.earnPoints('try_suggestion');
   };
 
-  // Randomize / AI Shuffle high-fashion outfit
+  // Randomize / AI Shuffle high-fashion outfit (strictly gender-segregated)
   const handleShuffleOutfit = () => {
     const randomTop = WARDROBE_CATALOG.filter((g) => g.slot === 'tops' && (g.gender === 'unisex' || g.gender === selectedModel.gender));
     const randomBottom = WARDROBE_CATALOG.filter((g) => g.slot === 'bottoms' && (g.gender === 'unisex' || g.gender === selectedModel.gender));
-    const randomOuter = WARDROBE_CATALOG.filter((g) => g.slot === 'outerwear');
+    const randomOuter = WARDROBE_CATALOG.filter((g) => g.slot === 'outerwear' && (g.gender === 'unisex' || g.gender === selectedModel.gender));
     const randomShoes = WARDROBE_CATALOG.filter((g) => g.slot === 'shoes' && (g.gender === 'unisex' || g.gender === selectedModel.gender));
-    const randomAcc = WARDROBE_CATALOG.filter((g) => g.slot === 'accessories');
+    const randomAcc = WARDROBE_CATALOG.filter((g) => g.slot === 'accessories' && (g.gender === 'unisex' || g.gender === selectedModel.gender));
 
     setActiveSlots({
       dresses: null,
@@ -778,8 +1156,8 @@ export default function MixAndMatchStudio() {
                     : 'text-[#FAF8F5]/70 hover:text-white'
                 }`}
               >
-                <Layers className="w-3.5 h-3.5" />
-                <span>3D Catwalk Turn</span>
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Real Lookbook Gallery</span>
               </button>
             </div>
 
@@ -820,11 +1198,7 @@ export default function MixAndMatchStudio() {
             {/* Gender Toggle */}
             <div className="flex items-center bg-[#0a192f] p-0.5 rounded-lg border border-[#FAF8F5]/15">
               <button
-                onClick={() => {
-                  updateGender('female');
-                  const femaleModel = STUDIO_MODELS.find((m) => m.gender === 'female');
-                  if (femaleModel) setSelectedModel(femaleModel);
-                }}
+                onClick={() => handleSwitchGender('female')}
                 className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
                   selectedModel.gender === 'female'
                     ? 'bg-[#F43F5E] text-white shadow-sm'
@@ -834,11 +1208,7 @@ export default function MixAndMatchStudio() {
                 Female
               </button>
               <button
-                onClick={() => {
-                  updateGender('male');
-                  const maleModel = STUDIO_MODELS.find((m) => m.gender === 'male');
-                  if (maleModel) setSelectedModel(maleModel);
-                }}
+                onClick={() => handleSwitchGender('male')}
                 className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
                   selectedModel.gender === 'male'
                     ? 'bg-[#38BDF8] text-[#0a192f] shadow-sm'
@@ -902,7 +1272,11 @@ export default function MixAndMatchStudio() {
               {[
                 { id: 'tops' as GarmentSlot, label: 'Tops', icon: '👚' },
                 { id: 'bottoms' as GarmentSlot, label: 'Bottoms', icon: '👖' },
-                { id: 'dresses' as GarmentSlot, label: 'Dresses', icon: '👗' },
+                {
+                  id: 'dresses' as GarmentSlot,
+                  label: selectedModel.gender === 'male' ? 'Ensembles' : 'Dresses',
+                  icon: selectedModel.gender === 'male' ? '🤵' : '👗'
+                },
                 { id: 'outerwear' as GarmentSlot, label: 'Coats', icon: '🧥' },
                 { id: 'shoes' as GarmentSlot, label: 'Shoes', icon: '👠' },
                 { id: 'accessories' as GarmentSlot, label: 'Jewelry', icon: '💍' },
@@ -1114,14 +1488,14 @@ export default function MixAndMatchStudio() {
                 </div>
               )}
 
-              {/* MODE B: 3D CATWALK TURNTABLE */}
+              {/* MODE B: REAL LOOKBOOK & DRESS PALETTES */}
               {visualMode === '3d-catwalk' && (
-                <div className="relative w-full h-full flex items-center justify-center p-2">
-                  <MannequinVisualizer
+                <div className="relative w-full h-full flex items-center justify-center p-2 overflow-y-auto">
+                  <RealModelDressViewer
                     gender={selectedModel.gender}
-                    outfit={compositeOutfitConfig}
-                    className="w-full h-full"
-                    showControls={true}
+                    selectedOccasion={selectedOccasion.label}
+                    showOptionCarousel={false}
+                    className="w-full h-full border-0 shadow-none bg-transparent"
                   />
                 </div>
               )}
