@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 export type Gender = 'male' | 'female';
 
@@ -25,8 +25,20 @@ interface ResetToken {
 
 const USERS_KEY = 'stylematch-users';
 const SESSION_KEY = 'stylematch-session';
+const GENDER_KEY = 'stylematch-gender';
 const RESET_TOKENS_KEY = 'stylematch-reset-tokens';
 const REMEMBERED_USER_KEY = 'stylematch-remembered-user';
+export const AUTH_CHANGE_EVENT = 'stylematch_auth_event';
+
+export function notifyAuthChange(user: User | null): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT, { detail: user }));
+    window.dispatchEvent(new Event('storage'));
+  } catch {
+    // ignore
+  }
+}
 
 export function getRememberedUser(): string {
   if (typeof window === 'undefined') return '';
@@ -65,10 +77,23 @@ function getSession(): User | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = localStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed.gender) parsed.gender = 'female';
-    return parsed;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (!parsed.gender) {
+        parsed.gender = (localStorage.getItem(GENDER_KEY) || 'female') as Gender;
+      }
+      return parsed;
+    }
+    // If guest, preserve explicit gender selection if present
+    const savedGender = localStorage.getItem(GENDER_KEY) as Gender | null;
+    if (savedGender === 'male' || savedGender === 'female') {
+      return {
+        email: 'guest@aurastyle.ai',
+        name: 'Guest Stylist',
+        gender: savedGender,
+      };
+    }
+    return null;
   } catch {
     return null;
   }
@@ -78,6 +103,9 @@ function saveSession(user: User | null): void {
   if (typeof window === 'undefined') return;
   if (user) {
     localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    if (user.gender) {
+      localStorage.setItem(GENDER_KEY, user.gender);
+    }
   } else {
     localStorage.removeItem(SESSION_KEY);
   }
@@ -107,7 +135,27 @@ export function useAuth() {
   const [rememberedUser, setRememberedUserState] = useState<string>(() => getRememberedUser());
   const isLoaded = true;
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!user && user.email !== 'guest@aurastyle.ai';
+
+  // Synchronize auth and gender across components and tabs in real-time
+  useEffect(() => {
+    const handleAuthChange = (e?: Event) => {
+      const customEvent = e as CustomEvent<User | null> | undefined;
+      if (customEvent && customEvent.detail !== undefined) {
+        setUser(customEvent.detail);
+      } else {
+        setUser(getSession());
+      }
+      setRememberedUserState(getRememberedUser());
+    };
+
+    window.addEventListener(AUTH_CHANGE_EVENT, handleAuthChange);
+    window.addEventListener('storage', handleAuthChange);
+    return () => {
+      window.removeEventListener(AUTH_CHANGE_EVENT, handleAuthChange);
+      window.removeEventListener('storage', handleAuthChange);
+    };
+  }, []);
 
   const setRememberedUser = useCallback((usernameOrEmail: string) => {
     saveRememberedUser(usernameOrEmail);
@@ -136,6 +184,7 @@ export function useAuth() {
       const newUser: User = { email: email.toLowerCase(), name, gender };
       saveSession(newUser);
       setUser(newUser);
+      notifyAuthChange(newUser);
 
       if (remember) {
         saveRememberedUser(email);
@@ -170,6 +219,7 @@ export function useAuth() {
 
       saveSession(loggedInUser);
       setUser(loggedInUser);
+      notifyAuthChange(loggedInUser);
 
       if (remember) {
         saveRememberedUser(email);
@@ -185,10 +235,19 @@ export function useAuth() {
   );
 
   const updateGender = useCallback((gender: Gender) => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(GENDER_KEY, gender);
+      } catch {
+        // ignore
+      }
+    }
     setUser((prev) => {
-      if (!prev) return { email: 'guest@aurastyle.ai', name: 'Guest Stylist', gender };
-      const updated = { ...prev, gender };
+      const updated: User = prev
+        ? { ...prev, gender }
+        : { email: 'guest@aurastyle.ai', name: 'Guest Stylist', gender };
       saveSession(updated);
+      notifyAuthChange(updated);
       return updated;
     });
   }, []);
@@ -196,6 +255,7 @@ export function useAuth() {
   const logout = useCallback(() => {
     saveSession(null);
     setUser(null);
+    notifyAuthChange(null);
   }, []);
 
   const forgotPassword = useCallback(

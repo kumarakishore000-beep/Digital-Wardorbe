@@ -888,10 +888,10 @@ export default function MixAndMatchStudio() {
   // Visualization View: 'photorealistic' (editorial try-on) | '3d-catwalk' (interactive turntable)
   const [visualMode, setVisualMode] = useState<'photorealistic' | '3d-catwalk'>('photorealistic');
 
-  // Before / After Comparison Slider State (0 to 100 percentage)
+  // Before / After Comparison State: default to full 'after' styled look
   const [sliderPosition, setSliderPosition] = useState<number>(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState<boolean>(false);
-  const [compareMode, setCompareMode] = useState<'split' | 'after' | 'before'>('split');
+  const [compareMode, setCompareMode] = useState<'after' | 'side-by-side' | 'split' | 'before'>('after');
 
   // Selected Occasion for Scoring
   const [selectedOccasion, setSelectedOccasion] = useState(OCCASIONS[0]);
@@ -1105,6 +1105,20 @@ export default function MixAndMatchStudio() {
 
   // Mouse move handler for Before / After Split Slider
   const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(500);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth);
+      }
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
   const handleSliderMove = (clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -1390,32 +1404,40 @@ export default function MixAndMatchStudio() {
                 </span>
               </div>
 
-              {/* Compare Mode Switcher (Split / Before / After) */}
+              {/* Compare Mode Switcher (Styled After, Side-by-Side, Split Slider, Base Model) */}
               {visualMode === 'photorealistic' && (
                 <div className="flex items-center bg-[#050d1a] p-0.5 rounded-xl border border-[#FAF8F5]/15 text-[10px] font-bold">
                   <button
-                    onClick={() => setCompareMode('split')}
-                    className={`px-2 py-1 rounded-lg transition-all ${
-                      compareMode === 'split' ? 'bg-[#38BDF8] text-[#0a192f]' : 'text-[#FAF8F5]/70 hover:text-white'
-                    }`}
-                  >
-                    Split View
-                  </button>
-                  <button
                     onClick={() => setCompareMode('after')}
-                    className={`px-2 py-1 rounded-lg transition-all ${
+                    className={`px-2.5 py-1 rounded-lg transition-all ${
                       compareMode === 'after' ? 'bg-[#38BDF8] text-[#0a192f]' : 'text-[#FAF8F5]/70 hover:text-white'
                     }`}
                   >
-                    After
+                    Styled Look
+                  </button>
+                  <button
+                    onClick={() => setCompareMode('side-by-side')}
+                    className={`px-2.5 py-1 rounded-lg transition-all ${
+                      compareMode === 'side-by-side' ? 'bg-[#38BDF8] text-[#0a192f]' : 'text-[#FAF8F5]/70 hover:text-white'
+                    }`}
+                  >
+                    Side-by-Side
+                  </button>
+                  <button
+                    onClick={() => setCompareMode('split')}
+                    className={`px-2.5 py-1 rounded-lg transition-all ${
+                      compareMode === 'split' ? 'bg-[#38BDF8] text-[#0a192f]' : 'text-[#FAF8F5]/70 hover:text-white'
+                    }`}
+                  >
+                    Split Slider
                   </button>
                   <button
                     onClick={() => setCompareMode('before')}
-                    className={`px-2 py-1 rounded-lg transition-all ${
+                    className={`px-2.5 py-1 rounded-lg transition-all ${
                       compareMode === 'before' ? 'bg-[#38BDF8] text-[#0a192f]' : 'text-[#FAF8F5]/70 hover:text-white'
                     }`}
                   >
-                    Before
+                    Base Model
                   </button>
                 </div>
               )}
@@ -1431,56 +1453,115 @@ export default function MixAndMatchStudio() {
               onMouseUp={() => setIsDraggingSlider(false)}
               className="relative w-full h-[580px] select-none overflow-hidden flex items-center justify-center bg-gradient-to-b from-[#0a192f]/50 to-[#020617]"
             >
-              {/* MODE A: PHOTOREALISTIC TRY-ON WITH BEFORE/AFTER SLIDER */}
+              {/* MODE A: PHOTOREALISTIC TRY-ON */}
               {visualMode === 'photorealistic' && (
                 <div className="relative w-full h-full">
-                  {/* AFTER IMAGE (Layer 1: The Styled Mix & Match Outfit) */}
-                  <div className="absolute inset-0 w-full h-full">
-                    <img
-                      src={compositePhotorealisticImage}
-                      alt="Mix & Match AI Output"
-                      className="w-full h-full object-cover object-top filter contrast-105"
-                    />
-                    <div className="absolute top-3 right-3 bg-[#0a192f]/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-[#38BDF8] border border-[#38BDF8]/40">
-                      AFTER: AI MIX &amp; MATCH
-                    </div>
-                  </div>
+                  {/* OPTION 1: SIDE-BY-SIDE DUAL VIEW (Clean, intact portraits) */}
+                  {compareMode === 'side-by-side' && (
+                    <div className="grid grid-cols-2 gap-3 w-full h-full p-3">
+                      {/* Before Panel */}
+                      <div className="relative w-full h-full rounded-2xl overflow-hidden border border-[#FAF8F5]/15 bg-black/40 shadow-inner">
+                        <img
+                          src={selectedModel.baseImage}
+                          alt="Original Base Model"
+                          className="w-full h-full object-cover object-top filter grayscale-[15%]"
+                        />
+                        <div className="absolute top-2.5 left-2.5 bg-[#0a192f]/85 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-[#FAF8F5]/80 border border-[#FAF8F5]/20 shadow-md">
+                          BEFORE: BASE
+                        </div>
+                      </div>
 
-                  {/* BEFORE IMAGE (Layer 2: Clipped unstyled base model) */}
-                  {(compareMode === 'split' || compareMode === 'before') && (
-                    <div
-                      className="absolute inset-0 w-full h-full overflow-hidden"
-                      style={{
-                        width: compareMode === 'before' ? '100%' : `${sliderPosition}%`,
-                      }}
-                    >
+                      {/* After Panel */}
+                      <div className="relative w-full h-full rounded-2xl overflow-hidden border border-[#38BDF8]/40 bg-black/40 shadow-xl">
+                        <img
+                          src={compositePhotorealisticImage}
+                          alt="Mix & Match AI Output"
+                          className="w-full h-full object-cover object-top filter contrast-105"
+                        />
+                        <div className="absolute top-2.5 right-2.5 bg-[#0a192f]/85 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-[#38BDF8] border border-[#38BDF8]/40 shadow-md">
+                          AFTER: STYLED
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* OPTION 2: AFTER ONLY (DEFAULT FULL-FIDELITY VIEW) */}
+                  {compareMode === 'after' && (
+                    <div className="relative w-full h-full">
+                      <img
+                        src={compositePhotorealisticImage}
+                        alt="Mix & Match AI Output"
+                        className="w-full h-full object-cover object-top filter contrast-105"
+                      />
+                      <div className="absolute top-3 right-3 bg-[#0a192f]/85 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-mono font-bold text-[#38BDF8] border border-[#38BDF8]/40 shadow-lg">
+                        ✨ AFTER: AI MIX &amp; MATCH
+                      </div>
+                    </div>
+                  )}
+
+                  {/* OPTION 3: BEFORE ONLY */}
+                  {compareMode === 'before' && (
+                    <div className="relative w-full h-full">
                       <img
                         src={selectedModel.baseImage}
                         alt="Original Base Model"
-                        className="w-full h-full object-cover object-top filter grayscale-[20%]"
-                        style={{
-                          width: containerRef.current?.clientWidth || '100%',
-                          maxWidth: 'none',
-                        }}
+                        className="w-full h-full object-cover object-top filter grayscale-[15%]"
                       />
-                      <div className="absolute top-3 left-3 bg-[#0a192f]/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-[#FAF8F5]/80 border border-[#FAF8F5]/20">
+                      <div className="absolute top-3 left-3 bg-[#0a192f]/85 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-mono font-bold text-[#FAF8F5]/80 border border-[#FAF8F5]/20 shadow-lg">
                         BEFORE: BASE MODEL
                       </div>
                     </div>
                   )}
 
-                  {/* INTERACTIVE DRAG DIVIDER (Fashion Diffusion standard) */}
+                  {/* OPTION 4: SPLIT SLIDER (un-squeezed pixel-exact width) */}
                   {compareMode === 'split' && (
-                    <div
-                      onMouseDown={() => setIsDraggingSlider(true)}
-                      onTouchStart={() => setIsDraggingSlider(true)}
-                      style={{ left: `${sliderPosition}%` }}
-                      className="absolute top-0 bottom-0 w-1 bg-white/90 shadow-[0_0_12px_rgba(255,255,255,0.8)] cursor-ew-resize z-30 flex items-center justify-center -ml-0.5"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-[#FAF8F5] text-[#0a192f] shadow-2xl flex items-center justify-center border-2 border-[#38BDF8] cursor-grab active:cursor-grabbing transform hover:scale-110 transition-transform">
-                        <div className="flex items-center gap-0.5 text-xs font-black">
-                          <ChevronLeft className="w-3 h-3 -mr-1" />
-                          <ChevronRight className="w-3 h-3" />
+                    <div className="relative w-full h-full">
+                      {/* AFTER LAYER */}
+                      <div className="absolute inset-0 w-full h-full">
+                        <img
+                          src={compositePhotorealisticImage}
+                          alt="Mix & Match AI Output"
+                          className="w-full h-full object-cover object-top filter contrast-105"
+                        />
+                        <div className="absolute top-3 right-3 bg-[#0a192f]/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-[#38BDF8] border border-[#38BDF8]/40">
+                          AFTER: AI MIX &amp; MATCH
+                        </div>
+                      </div>
+
+                      {/* BEFORE LAYER */}
+                      <div
+                        className="absolute inset-0 h-full overflow-hidden"
+                        style={{
+                          width: `${sliderPosition}%`,
+                        }}
+                      >
+                        <img
+                          src={selectedModel.baseImage}
+                          alt="Original Base Model"
+                          className="h-full object-cover object-top filter grayscale-[20%]"
+                          style={{
+                            width: `${containerWidth}px`,
+                            minWidth: `${containerWidth}px`,
+                            maxWidth: 'none',
+                          }}
+                        />
+                        <div className="absolute top-3 left-3 bg-[#0a192f]/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-[#FAF8F5]/80 border border-[#FAF8F5]/20">
+                          BEFORE: BASE MODEL
+                        </div>
+                      </div>
+
+                      {/* INTERACTIVE DRAG DIVIDER */}
+                      <div
+                        onMouseDown={() => setIsDraggingSlider(true)}
+                        onTouchStart={() => setIsDraggingSlider(true)}
+                        style={{ left: `${sliderPosition}%` }}
+                        className="absolute top-0 bottom-0 w-1 bg-white/90 shadow-[0_0_12px_rgba(255,255,255,0.8)] cursor-ew-resize z-30 flex items-center justify-center -ml-0.5"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-[#FAF8F5] text-[#0a192f] shadow-2xl flex items-center justify-center border-2 border-[#38BDF8] cursor-grab active:cursor-grabbing transform hover:scale-110 transition-transform">
+                          <div className="flex items-center gap-0.5 text-xs font-black">
+                            <ChevronLeft className="w-3 h-3 -mr-1" />
+                            <ChevronRight className="w-3 h-3" />
+                          </div>
                         </div>
                       </div>
                     </div>
