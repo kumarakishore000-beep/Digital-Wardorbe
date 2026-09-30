@@ -56,7 +56,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 };
 
 export default function ResultsDashboard({ data, collection, onAddToCollection, onTrySuggestion }: ResultsDashboardProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [pendingAcc, setPendingAcc] = useState<AccessoryRecommendationItem | null>(null);
 
@@ -240,6 +240,7 @@ export default function ResultsDashboard({ data, collection, onAddToCollection, 
         <SuggestionBox
           collection={collection}
           onTrySuggestion={onTrySuggestion}
+          gender={user?.gender}
         />
       </motion.div>
     </motion.div>

@@ -6,6 +6,7 @@ import { Sparkles, Palette, Package, Trophy, LogOut, Bot, MessageSquare, Radio, 
 import Header from '@/components/Header';
 import Uploader from '@/components/Uploader';
 import ResultsDashboard from '@/components/ResultsDashboard';
+import SuggestionBox from '@/components/SuggestionBox';
 import ColorPicker from '@/components/ColorPicker';
 import MyCollection from '@/components/MyCollection';
 import RewardsPanel from '@/components/RewardsPanel';
@@ -184,6 +185,16 @@ export default function DashboardPage() {
 
               {!results && (
                 <Uploader onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
+              )}
+
+              {!results && (
+                <div className="w-full pt-8 border-t border-[#FAF8F5]/10">
+                  <SuggestionBox
+                    collection={collection}
+                    gender={user?.gender}
+                    onTrySuggestion={() => rewards.earnPoints('try_suggestion')}
+                  />
+                </div>
               )}
 
               {results && (
