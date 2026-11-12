@@ -38,7 +38,7 @@ import { AiOpinionResponse } from '@/app/api/ai-opinion/route';
 import { useCollection } from '@/hooks/useCollection';
 import { useRewards } from '@/hooks/useRewards';
 import { useAuth } from '@/hooks/useAuth';
-import MannequinVisualizer from '@/components/MannequinVisualizer';
+import RealModelDressViewer from '@/components/RealModelDressViewer';
 
 const OCCASIONS = [
   'Job Interview & Executive Assessment',
@@ -510,60 +510,15 @@ export default function OutfitAssistant({ onSaveToCollection }: OutfitAssistantP
                 </div>
               </div>
 
-              {/* Interactive AI Mannequin Preview */}
+              {/* Real Model & Authentic Clothes Showcase */}
               <div className="relative z-10 my-4">
-                {(() => {
-                  const combined = `${recommendation.title} ${recommendation.items?.upperBody || ''}`.toLowerCase();
-                  let topType: 'shirt' | 'kurti' | 'kurta' | 'saree' | 'gown' | 'blazer' | 'top' = 'gown';
-                  let bottomType: 'jeans' | 'trousers' | 'salwar_bottom' | 'skirt' | 'chinos' | 'gown_skirt' = 'gown_skirt';
-
-                  if (selectedGender === 'male') {
-                    if (combined.includes('kurta') || combined.includes('bandhgala') || combined.includes('ethnic')) {
-                      topType = 'kurta';
-                      bottomType = 'salwar_bottom';
-                    } else if (combined.includes('suit') || combined.includes('blazer') || combined.includes('tuxedo')) {
-                      topType = 'blazer';
-                      bottomType = 'trousers';
-                    } else {
-                      topType = 'shirt';
-                      bottomType = 'chinos';
-                    }
-                  } else {
-                    if (combined.includes('saree') || combined.includes('sari')) {
-                      topType = 'saree';
-                      bottomType = 'skirt';
-                    } else if (combined.includes('kurti') || combined.includes('salwar')) {
-                      topType = 'kurti';
-                      bottomType = 'salwar_bottom';
-                    } else if (combined.includes('blazer') || combined.includes('suit')) {
-                      topType = 'blazer';
-                      bottomType = 'trousers';
-                    } else if (combined.includes('skirt') || combined.includes('blouse')) {
-                      topType = 'top';
-                      bottomType = 'skirt';
-                    } else {
-                      topType = 'gown';
-                      bottomType = 'gown_skirt';
-                    }
-                  }
-
-                  return (
-                    <MannequinVisualizer
-                      gender={selectedGender === 'male' ? 'male' : 'female'}
-                      outfit={{
-                        title: recommendation.title,
-                        topType,
-                        topColor: recommendation.colorPalette[0]?.hex || '#0F172A',
-                        bottomType,
-                        bottomColor: recommendation.colorPalette[1]?.hex || '#FAF8F5',
-                        outerwearColor: recommendation.colorPalette[2]?.hex,
-                        accentColor: recommendation.colorPalette[3]?.hex || '#D4AF37',
-                        description: recommendation.overview,
-                      }}
-                      showControls={true}
-                    />
-                  );
-                })()}
+                <RealModelDressViewer
+                  gender={selectedGender === 'male' ? 'male' : 'female'}
+                  selectedOccasion={occasion}
+                  preferredColor={colorPreference}
+                  onSaveToWardrobe={handleSaveCollection}
+                  showOptionCarousel={true}
+                />
               </div>
 
               {/* Real Human Model Editorial Reference Showcase */}

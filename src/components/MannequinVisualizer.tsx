@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "3D mannequin visualizer with realistic garment silhouettes", deps: ["framer-motion", "lucide-react"], state: active, last: "tara@2026-09-23" }
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -578,6 +579,386 @@ export const SILHOUETTES: GarmentSilhouette[] = [
       ring: { name: 'Oxidized Silver Nautical Compass Ring', style: 'Artisan Signet', finish: '925 Sterling Silver', tip: 'Maritime flair on the left hand.' },
       chain: { name: 'Raw Turquoise & Silver Bead Pendant', style: 'Resort Necklace', finish: 'Sterling Silver / Natural Stone', tip: 'Rests naturally at the open camp collar.' },
       bracelet: { name: 'Braided Tan Saddle Leather Cord', style: 'Coastal Wrap', finish: 'Vegetable-Tanned Italian Leather', tip: 'Ages beautifully with sun and saltwater exposure.' },
+    },
+  },
+
+  // WOMEN - HANDCRAFTED ZARDOZI BRIDAL LEHENGA
+  {
+    id: 'w-lehenga-festive',
+    key: 'croptop',
+    title: 'Handcrafted Zardozi Bridal Lehenga (Royal Wedding)',
+    category: 'Royal Wedding & Sangeet Gala',
+    gender: 'female',
+    suggestedBottom: 'skirt',
+    defaultTopColor: '#991B1B',
+    defaultBottomColor: '#991B1B',
+    defaultAccentColor: '#D4AF37',
+    description: '16-kali flared raw silk lehenga with hand-embroidered antique gold zardozi kalis, sweetheart choli, and scalloped organza dupatta.',
+    fabricType: 'silk',
+    occasion: 'wedding',
+    realModelImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop',
+    modelSource: 'Couture Bridal Lookbook / Vogue Weddings',
+    fabricInfo: {
+      name: '380 GSM Heavyweight Raw Silk with Zardozi Embroidery',
+      texture: 'Substantial, regal silk canvas carrying dense metallic dabka and sequin borders with structural flare',
+      gsm: '380 GSM Bridal Silk',
+      breathability: 'Medium',
+      care: 'Wrap in breathable pure muslin; store flat; specialist dry clean only',
+    },
+    sizeAdvice: {
+      slim: 'Fitted sweetheart choli blouse with high-waist kalidar lehenga enhancing vertical height.',
+      regular: '16-kali flare with interior can-can skirt offering dramatic ballroom spin volume.',
+      oversized: 'Extended sweeping royal court train with pleated dupatta drape.',
+      tailoringBreak: 'Lehenga skirt hem hovers exactly 1 inch above floor over embroidered heels.',
+    },
+    accessories: {
+      shoe: { name: 'Hand-Embellished Zari Mojri Heels', style: 'Bridal Heel', finish: 'Velvet & Zari Thread', tip: '55mm cushioned block heel provides steady ballroom longevity.' },
+      watch: { name: 'Filigree Antique Gold Bangle Watch', style: 'Heirloom Watch', finish: '22k Gold Foil', tip: 'Complements bridal chooda or gold kada stack.' },
+      ring: { name: 'Polki Diamond & Emerald Statement Ring', style: 'Royal Cocktail', finish: '22k Gold Foil / Polki', tip: 'Catches warm chandelier reflection during vows.' },
+      chain: { name: 'Polki Diamond & Emerald Bridal Choker', style: 'Bridal Collar', finish: '22k Antique Gold', tip: 'Frames the sweetheart neckline with imperial majesty.' },
+      bracelet: { name: 'Temple Filigree Gold Kadas & Hathphool', style: 'Bridal Kadas', finish: 'Antique Gold Polish', tip: 'Adds rhythmic chime and traditional grandeur.' },
+    },
+  },
+
+  // WOMEN - SCULPTED WIDE-LEG HALTER JUMPSUIT
+  {
+    id: 'w-jumpsuit-evening',
+    key: 'top',
+    title: 'Sculpted Wide-Leg Halter Jumpsuit (Art Gala & Cocktail)',
+    category: 'Contemporary Art Gala & Cocktail',
+    gender: 'female',
+    suggestedBottom: 'trousers',
+    defaultTopColor: '#064E3B',
+    defaultBottomColor: '#064E3B',
+    defaultAccentColor: '#EAB308',
+    description: 'High-neck Japanese crepe jumpsuit with sculpted halter collar, fluid knife-pleated palazzo legs, and polished gold waist hardware.',
+    fabricType: 'silk',
+    occasion: 'cocktail',
+    realModelImage: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop',
+    modelSource: 'Paris Haute Couture / Harper\'s Bazaar Modern Gala',
+    fabricInfo: {
+      name: '280 GSM Heavy Japanese Double Crepe',
+      texture: 'Crisp architectural drape with fluid silk backing that floats effortlessly without clinging',
+      gsm: '280 GSM Luxury Crepe',
+      breathability: 'High',
+      care: 'Steam press on reverse; store on padded shoulder hanger',
+    },
+    sizeAdvice: {
+      slim: 'Tailored waist contour with elongated palazzo inseam designed to skim over 90mm stilettos.',
+      regular: 'Fluid ease through hips and thighs allowing statuesque movement across cocktail salons.',
+      oversized: 'Architectural column drape with attached fluid neck scarf floating down the back.',
+      tailoringBreak: 'Wide palazzo hem rests flush with the floor over pointed stiletto pumps.',
+    },
+    accessories: {
+      shoe: { name: 'Mirrored Champagne Gold Pointed Heels', style: 'Evening Stiletto', finish: 'Mirror Metallic Leather', tip: 'Elongates legs beneath fluid palazzo hem.' },
+      watch: { name: 'Minimalist Gold Bangle Timepiece', style: 'Evening Bangle Watch', finish: '18k Polished Brass', tip: 'Seamlessly doubles as high jewelry on the left wrist.' },
+      ring: { name: 'Geometric Double-Band Gold Ring', style: 'Modern Architectural', finish: '18k Solid Gold', tip: 'Clean geometric lines accentuating hand gestures.' },
+      chain: { name: 'Architectural Gold Torc Choker', style: 'Torc Collar', finish: 'Polished Brass Gold', tip: 'Accentuates the sculpted halter neckline.' },
+      bracelet: { name: 'Solid Minimalist Gold Sculptural Cuff', style: 'Sculptural Cuff', finish: '18k Polished Gold', tip: 'Worn on the opposite wrist of the bangle timepiece.' },
+    },
+  },
+
+  // WOMEN - ROYAL KALIDAR SILK ANARKALI
+  {
+    id: 'w-anarkali-royal',
+    key: 'kurti',
+    title: 'Royal Kalidar Silk Anarkali Suit (Festive Majesty)',
+    category: 'Festive Celebration & Royal Soirée',
+    gender: 'female',
+    suggestedBottom: 'salwar_bottom',
+    defaultTopColor: '#1E3A8A',
+    defaultBottomColor: '#1E3A8A',
+    defaultAccentColor: '#F59E0B',
+    description: 'Floor-length 24-kali royal sapphire Chanderi silk anarkali with shimmering gota patti borders, gathered churidar, and tissue organza dupatta.',
+    fabricType: 'silk',
+    occasion: 'wedding',
+    realModelImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop',
+    modelSource: 'Jaipur Court Lookbook / Grazia Festive',
+    fabricInfo: {
+      name: '240 GSM Pure Chanderi Silk with Golden Zari Weft',
+      texture: 'Weightless shimmer with crisp Kalidar panels that expand into an ethereal umbrella flare during walking',
+      gsm: '240 GSM Chanderi Silk',
+      breathability: 'High',
+      care: 'Specialist silk dry clean; wrap in cotton fabric to preserve gota work',
+    },
+    sizeAdvice: {
+      slim: 'Fitted empire bust with high kalidar waistline creating an elongated statuesque silhouette.',
+      regular: 'Generous 24 kalis allowing full freedom for spins and traditional dance.',
+      oversized: 'Angrakha overlapping front with gilded tassel dori tie-ups.',
+      tailoringBreak: 'Floor-skimming kali hem hovering 0.5 inches above mojris.',
+    },
+    accessories: {
+      shoe: { name: 'Embellished Velvet Khussa Mojris', style: 'Ceremonial Mojri', finish: 'Raw Silk & Brass Thread', tip: 'Padded insole for celebratory evening longevity.' },
+      watch: { name: 'Heritage Filigree Bangle Watch', style: 'Traditional Watch', finish: '22k Antique Gold', tip: 'Pairs harmoniously with bridal chooda or bangles.' },
+      ring: { name: 'Kundan Navratan Cocktail Ring', style: 'Imperial Statement', finish: '22k Gold Foil / Stones', tip: 'Commands attention during greeting and tea ceremonies.' },
+      chain: { name: 'Layered Gold Gota & Pearl Mala', style: 'Festive Mala', finish: 'Emerald Beads & Gold Zari', tip: 'Drapes gracefully across the royal blue bodice.' },
+      bracelet: { name: 'Gold Filigree Temple Kadas Stack', style: 'Heritage Bangles', finish: '22k Gold Finish', tip: 'Adds rhythmic chiming and regal charm.' },
+    },
+  },
+
+  // WOMEN - AMALFI COAST TIERED FLORAL SILK SUNDRESS
+  {
+    id: 'w-sundress-resort',
+    key: 'gown',
+    title: 'Tiered Floral Silk Maxi Sundress (Resort & Garden)',
+    category: 'Destination Resort & Summer Gala',
+    gender: 'female',
+    suggestedBottom: 'gown_skirt',
+    defaultTopColor: '#C2410C',
+    defaultBottomColor: '#C2410C',
+    defaultAccentColor: '#EAB308',
+    description: 'Tiered cascading silk chiffon sundress in sunlit terracotta and coral with sweetheart tie-shoulders and breezy ruffled hemline.',
+    fabricType: 'silk',
+    occasion: 'resort',
+    realModelImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop',
+    modelSource: 'Riviera Resort Cruise / Vogue Resort',
+    fabricInfo: {
+      name: '80 GSM Pure Featherweight Silk Chiffon',
+      texture: 'Airy, floating texture that catches sea breezes with romantic dynamic ripples',
+      gsm: '80 GSM Silk Chiffon',
+      breathability: 'High',
+      care: 'Delicate cold hand wash; dry flat in shade',
+    },
+    sizeAdvice: {
+      slim: 'Tie-shoulder bows adjusted snug with smocked torso contouring down to hip flare.',
+      regular: 'Relaxed tiered flow allowing effortless dining and boardwalk strolling.',
+      oversized: 'Bohemian resort silhouette with flowing ruffle flounce.',
+      tailoringBreak: 'Floor-grazing hem hovering neatly over woven raffia espadrilles.',
+    },
+    accessories: {
+      shoe: { name: 'Woven Raffia & Metallic Espadrille Wedges', style: 'Resort Wedge', finish: 'Natural Jute & Gold Nappa', tip: 'Solid footing on coastal boardwalks and sandy garden paths.' },
+      watch: { name: 'Mother-of-Pearl Dial Bangle Timepiece', style: 'Resort Watch', finish: 'Warm Yellow Gold', tip: 'Catches coastal golden hour sunsets.' },
+      ring: { name: 'Raw Hammered Citrine Gemstone Ring', style: 'Resort Ring', finish: '22k Wire-Wrapped Gold', tip: 'Golden warmth on sun-kissed skin.' },
+      chain: { name: 'Layered Scallop Shell & Gold Coin Pendant', style: 'Resort Layered Chain', finish: '18k Gold Dipped', tip: 'Rests across the open sweetheart décolletage.' },
+      bracelet: { name: 'Stack of Hammered Brass Bangles', style: 'Boho Luxe Bangles', finish: 'Organic Brushed Brass', tip: 'Rhythmic chiming with each step.' },
+    },
+  },
+
+  // WOMEN - ARCHITECTURAL ASYMMETRICAL CREPE MIDI
+  {
+    id: 'w-cocktail-crepe',
+    key: 'top',
+    title: 'Architectural Asymmetrical Crepe Midi (Modern Cocktail)',
+    category: 'Black-Tie Dinner & Cocktail',
+    gender: 'female',
+    suggestedBottom: 'skirt',
+    defaultTopColor: '#881337',
+    defaultBottomColor: '#881337',
+    defaultAccentColor: '#E2E8F0',
+    description: 'One-shoulder bonded stretch-crepe column dress in deep bordeaux wine with sculpted shoulder fold and back-vent pencil hem.',
+    fabricType: 'silk',
+    occasion: 'cocktail',
+    realModelImage: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&auto=format&fit=crop',
+    modelSource: 'Vogue Metropolitan / Pinterest Contemporary Cocktail',
+    fabricInfo: {
+      name: '310 GSM Bonded Stretch Crepe with Interior Bodice Boning',
+      texture: 'Sculptural, smoothing matte fabric that holds clean architectural lines without shifting',
+      gsm: '310 GSM Bonded Crepe',
+      breathability: 'Medium',
+      care: 'Specialist dry clean; store on shaped form hanger',
+    },
+    sizeAdvice: {
+      slim: 'Contoured column fit following body contours down to below-knee pencil hem.',
+      regular: 'Balanced ease across hips with hidden stretch backing for comfortable seated dinners.',
+      oversized: 'Cape-sleeve extension draping from the single shoulder.',
+      tailoringBreak: 'Calf-length hem resting 3 inches below the knee over minimal stiletto sandals.',
+    },
+    accessories: {
+      shoe: { name: 'Minimalist Stiletto Ankle-Strap Sandals', style: 'Evening Stiletto', finish: 'Nappa Black Leather', tip: 'Barely-there strap highlighting foot arches.' },
+      watch: { name: 'Ultra-Thin White Gold Jewelry Timepiece', style: 'Cocktail Watch', finish: '18k White Gold / Onyx', tip: 'Discrete profile blending with evening jewelry.' },
+      ring: { name: 'Emerald-Cut Solitaire Cocktail Ring', style: 'Cocktail Statement', finish: '18k White Gold & Crystal', tip: 'Flashes brilliance under low evening lighting.' },
+      chain: { name: 'Cascading Crystal Chandelier Drop Earrings', style: 'Earring Statement', finish: 'Rhodium Plated', tip: 'Balances the bare shoulder opposite the strap.' },
+      bracelet: { name: 'Diamond Tennis Line Bracelet', style: 'Classic Tennis Line', finish: 'Platinum / Crystal', tip: 'Delicate shimmer on the wrist.' },
+    },
+  },
+
+  // MEN - IMPERIAL HAND-EMBROIDERED ZARI SHERWANI
+  {
+    id: 'm-sherwani-wedding',
+    key: 'kurta',
+    title: 'Imperial Zari Silk Sherwani (Royal Wedding Groom)',
+    category: 'Wedding & Royal Celebration',
+    gender: 'male',
+    suggestedBottom: 'salwar_bottom',
+    defaultTopColor: '#FAF8F5',
+    defaultBottomColor: '#FAF8F5',
+    defaultAccentColor: '#D4AF37',
+    description: 'Pure Matka silk hand-embroidered sherwani with antique gold zardozi jaal, mandarin stand collar, gathered churidar, and embroidered velvet stole.',
+    fabricType: 'silk',
+    occasion: 'wedding',
+    realModelImage: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=800&auto=format&fit=crop',
+    modelSource: 'Royal Atelier Lookbook / GQ Groom Special',
+    fabricInfo: {
+      name: '360 GSM Pure Handloom Matka Silk with Real Gold Zari',
+      texture: 'Regal architectural structure with substantial weight that maintains clean vertical lines without wrinkling',
+      gsm: '360 GSM Heavy Silk',
+      breathability: 'High',
+      care: 'Specialist royal garment dry clean; store with cedar blocks in canvas bag',
+    },
+    sizeAdvice: {
+      slim: 'Tailored chest suppression with structured shoulder pads creating an imposing, athletic frame.',
+      regular: 'Imperial court fit allowing ceremonial longevity and comfortable banquet dining.',
+      oversized: 'Royal Achkan style cut with overlapping front placket.',
+      tailoringBreak: 'Churidar gathers neatly at ankle with 5-6 natural folds above velvet mojris.',
+    },
+    accessories: {
+      shoe: { name: 'Embroidered Velvet Zari Juttis', style: 'Royal Mojri', finish: 'Italian Velvet & Gold Thread', tip: 'Curled toe crest with memory foam arch cushion.' },
+      watch: { name: 'Vintage Yellow Gold Dress Chronograph', style: 'Heirloom Watch', finish: '18k Yellow Gold', tip: 'Harmonizes with gilded sherwani buttons.' },
+      ring: { name: 'Lion Crest 22k Gold Signet Ring', style: 'Royal Signet', finish: '22k Solid Gold', tip: 'Masculine heirloom statement on the right hand.' },
+      chain: { name: 'Multi-Strand Basra Pearl & Emerald Mala', style: 'Royal Wedding Mala', finish: 'Natural Pearls & Emeralds', tip: 'Drapes across the chest with Maharaja elegance.' },
+      bracelet: { name: 'Solid Heavy Gold Kada with Engraved Finials', style: 'Traditional Kada', finish: '22k Antique Gold', tip: 'Commands respect and traditional presence.' },
+    },
+  },
+
+  // MEN - INDO-WESTERN DRAPED ASYMMETRICAL KURTA
+  {
+    id: 'm-indowestern-drape',
+    key: 'kurta',
+    title: 'Indo-Western Asymmetrical Kurta & Bandi (Festive Sangeet)',
+    category: 'Festive Sangeet & Cocktail Celebration',
+    gender: 'male',
+    suggestedBottom: 'trousers',
+    defaultTopColor: '#881337',
+    defaultBottomColor: '#0F172A',
+    defaultAccentColor: '#D4AF37',
+    description: 'Draped asymmetrical cowl-hem kurta in deep wine marsala paired with an embroidered raw silk Nehru bandi jacket and slim tailored wool trousers.',
+    fabricType: 'silk',
+    occasion: 'wedding',
+    realModelImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop',
+    modelSource: 'Contemporary Couturier Lookbook / Men\'s Vogue India',
+    fabricInfo: {
+      name: '240 GSM Mulberry Silk Georgette & Raw Silk Brocade',
+      texture: 'Fluid diagonal cowl drape contrasted by crisp architectural stand-collar jacket',
+      gsm: '240 GSM Silk Blend',
+      breathability: 'High',
+      care: 'Dry clean only; steam cowl drape gently before wearing',
+    },
+    sizeAdvice: {
+      slim: 'Structured Nehru vest with fluid diagonal cowl hem extending down the left thigh.',
+      regular: 'Balanced ease across chest with tapered modern trousers.',
+      oversized: 'Extended flowing asymmetrical drape for high-fashion runway statement.',
+      tailoringBreak: 'No-break trouser hem resting cleanly over double-monkstrap shoes.',
+    },
+    accessories: {
+      shoe: { name: 'Hand-Burnished Double Monkstrap Shoes', style: 'Formal Monkstrap', finish: 'Espresso Box Calf', tip: 'Brass buckles echoing Nehru jacket buttons.' },
+      watch: { name: 'Bronze Pilot Chronograph on Saddle Leather', style: 'Sartorial Timepiece', finish: 'Aged Bronze & Calfskin', tip: 'Warm metallic accents matching the marsala tones.' },
+      ring: { name: 'Hammered Brass Signet Ring', style: 'Artisan Signet', finish: 'Aged Brass', tip: 'Understated masculine elegance.' },
+      chain: { name: 'Vintage Pocket Watch Chain', style: 'Vest Chain', finish: 'Aged Brass Link', tip: 'Drapes from jacket buttonhole to welt pocket.' },
+      bracelet: { name: 'Braided Italian Saddle Leather Cuff', style: 'Leather Cuff', finish: 'Dark Espresso', tip: 'Balances the left wrist.' },
+    },
+  },
+
+  // MEN - NEAPOLITAN DOUBLE-BREASTED SLUB LINEN SUIT
+  {
+    id: 'm-linen-suit',
+    key: 'blazer',
+    title: 'Neapolitan Double-Breasted Linen Suit (Riviera Summer)',
+    category: 'Destination Resort & Summer Gala',
+    gender: 'male',
+    suggestedBottom: 'chinos',
+    defaultTopColor: '#3F6212',
+    defaultBottomColor: '#3F6212',
+    defaultAccentColor: '#78350F',
+    description: 'Unstructured double-breasted 4x2 sage olive slub linen jacket with pleated spalla camicia shirt-shoulders and double-pleated Gurkha trousers.',
+    fabricType: 'linen',
+    occasion: 'resort',
+    realModelImage: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&auto=format&fit=crop',
+    modelSource: 'Pitti Uomo Florence / Riviera Tailoring',
+    fabricInfo: {
+      name: '240 GSM Pure Normandy Open-Weave Slub Linen',
+      texture: 'Breathable, tactile slub character with natural sprezzatura soft crumple',
+      gsm: '240 GSM Normandy Linen',
+      breathability: 'High',
+      care: 'Hang dry in breeze; avoid hard pressing to preserve organic linen texture',
+    },
+    sizeAdvice: {
+      slim: 'Tapered waist with soft unpadded shoulders hugging natural contours.',
+      regular: 'Classic Italian Riviera ease with room for light linen popovers beneath.',
+      oversized: 'Relaxed wide-lapel drape with generous wide-leg Gurkha trousers.',
+      tailoringBreak: 'Cropped ankle hem resting cleanly above sockless Belgian suede loafers.',
+    },
+    accessories: {
+      shoe: { name: 'Snuff Suede Belgian Loafers', style: 'Belgian Loafer', finish: 'Reverse Calf Suede', tip: 'Hand-sewn apron worn sockless with invisible bamboo liners.' },
+      watch: { name: 'Field Watch on Olive Canvas Strap', style: 'Vintage Field Watch', finish: 'Matte Sandblasted Bronze', tip: 'Rugged yet refined outdoor luxury presence.' },
+      ring: { name: 'Oxidized Silver Nautical Compass Band', style: 'Artisan Band', finish: '925 Sterling Silver', tip: 'Maritime flair on the left hand.' },
+      chain: { name: 'Raw Turquoise & Silver Bead Pendant', style: 'Resort Necklace', finish: 'Sterling Silver / Natural Stone', tip: 'Rests naturally at the open camp collar spread.' },
+      bracelet: { name: 'Braided Tan Italian Leather Cord', style: 'Coastal Wrap', finish: 'Vegetable-Tanned Calfskin', tip: 'Ages beautifully with sun and saltwater exposure.' },
+    },
+  },
+
+  // MEN - ROYAL HERITAGE MATKA SILK PATHANI SUIT
+  {
+    id: 'm-pathani-festive',
+    key: 'kurta',
+    title: 'Royal Heritage Matka Silk Pathani Suit (Traditional Festive)',
+    category: 'Smart Casual & Commute',
+    gender: 'male',
+    suggestedBottom: 'salwar_bottom',
+    defaultTopColor: '#1E293B',
+    defaultBottomColor: '#1E293B',
+    defaultAccentColor: '#94A3B8',
+    description: 'Structured stand-collar pathani kurta tunic with military shoulder epaulets, flapped chest pockets, and deep-pleated salwar bottoms in charcoal slate.',
+    fabricType: 'silk',
+    occasion: 'casual',
+    realModelImage: '/images/branding/hero-banner.jpg',
+    modelSource: 'Heritage Crafts Collective / Men\'s Ethnic Review',
+    fabricInfo: {
+      name: '280 GSM Textured Handloom Matka Silk with Slub Weave',
+      texture: 'Substantial, masculine tactile weave with crisp crease retention and natural slub texture',
+      gsm: '280 GSM Matka Silk',
+      breathability: 'High',
+      care: 'Specialist dry clean; press medium steam with protective cloth',
+    },
+    sizeAdvice: {
+      slim: 'Tailored chest and tapered sleeves with interior button tabs to roll cuffs securely.',
+      regular: 'Generous traditional cut allowing complete ease for long celebratory gatherings.',
+      oversized: 'Loose Pathani tunic falling gracefully down to mid-knee.',
+      tailoringBreak: 'Deep-pleated salwar gathers securely into structured ankle cuffs over Peshawari sandals.',
+    },
+    accessories: {
+      shoe: { name: 'Handcrafted Peshawari Leather Sandals', style: 'Peshawari Chappal', finish: 'Full-Grain Buffalo Leather', tip: 'Semi-pointed toe with sturdy non-slip tire-tread sole.' },
+      watch: { name: 'Stainless Steel Military Field Chronometer', style: 'Field Watch', finish: 'Brushed Steel / Matte Black', tip: 'Echoes the disciplined military structure of pathani epaulets.' },
+      ring: { name: 'Solid Heavy Sterling Silver Signet', style: 'Masculine Signet', finish: 'Oxidized 925 Silver', tip: 'Dignified presence on the right hand.' },
+      chain: { name: 'Concealed Silver Wheat Link Collar Chain', style: 'Sub-Collar Chain', finish: 'Solid Silver', tip: 'Rests beneath the opened shirt collar.' },
+      bracelet: { name: 'Substantial Engraved Silver Kada', style: 'Traditional Kada', finish: 'Solid Sterling Silver', tip: 'Adds weighty masculine authority on the wrist.' },
+    },
+  },
+
+  // MEN - LUXURY URBAN FRENCH TERRY TRACKSUIT
+  {
+    id: 'm-streetwear-lux',
+    key: 'top',
+    title: 'Luxury Heavyweight French Terry Tracksuit (Urban Streetwear)',
+    category: 'Smart Casual & Commute',
+    gender: 'male',
+    suggestedBottom: 'tracks',
+    defaultTopColor: '#FAF8F5',
+    defaultBottomColor: '#FAF8F5',
+    defaultAccentColor: '#0F172A',
+    description: 'Boxy 480 GSM organic cotton French terry hoodie with seamless kangaroo pocket paired with tapered cargo track pants and sculptural designer runners.',
+    fabricType: 'wool',
+    occasion: 'casual',
+    realModelImage: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&auto=format&fit=crop',
+    modelSource: 'Tokyo Atelier Street / Highsnobiety Luxury Capsule',
+    fabricInfo: {
+      name: '480 GSM Heavyweight 100% Organic Looped French Terry',
+      texture: 'Substantial, ultra-plush fabric that holds an architectural boxy drape without sagging',
+      gsm: '480 GSM French Terry',
+      breathability: 'High',
+      care: 'Machine wash cold inside out; hang dry in shade; do not tumble dry',
+    },
+    sizeAdvice: {
+      slim: 'Structured shoulder line with tapered cuffs resting right above sneaker collar.',
+      regular: 'Boxy relaxed streetwear cut with dropped shoulders and roomy hood.',
+      oversized: 'Dramatic avant-garde oversized drape extending below hip line.',
+      tailoringBreak: 'Elasticized ribbed ankle cuffs resting cleanly over chunky sneaker tongue.',
+    },
+    accessories: {
+      shoe: { name: 'Chunky Architectural Designer Runners', style: 'Luxury Sneaker', finish: 'Nubuck Leather & Vibram Rubber', tip: 'Sculptural sole providing aggressive, modern street stance.' },
+      watch: { name: 'Matte Black DLC Sports Watch on Rubber Strap', style: 'Sport Chrono', finish: 'Matte DLC Black Steel', tip: 'Waterproof high-tech performance aesthetic.' },
+      ring: { name: 'Brushed Titanium Minimalist Band', style: 'Modern Industrial', finish: 'Satin Titanium', tip: 'Clean geometric accent on left index finger.' },
+      chain: { name: 'Sterling Silver 8mm Cuban Curb Chain', style: 'Street Chain', finish: 'Solid 925 Silver', tip: 'Rests cleanly over the double-layered hood collar.' },
+      bracelet: { name: 'Matte Black Steel Cable Cuff', style: 'Industrial Cuff', finish: 'DLC Black Coated', tip: 'Minimalist industrial wrist accent.' },
     },
   },
 ];
@@ -1446,6 +1827,21 @@ export default function MannequinVisualizer({
                       <path d="M106 142 Q100 270 82 398" stroke="#000" strokeOpacity="0.22" strokeWidth="2.5" fill="none" />
                       <path d="M134 142 Q140 270 158 398" stroke="#000" strokeOpacity="0.22" strokeWidth="2.5" fill="none" />
                     </motion.g>
+                  ) : activeOutfit.bottomType === 'salwar_bottom' ? (
+                    <g id="real-salwar-bottom" filter="url(#silkSheen)">
+                      <path
+                        d={`M${84 + waistSuppress} 160 L${156 - waistSuppress} 160 L${160 - waistSuppress} 360 Q138 390 ${124 - waistSuppress / 2} 388 L120 230 L${116 + waistSuppress / 2} 388 Q102 390 ${80 + waistSuppress} 360 Z`}
+                        fill={bottomColor}
+                      />
+                      <path
+                        d={`M${84 + waistSuppress} 160 L${156 - waistSuppress} 160 L${160 - waistSuppress} 360 Q138 390 ${124 - waistSuppress / 2} 388 L120 230 L${116 + waistSuppress / 2} 388 Q102 390 ${80 + waistSuppress} 360 Z`}
+                        fill="url(#bottomFabricGrad)"
+                      />
+                      <line x1="94" y1="362" x2="114" y2="365" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
+                      <line x1="92" y1="374" x2="114" y2="377" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
+                      <line x1="126" y1="365" x2="146" y2="362" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
+                      <line x1="126" y1="377" x2="148" y2="374" stroke="#000" strokeOpacity="0.2" strokeWidth="1.5" />
+                    </g>
                   ) : (
                     /* Tailored Trousers with Fit Adjustments */
                     <g id="real-tailored-trousers" filter="url(#woolTwill)">
@@ -1494,6 +1890,53 @@ export default function MannequinVisualizer({
                         fill="url(#topFabricGrad)"
                       />
                       <rect x="88" y="142" width="64" height="6" rx="2" fill="url(#goldHardware)" />
+                    </g>
+                  ) : activeOutfit.topType === 'saree' ? (
+                    <g id="real-saree-top" filter="url(#silkSheen)">
+                      <path
+                        d={`M82 92 Q120 106 158 92 L${152 - waistSuppress} 142 Q120 150 L${88 + waistSuppress} 142 Z`}
+                        fill={topColor}
+                      />
+                      <path
+                        d={`M82 92 Q120 106 158 92 L${152 - waistSuppress} 142 Q120 150 L${88 + waistSuppress} 142 Z`}
+                        fill="url(#topFabricGrad)"
+                      />
+                      <path
+                        d={`M${92 + waistSuppress} 144 Q116 118 152 86 L164 88 Q130 130 ${106 + waistSuppress} 176 Z`}
+                        fill={accentColor || '#D4AF37'}
+                        fillOpacity="0.85"
+                      />
+                      <circle cx="120" cy="142" r="2.5" fill="url(#goldHardware)" />
+                    </g>
+                  ) : activeOutfit.topType === 'croptop' ? (
+                    <g id="real-croptop" filter="url(#silkSheen)">
+                      <path
+                        d={`M84 92 Q120 108 156 92 L${150 - waistSuppress} 132 Q120 140 L${90 + waistSuppress} 132 Z`}
+                        fill={topColor}
+                      />
+                      <path
+                        d={`M84 92 Q120 108 156 92 L${150 - waistSuppress} 132 Q120 140 L${90 + waistSuppress} 132 Z`}
+                        fill="url(#topFabricGrad)"
+                      />
+                      <line x1="88" y1="132" x2="152" y2="132" stroke="url(#goldHardware)" strokeWidth="2.5" />
+                      <circle cx="120" cy="112" r="2" fill="url(#goldHardware)" />
+                    </g>
+                  ) : activeOutfit.topType === 'kurta' ? (
+                    <g id="real-kurta" filter="url(#silkSheen)">
+                      <path
+                        d={`M74 86 L166 86 L${160 - waistSuppress} 220 L130 220 L120 185 L110 220 L${80 + waistSuppress} 220 Z`}
+                        fill={topColor}
+                      />
+                      <path
+                        d={`M74 86 L166 86 L${160 - waistSuppress} 220 L130 220 L120 185 L110 220 L${80 + waistSuppress} 220 Z`}
+                        fill="url(#topFabricGrad)"
+                      />
+                      <rect x="110" y="82" width="20" height="7" rx="2" fill={topColor} stroke="url(#goldHardware)" strokeWidth="1" />
+                      <line x1="120" y1="88" x2="120" y2="180" stroke="#000" strokeOpacity="0.25" strokeWidth="1.5" />
+                      <circle cx="120" cy="98" r="1.8" fill="url(#goldHardware)" />
+                      <circle cx="120" cy="114" r="1.8" fill="url(#goldHardware)" />
+                      <circle cx="120" cy="130" r="1.8" fill="url(#goldHardware)" />
+                      <circle cx="120" cy="146" r="1.8" fill="url(#goldHardware)" />
                     </g>
                   ) : (
                     /* Classic Oxford Shirt / Kurta */

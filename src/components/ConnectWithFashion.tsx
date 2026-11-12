@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "connect with fashion AI stylist and interactive wardrobe desk", deps: ["framer-motion", "lucide-react"], state: active, last: "tara@2026-09-23" }
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -10,6 +11,7 @@ import {
   GlassWater, PartyPopper, Compass, GraduationCap, Palette
 } from 'lucide-react';
 import MannequinVisualizer, { OutfitConfig, SILHOUETTES, GarmentSilhouette } from '@/components/MannequinVisualizer';
+import RealModelDressViewer from '@/components/RealModelDressViewer';
 import { useAuth, Gender } from '@/hooks/useAuth';
 import { useRewards } from '@/hooks/useRewards';
 import { ModelDressOption } from '@/app/api/model-dress-options/route';
@@ -126,6 +128,82 @@ const EDITORIAL_REFERRALS = [
       fabricType: 'linen' as const,
       occasion: 'Destination Resort & Summer Gala',
     }
+  },
+  {
+    id: 'ref-5',
+    title: 'The Imperial Zari Silk Sherwani',
+    source: 'Royal Atelier Lookbook & GQ Men',
+    image: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=800&auto=format&fit=crop',
+    tags: ['Pure Matka Silk', 'Gold Zardozi', 'Churidar Set'],
+    whyItWorks: 'Hand-embroidered ivory raw silk with gilded buttons and stand collar commands timeless ceremonial reverence.',
+    outfit: {
+      title: 'Imperial Zari Silk Sherwani (Royal Wedding Groom)',
+      topType: 'kurta' as const,
+      topColor: '#FAF8F5',
+      bottomType: 'salwar_bottom' as const,
+      bottomColor: '#FAF8F5',
+      outerwearColor: '#FAF8F5',
+      accentColor: '#D4AF37',
+      fabricType: 'silk' as const,
+      occasion: 'Royal Wedding & Groom Grandeur',
+    }
+  },
+  {
+    id: 'ref-6',
+    title: 'Handcrafted Zardozi Bridal Lehenga',
+    source: 'Vogue Weddings Haute Couture Lookbook',
+    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop',
+    tags: ['16 Kalis', 'Pure Raw Silk', 'Antique Zari'],
+    whyItWorks: 'Heavyweight raw silk paired with 16 kalis creates dramatic ballroom spin flare with glistening gold accents.',
+    outfit: {
+      title: 'Handcrafted Zardozi Bridal Lehenga (Royal Wedding)',
+      topType: 'croptop' as const,
+      topColor: '#991B1B',
+      bottomType: 'skirt' as const,
+      bottomColor: '#991B1B',
+      outerwearColor: '#FAF8F5',
+      accentColor: '#D4AF37',
+      fabricType: 'silk' as const,
+      occasion: 'Royal Wedding & Sangeet Gala',
+    }
+  },
+  {
+    id: 'ref-7',
+    title: 'Savile Row 3-Piece Peak Tuxedo',
+    source: 'GQ Black Tie Special & Met Gala Archive',
+    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop',
+    tags: ['Super 160s Wool', 'Grosgrain Lapel', 'Low-Cut Vest'],
+    whyItWorks: 'Low-cut horseshoe vest frames the stiff white bib while grosgrain silk lapels absorb evening spotlight flashes.',
+    outfit: {
+      title: 'Savile Row 3-Piece Peak Tuxedo (Black-Tie Gala)',
+      topType: 'blazer' as const,
+      topColor: '#020617',
+      bottomType: 'trousers' as const,
+      bottomColor: '#020617',
+      outerwearColor: '#FAF8F5',
+      accentColor: '#FAF8F5',
+      fabricType: 'wool' as const,
+      occasion: 'Black-Tie Dinner & Cocktail',
+    }
+  },
+  {
+    id: 'ref-8',
+    title: 'Sculpted Wide-Leg Halter Jumpsuit',
+    source: 'Paris Haute Couture / Harper\'s Bazaar',
+    image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop',
+    tags: ['Heavyweight Crepe', 'Knife Pleats', 'Gold Sash Buckle'],
+    whyItWorks: 'Architectural alternative to traditional evening gowns; continuous vertical palazzo line dramatically elongates posture.',
+    outfit: {
+      title: 'Sculpted Wide-Leg Halter Jumpsuit (Art Gala & Cocktail)',
+      topType: 'top' as const,
+      topColor: '#064E3B',
+      bottomType: 'trousers' as const,
+      bottomColor: '#064E3B',
+      outerwearColor: '#0A192F',
+      accentColor: '#EAB308',
+      fabricType: 'silk' as const,
+      occasion: 'Contemporary Art Gala & Cocktail',
+    }
   }
 ];
 
@@ -167,8 +245,8 @@ export default function ConnectWithFashion() {
     {
       id: 'init-msg',
       role: 'assistant',
-      content: `Welcome to **Connect with Fashion**! I am your personal AI stylist powered by Google Gemini.\n\nTap **🎙️ Voice Mode** to speak naturally or customize your 3D Catwalk Mannequin with our Acloset wardrobe rack and Gemini multi-model opinions.`,
-      voiceText: "Welcome to Connect with Fashion. Speak to me or customize the 3D model with Acloset wardrobe pieces and Gemini opinions.",
+      content: `Welcome to **Connect with Fashion**! I am your personal AI stylist powered by Google Gemini.\n\nTap **🎙️ Voice Mode** to speak naturally or explore our **Real Model Runway & Color Combinations** with Acloset wardrobe pieces and Gemini multi-model opinions.`,
+      voiceText: "Welcome to Connect with Fashion. Speak to me or explore real models wearing authentic clothing color combinations with Gemini opinions.",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       suggestedQuestions: [
         "What should I wear to an executive job interview?",
@@ -440,10 +518,10 @@ export default function ConnectWithFashion() {
             ✦ Connect with Fashion &bull; Aiuta &amp; Acloset Architecture ✦
           </div>
           <h2 className="text-2xl sm:text-4xl font-serif font-black tracking-tight text-[#FAF8F5]">
-            3D Mannequin &amp; Intelligent Wardrobe Studio
+            Real Runway Models &amp; Intelligent Wardrobe Studio
           </h2>
           <p className="text-xs sm:text-sm text-[#FAF8F5]/70 max-w-xl">
-            Live 3D catwalk model with diverse body archetypes, Acloset wardrobe slots, and Gemini AI multi-model opinions.
+            Live real runway models wearing authentic garments with dynamic color combinations, Acloset wardrobe slots, and Gemini AI opinions.
           </p>
         </div>
 
@@ -511,12 +589,12 @@ export default function ConnectWithFashion() {
 
       {/* ===== SPLIT SCREEN: CONCEPT B (Aiuta + Acloset + Fits Hybrid) ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* LEFT COLUMN: 3D RUNWAY MANNEQUIN & VOICE (5 cols) */}
+        {/* LEFT COLUMN: REAL RUNWAY MODEL & VOICE (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="flex items-center justify-between px-2">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-              <h3 className="font-serif font-bold text-base text-white">Interactive 3D Mannequin</h3>
+              <h3 className="font-serif font-bold text-base text-white">Real Model Runway &amp; Clothes</h3>
             </div>
             <span className="text-[11px] font-mono text-[#38BDF8] bg-[#1e3a8a]/30 px-2.5 py-0.5 rounded-full border border-[#38BDF8]/20">
               {activeArchetype.name}
@@ -524,17 +602,15 @@ export default function ConnectWithFashion() {
           </div>
 
           <div className="relative">
-            <MannequinVisualizer
+            <RealModelDressViewer
               gender={currentGender}
-              onGenderChange={updateGender}
-              outfit={currentOutfit}
-              onGarmentChange={(newOutfit) => setCurrentOutfit(newOutfit)}
-              showControls={true}
-              className="h-[760px] shadow-2xl rounded-3xl overflow-hidden border border-[#FAF8F5]/15"
+              selectedOccasion={OCCASIONS.find((o) => o.id === activeOccasion)?.label}
+              showOptionCarousel={true}
+              className="shadow-2xl"
             />
 
             {/* In-Canvas Floating Microphone for Voice Talk */}
-            <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+            <div className="absolute top-3.5 right-3.5 z-20 flex items-center gap-2">
               <button
                 onClick={toggleMic}
                 className={`p-2.5 rounded-full shadow-xl transition-all flex items-center gap-2 border ${

@@ -45,7 +45,7 @@ export default function Header({ collectionCount = 0, rewardPoints = 0, rewardLe
         <button
           onClick={() => updateGender(currentGender === 'female' ? 'male' : 'female')}
           className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#FAF8F5]/20 bg-[#1e3a8a]/40 text-[#FAF8F5] hover:bg-[#1e3a8a] text-xs font-semibold shadow-sm transition-all duration-300"
-          title="Click to switch mannequin & clothing category (Female / Male)"
+          title="Click to switch model & clothing category (Female / Male)"
         >
           <span className="text-sm">{currentGender === 'female' ? '👗' : '👔'}</span>
           <span>Category: <strong className="capitalize text-[#FAF8F5]">{currentGender}</strong></span>

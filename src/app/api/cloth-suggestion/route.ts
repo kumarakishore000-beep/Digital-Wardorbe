@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "AI cloth suggestion API endpoint for mannequin styling", deps: ["next/server"], state: active, last: "tara@2026-09-23" }
 import { NextResponse } from 'next/server';
 
 export interface ClothSuggestionResponse {
@@ -50,8 +51,8 @@ Suggest the single best real clothing piece option to wear on the mannequin for:
 - Mannequin Skin Tone: ${skinTone}
 
 Choose one 'suggestedClothKey' strictly from these options:
-For female: ['gown', 'skirt', 'kurti', 'saree', 'salwar', 'croptop', 'shrug', 'blazer']
-For male: ['kurta', 'tshirt', 'shirt', 'jacket']
+For female: ['gown', 'skirt', 'kurti', 'saree', 'salwar', 'croptop', 'shrug', 'blazer', 'lehenga', 'jumpsuit', 'anarkali']
+For male: ['kurta', 'tshirt', 'shirt', 'jacket', 'blazer', 'sherwani', 'tuxedo', 'pathani']
 
 Return a valid JSON matching this EXACT structure:
 {

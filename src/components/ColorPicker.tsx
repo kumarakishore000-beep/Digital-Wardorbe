@@ -15,7 +15,8 @@ import {
   Compass,
   Bookmark,
 } from 'lucide-react';
-import MannequinVisualizer, { OutfitConfig } from '@/components/MannequinVisualizer';
+import RealModelDressViewer from '@/components/RealModelDressViewer';
+import { OutfitConfig } from '@/components/MannequinVisualizer';
 import { useAuth, Gender } from '@/hooks/useAuth';
 
 export interface ColorHarmony {
@@ -807,45 +808,28 @@ export default function ColorPicker({ onColorSelect, onUseColorPicker }: ColorPi
           </div>
         </div>
 
-        {/* RIGHT COLUMN: MANNEQUIN ATELIER STUDIO */}
+        {/* RIGHT COLUMN: REAL MODEL COLOR ATELIER */}
         <div className="lg:col-span-5 space-y-6 sticky top-24">
-          <div className="rounded-3xl bg-[#0f254e]/50 border border-[#FAF8F5]/15 p-6 sm:p-7 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-[#FAF8F5]/10 pb-3.5">
+          <div className="rounded-3xl bg-[#0f254e]/50 border border-[#FAF8F5]/15 p-4 sm:p-5 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#FAF8F5]/10 pb-3">
               <div className="space-y-0.5">
                 <span className="font-mono text-[10px] font-bold tracking-widest uppercase text-[#93c5fd]">
-                  STUDIO FITTING BOOTH
+                  REAL CLOTHES COLOR LAB
                 </span>
-                <h3 className="font-serif text-xl text-[#FAF8F5] flex items-center gap-2">
-                  <Shirt className="w-5 h-5 text-[#FAF8F5]" />
-                  <span>Interactive Mannequin</span>
+                <h3 className="font-serif text-lg text-[#FAF8F5] flex items-center gap-2">
+                  <Shirt className="w-4 h-4 text-[#38BDF8]" />
+                  <span>Real Model &amp; Garment Colors</span>
                 </h3>
               </div>
-              <div className="w-2.5 h-2.5 rounded-full bg-[#FAF8F5] animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             </div>
 
-            <div className="bg-[#0a192f]/80 border border-[#FAF8F5]/15 rounded-2xl p-4 shadow-inner">
-              <MannequinVisualizer
-                gender={gender}
-                onGenderChange={(newGender) => updateGender(newGender)}
-                outfit={outfitCombinations[activeOutfitIndex]}
-                showControls={true}
-              />
-            </div>
-
-            <div className="p-4 rounded-2xl bg-[#0a192f]/60 border border-[#FAF8F5]/15 space-y-2">
-              <div className="flex items-center justify-between text-[11px] font-mono uppercase text-[#FAF8F5]/70">
-                <span>Current Draped Outfit</span>
-                <span className="font-bold text-[#93c5fd]">
-                  {gender === 'female' ? 'Women' : 'Men'} Cut
-                </span>
-              </div>
-              <p className="font-serif text-sm font-bold text-[#FAF8F5]">
-                {outfitCombinations[activeOutfitIndex]?.title}
-              </p>
-              <p className="text-xs text-[#FAF8F5]/70">
-                {outfitCombinations[activeOutfitIndex]?.description}
-              </p>
-            </div>
+            <RealModelDressViewer
+              gender={gender}
+              preferredColor={harmonies[activeHarmony]?.colors[0] || selectedColor}
+              showOptionCarousel={true}
+              className="border-0 shadow-none bg-transparent"
+            />
           </div>
         </div>
 

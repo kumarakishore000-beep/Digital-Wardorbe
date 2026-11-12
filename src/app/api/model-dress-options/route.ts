@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "editorial model dress options with Gemini multi-model opinion engine", deps: ["next/server"], state: active, last: "tara@2026-09-23" }
 import { NextResponse } from 'next/server';
 
 export interface ModelDressOption {
@@ -17,7 +18,7 @@ export interface ModelDressOption {
     walkingImpression: string;
   };
   outfit: {
-    topType: 'blazer' | 'gown' | 'saree' | 'kurta' | 'shirt' | 'jacket' | 'top' | 'croptop';
+    topType: 'blazer' | 'gown' | 'saree' | 'kurta' | 'kurti' | 'shirt' | 'jacket' | 'top' | 'croptop';
     topColor: string;
     bottomType: 'trousers' | 'skirt' | 'chinos' | 'jeans' | 'gown_skirt';
     bottomColor: string;
@@ -72,18 +73,20 @@ Your client is a ${gender.toUpperCase()} seeking 3 UNIQUE, distinct Model Dress 
 Preferred Color Anchor: ${preferredColor}
 Target Silhouette: ${bodySilhouette}
 
-Generate EXACTLY 3 distinct options:
+Generate EXACTLY 3 distinct options with diverse dress silhouettes:
+- For women: explore evening gowns, bridal/festive lehengas, royal anarkalis, banarasi sarees, tailored jumpsuits, and sculpted power suits.
+- For men: explore bespoke peak tuxedos, imperial zari sherwanis, draped asymmetrical kurtas, Neapolitan linen suits, bandhgala suits, and luxury streetwear tracksuits.
 - Option 1: Classic High-Fashion Authority (Timeless, structured, tailored power silhouette)
 - Option 2: Statement Celebration & Gala Luxe (Fluid silk/brocade, dramatic drape, high luxury)
 - Option 3: Modern Avant-Garde / Contemporary Fusion (Asymmetrical drape, textural contrast, architectural lines)
 
 For EACH option provide:
 1. modelStyleName
-2. silhouetteType (e.g. 'Hourglass Runway', 'Sartorial Power Suit', 'Fluid Bias Cut', 'Architectural Cape')
+2. silhouetteType (e.g. 'Hourglass Runway', 'Sartorial Power Suit', 'Fluid Bias Cut', 'Architectural Cape', 'Imperial Sherwani', 'Flared Kalidar')
 3. editorialReferral (source e.g. 'Vogue Runway / Pinterest Executive', inspiration, lookbookImageUrl from high-res fashion Unsplash)
 4. geminiOpinion (score 85-99, verdict, critique, whyItWorks, walkingImpression)
 5. outfit:
-   - topType (must be one of: 'blazer', 'gown', 'saree', 'kurta', 'shirt', 'jacket', 'top', 'croptop')
+   - topType (must be one of: 'blazer', 'gown', 'saree', 'kurta', 'kurti', 'shirt', 'jacket', 'top', 'croptop')
    - topColor (hex)
    - bottomType (must be one of: 'trousers', 'skirt', 'chinos', 'jeans', 'gown_skirt')
    - bottomColor (hex)
@@ -291,6 +294,111 @@ function getFallbackModelOptions(gender: string, occasion: string, preferredColo
           chain: { name: 'Venetian Box Chain Pendant', style: 'Collar Chain', finish: 'Aged Silver', advice: 'Rests cleanly at the hollow of the throat.' },
           bracelet: { name: 'Braided Italian Leather Wrap', style: 'Leather Wrap', finish: 'Espresso Calfskin', advice: 'Layered alongside vintage timepiece.' }
         }
+      },
+      {
+        id: 'opt-men-4',
+        modelStyleName: 'The Imperial Zari Silk Sherwani',
+        silhouetteType: 'Imperial Grand Wedding Court Cut',
+        editorialReferral: {
+          source: 'Vogue Groom Editorial / Royal Atelier Lookbook',
+          inspiration: 'Knee-length structured raw silk sherwani with gilded floral jaal needlework and gathered silk churidar.',
+          lookbookImageUrl: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=800&auto=format&fit=crop'
+        },
+        geminiOpinion: {
+          score: 99,
+          verdict: 'Supreme Ceremonial Grandeur & Noble Poise',
+          critique: 'The pure ivory silk with micro-zari threading creates an imperial presence unmatched for grand weddings.',
+          whyItWorks: 'The 360 GSM heavy silk holds structural lines cleanly, while the mandarin collar commands upright posture.',
+          walkingImpression: 'Commanding slow imperial pace with chest open and shoulders aligned.'
+        },
+        outfit: {
+          topType: 'kurta',
+          topColor: '#FAF8F5',
+          bottomType: 'trousers',
+          bottomColor: '#FAF8F5',
+          outerwearColor: '#FAF8F5',
+          accentColor: '#D4AF37',
+          fabricType: 'silk',
+          fabricGsm: '360 GSM Pure Matka Silk',
+          fitStyle: 'regular'
+        },
+        accessories: {
+          shoe: { name: 'Embroidered Velvet Zari Juttis', style: 'Ceremonial Mojri', finish: 'Midnight Velvet & Gold Thread', advice: 'Padded insole for ballroom longevity.' },
+          watch: { name: 'Vintage Yellow Gold Dress Chronometer', style: 'Heirloom Watch', finish: '18k Yellow Gold', advice: 'Harmonizes with gilded sherwani buttons.' },
+          ring: { name: 'Lion Crest Solid Gold Signet', style: 'Royal Signet', finish: '22k Gold', advice: 'Wear on right hand.' },
+          chain: { name: 'Multi-Strand Basra Pearl Mala', style: 'Wedding Mala', finish: 'Saltwater Pearls & Emerald Beads', advice: 'Draped symmetrically across chest.' },
+          bracelet: { name: 'Solid Heavy Gold Kada', style: 'Traditional Kada', finish: '22k Antique Gold', advice: 'Commands traditional respect.' }
+        }
+      },
+      {
+        id: 'opt-men-5',
+        modelStyleName: 'The Savile Row 3-Piece Peak Tuxedo',
+        silhouetteType: 'Black-Tie Red Carpet Sovereign',
+        editorialReferral: {
+          source: 'GQ Black Tie Special / Met Gala Archive',
+          inspiration: 'Super 160s worsted barathea wool with silk grosgrain peak lapels, low-cut vest, and side-braided trousers.',
+          lookbookImageUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop'
+        },
+        geminiOpinion: {
+          score: 98,
+          verdict: 'Uncompromising Black-Tie Mastery & Red Carpet Precision',
+          critique: 'The grosgrain silk lapels absorb flash photography while the pristine white piqué bib delivers brilliant contrast.',
+          whyItWorks: 'The low-cut horseshoe vest eliminates shirt-bunching and maintains razor-sharp formal proportions.',
+          walkingImpression: 'Sleek, statuesque red-carpet gait.'
+        },
+        outfit: {
+          topType: 'blazer',
+          topColor: '#020617',
+          bottomType: 'trousers',
+          bottomColor: '#020617',
+          outerwearColor: '#FAF8F5',
+          accentColor: '#FAF8F5',
+          fabricType: 'wool',
+          fabricGsm: '290 GSM Super 160s Barathea Wool',
+          fitStyle: 'slim'
+        },
+        accessories: {
+          shoe: { name: 'Patent Leather Wholecut Oxford Shoes', style: 'Formal Tuxedo Shoe', finish: 'Mirror Patent Gloss', advice: 'Conditioned to absolute mirror shine.' },
+          watch: { name: 'Ultra-Thin Onyx Dress Watch', style: 'Formal Watch', finish: '18k White Gold / Onyx', advice: 'Under 7mm profile to slip beneath French cuffs.' },
+          ring: { name: 'Black Onyx & Platinum Signet Band', style: 'Black-Tie Signet', finish: 'Platinum / Onyx', advice: 'Worn on pinky finger.' },
+          chain: { name: 'Hand-Tied Silk Grosgrain Butterfly Bowtie', style: 'Formal Tie', finish: 'Mulberry Silk', advice: 'Tied by hand for natural sprezzatura.' },
+          bracelet: { name: 'Black DLC Titanium Cable Cuff', style: 'Minimal Cuff', finish: 'DLC Black Steel', advice: 'Balances the left timepiece.' }
+        }
+      },
+      {
+        id: 'opt-men-6',
+        modelStyleName: 'The Indo-Western Draped Kurta & Bandi',
+        silhouetteType: 'Contemporary Draped Menswear',
+        editorialReferral: {
+          source: 'Men\'s Vogue India / Pinterest Festive Sangeet',
+          inspiration: 'Asymmetrical cowl-hem silk kurta in deep wine marsala paired with an embroidered raw silk Nehru bandi jacket.',
+          lookbookImageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop'
+        },
+        geminiOpinion: {
+          score: 96,
+          verdict: 'Dynamic Architectural Motion & Modern Festive Flair',
+          critique: 'Breaks away from conventional kurtas with an arresting asymmetrical diagonal cowl line.',
+          whyItWorks: 'Mulberry silk georgette flows effortlessly while the structured bandi vest anchors the chest.',
+          walkingImpression: 'Fluid, confident stride with natural garment movement.'
+        },
+        outfit: {
+          topType: 'kurta',
+          topColor: '#881337',
+          bottomType: 'trousers',
+          bottomColor: '#0F172A',
+          outerwearColor: '#881337',
+          accentColor: '#D4AF37',
+          fabricType: 'silk',
+          fabricGsm: '240 GSM Silk Georgette & Raw Silk',
+          fitStyle: 'regular'
+        },
+        accessories: {
+          shoe: { name: 'Burnished Double Monkstrap Leather Shoes', style: 'Monkstrap Shoe', finish: 'Espresso Calf', advice: 'Brass buckles echoing Nehru jacket hardware.' },
+          watch: { name: 'Bronze Pilot Chronograph on Saddle Leather', style: 'Sartorial Watch', finish: 'Aged Bronze & Leather', advice: 'Warm metallic accents matching the marsala tones.' },
+          ring: { name: 'Hammered Brass Signet Ring', style: 'Artisan Band', finish: 'Aged Brass', advice: 'Understated bohemian refinement.' },
+          chain: { name: 'Vintage Pocket Watch Chain', style: 'Vest Chain', finish: 'Aged Brass', advice: 'Draped into Nehru jacket welt pocket.' },
+          bracelet: { name: 'Braided Italian Saddle Leather Cuff', style: 'Leather Wrap', finish: 'Dark Espresso', advice: 'Balances opposite wrist.' }
+        }
       }
     ];
   }
@@ -400,6 +508,111 @@ function getFallbackModelOptions(gender: string, occasion: string, preferredColo
         ring: { name: 'Kundan Cocktail Statement Ring', style: 'Royal Ring', finish: 'Gold Foil / Uncut Stones', advice: 'Draws focus during ceremonial greetings.' },
         chain: { name: 'Royal Emerald & Pearl Choker', style: 'Bridal Choker', finish: 'Emerald Beads / Gold Zari', advice: 'Frames the neckline with regal grandeur.' },
         bracelet: { name: 'Temple Filigree Gold Kadas', style: 'Heirloom Kadas', finish: '22k Antique Gold', advice: 'Complements the zari border of the saree.' }
+      }
+    },
+    {
+      id: 'opt-fem-4',
+      modelStyleName: 'The Handcrafted Zardozi Bridal Lehenga',
+      silhouetteType: 'Imperial 16-Kali Flared Bridal Silhouette',
+      editorialReferral: {
+        source: 'Vogue Weddings Haute Couture / Heritage Bridal',
+        inspiration: 'Crimson raw silk lehenga with hand-embroidered antique gold zardozi kalis, sweetheart choli, and sheer organza dupatta.',
+        lookbookImageUrl: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800&auto=format&fit=crop'
+      },
+      geminiOpinion: {
+        score: 99,
+        verdict: 'Breathtaking Bridal Grandeur & Masterwork Embroidery',
+        critique: 'The deep crimson raw silk accented by 24k gold zardozi needlework creates an unforgettable heirloom bridal silhouette.',
+        whyItWorks: 'The 380 GSM heavyweight silk holds dramatic flare during circular spins and entrance walks.',
+        walkingImpression: 'Majestic slow bridal walk with flowing organza pallu draped over forearm.'
+      },
+      outfit: {
+        topType: 'croptop',
+        topColor: '#991B1B',
+        bottomType: 'skirt',
+        bottomColor: '#991B1B',
+        outerwearColor: '#FAF8F5',
+        accentColor: '#D4AF37',
+        fabricType: 'silk',
+        fabricGsm: '380 GSM Heavyweight Raw Silk',
+        fitStyle: 'regular'
+      },
+      accessories: {
+        shoe: { name: 'Embellished Zari Mojri Block Heels', style: 'Bridal Heel', finish: 'Velvet & Gold Thread', advice: 'Cushioned 55mm block heel for ballroom endurance.' },
+        watch: { name: 'Heritage Filigree Gold Bangle Watch', style: 'Traditional Watch', finish: '22k Gold Foil', advice: 'Complements bridal bangles.' },
+        ring: { name: 'Polki Diamond & Emerald Statement Ring', style: 'Cocktail Statement', finish: '22k Gold Foil', advice: 'Catches candlelight reflection.' },
+        chain: { name: 'Polki Diamond & Emerald Bridal Choker', style: 'Bridal Choker', finish: '22k Antique Gold', advice: 'Frames the sweetheart neckline.' },
+        bracelet: { name: 'Temple Filigree Gold Kadas & Hathphool', style: 'Bridal Kadas', finish: 'Antique Gold Polish', advice: 'Adds traditional chiming grandeur.' }
+      }
+    },
+    {
+      id: 'opt-fem-5',
+      modelStyleName: 'The Sculpted Wide-Leg Halter Jumpsuit',
+      silhouetteType: 'Contemporary Architectural Haute Jumpsuit',
+      editorialReferral: {
+        source: 'Harper\'s Bazaar Evening / Paris Haute Couture',
+        inspiration: 'High-neck Japanese crepe jumpsuit with sculpted halter collar, fluid knife-pleated palazzo legs, and gold hardware.',
+        lookbookImageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&auto=format&fit=crop'
+      },
+      geminiOpinion: {
+        score: 97,
+        verdict: 'Razor-Sharp Contemporary Elegance & Red Carpet Power',
+        critique: 'A fearless, sophisticated alternative to conventional evening gowns that elongates the frame with continuous palazzo lines.',
+        whyItWorks: 'The high-neck halter collar broadens shoulders while the fluid palazzo legs float effortlessly.',
+        walkingImpression: 'Sleek, statuesque runway stride.'
+      },
+      outfit: {
+        topType: 'top',
+        topColor: '#064E3B',
+        bottomType: 'trousers',
+        bottomColor: '#064E3B',
+        outerwearColor: '#0A192F',
+        accentColor: '#EAB308',
+        fabricType: 'silk',
+        fabricGsm: '280 GSM Heavy Japanese Crepe',
+        fitStyle: 'slim'
+      },
+      accessories: {
+        shoe: { name: 'Champagne Gold Pointed-Toe Stilettos', style: 'Evening Heel', finish: 'Mirror Metallic Leather', advice: '90mm stiletto elevating palazzo hem flush with floor.' },
+        watch: { name: 'Minimalist Gold Bangle Timepiece', style: 'Bangle Watch', finish: '18k Polished Brass', advice: 'Doubles as high jewelry on left wrist.' },
+        ring: { name: 'Geometric Double-Band Gold Ring', style: 'Architectural Ring', finish: '18k Solid Gold', advice: 'Clean lines accentuating hand gestures.' },
+        chain: { name: 'Architectural Gold Torc Choker', style: 'Torc Collar', finish: 'Polished Brass Gold', advice: 'Accentuates the sculpted halter neckline.' },
+        bracelet: { name: 'Solid Minimalist Gold Sculptural Cuff', style: 'Sculptural Cuff', finish: '18k Polished Gold', advice: 'Balances opposite wrist.' }
+      }
+    },
+    {
+      id: 'opt-fem-6',
+      modelStyleName: 'The Royal Kalidar Silk Anarkali Gown',
+      silhouetteType: 'Fluted Kalidar Umbrella Gown Silhouette',
+      editorialReferral: {
+        source: 'Jaipur Court Lookbook / Grazia India Festive',
+        inspiration: '24-kali royal sapphire Chanderi silk anarkali with shimmering gota patti borders, gathered churidar, and tissue organza dupatta.',
+        lookbookImageUrl: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop'
+      },
+      geminiOpinion: {
+        score: 98,
+        verdict: 'Regal Poise & Ethereal Dynamic Motion',
+        critique: 'The umbrella flare created by 24 hand-stitched kalis produces mesmerizing movement during formal evening festivities.',
+        whyItWorks: 'Empire waist contour creates statuesque height while pure Chanderi silk ensures weightless comfort.',
+        walkingImpression: 'Gliding, graceful regal gait with flared hem rippling harmoniously.'
+      },
+      outfit: {
+        topType: 'kurti',
+        topColor: '#1E3A8A',
+        bottomType: 'skirt',
+        bottomColor: '#1E3A8A',
+        outerwearColor: '#FAF8F5',
+        accentColor: '#F59E0B',
+        fabricType: 'silk',
+        fabricGsm: '240 GSM Pure Chanderi Silk with Zari',
+        fitStyle: 'regular'
+      },
+      accessories: {
+        shoe: { name: 'Embellished Velvet Khussa Mojris', style: 'Traditional Mojri', finish: 'Raw Silk & Brass Thread', advice: 'Cushioned flat sole for lively celebrations.' },
+        watch: { name: 'Heritage Filigree Bangle Watch', style: 'Heirloom Watch', finish: '22k Antique Gold', advice: 'Harmonizes with festive bangles.' },
+        ring: { name: 'Kundan Navratan Cocktail Statement Ring', style: 'Royal Ring', finish: '22k Gold Foil / Stones', advice: 'Draws focus during ceremonial greetings.' },
+        chain: { name: 'Layered Gold Gota & Pearl Mala', style: 'Festive Mala', finish: 'Emerald Beads & Gold Zari', advice: 'Drapes across royal blue bodice.' },
+        bracelet: { name: 'Gold Filigree Temple Kadas Stack', style: 'Heirloom Bangles', finish: '22k Antique Gold', advice: 'Adds rhythmic chiming with hand movement.' }
       }
     }
   ];

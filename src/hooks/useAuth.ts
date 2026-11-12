@@ -1,3 +1,5 @@
+// agent-notes: { ctx: "client-side auth and session management with real-time sync", deps: ["react"], state: active, last: "sato@2026-10-29" }
+
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
@@ -32,12 +34,16 @@ export const AUTH_CHANGE_EVENT = 'stylematch_auth_event';
 
 export function notifyAuthChange(user: User | null): void {
   if (typeof window === 'undefined') return;
-  try {
-    window.dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT, { detail: user }));
-    window.dispatchEvent(new Event('storage'));
-  } catch {
-    // ignore
-  }
+  // Use queueMicrotask to ensure event dispatch and dependent component state updates
+  // never execute synchronously inside React's render phase
+  queueMicrotask(() => {
+    try {
+      window.dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT, { detail: user }));
+      window.dispatchEvent(new Event('storage'));
+    } catch {
+      // ignore
+    }
+  });
 }
 
 export function getRememberedUser(): string {
@@ -242,15 +248,14 @@ export function useAuth() {
         // ignore
       }
     }
-    setUser((prev) => {
-      const updated: User = prev
-        ? { ...prev, gender }
-        : { email: 'guest@aurastyle.ai', name: 'Guest Stylist', gender };
-      saveSession(updated);
-      notifyAuthChange(updated);
-      return updated;
-    });
-  }, []);
+    const current = user || getSession();
+    const updated: User = current
+      ? { ...current, gender }
+      : { email: 'guest@aurastyle.ai', name: 'Guest Stylist', gender };
+    saveSession(updated);
+    setUser(updated);
+    notifyAuthChange(updated);
+  }, [user]);
 
   const logout = useCallback(() => {
     saveSession(null);
